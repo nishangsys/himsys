@@ -1,0 +1,1 @@
+<iframe src="sales.php?name=<?php echo $_GET['our_staff']; ?>&dept=<?php echo $_GET['dep']; ?>&id=<?php echo $_GET['id']; ?>&req_id=<?php echo $_GET['req_id']; ?>" style="width:100%; height:700px; border:none; margin:auto"></iframe>

@@ -1,0 +1,13 @@
+1st open db_embuscado_tester.sql using notepad++
+
+2nd run your xampp, run only apache and mysql
+
+3rd go to localhost/phpmyadmin on your web-browser
+
+4th click SQL tab on upper portion of phpmyadmin
+
+5th in the textarea type the SQL syntax and click GO button SQL SYNTAX: "CREATE DATABASE db_embuscado_tester" only
+NOTE: do not execute the all the sql queries inside the db_embuscado_tester.sql
+
+6th SELECT the database you've created and once you've selected the database click SQL tab again and copy-paste the sql
+syntaxes inside the db_embuscado_tester1.sql and you're done.

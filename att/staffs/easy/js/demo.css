@@ -1,0 +1,38 @@
+*{
+	font-size:12px;
+}
+body {
+    font-family:verdana,helvetica,arial,sans-serif;
+    padding:20px;
+    font-size:16px;
+    margin:0;
+}
+h2 {
+    font-size:18px;
+    font-weight:bold;
+    margin:0;
+    margin-bottom:15px;
+}
+.demo-info{
+	padding:0 0 12px 0;
+}
+.demo-tip{
+	display:none;
+}
+#toolbar{
+	background:#fff;
+	
+}
+#toolbar ul li{
+	display:inline;
+	background:#fff;
+	
+}
+
+#toolbar ul li a{
+	border-right:;
+	padding:0px 20px;
+	font-weight:bold;
+	
+	
+}

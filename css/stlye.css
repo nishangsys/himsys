@@ -1,0 +1,14 @@
+.bg-image{
+	background-image:url(../computer-background-notebook-powerpoint-backgrounds.jpg);
+	background-position: center center;
+	background-size: cover;
+	height: 200px;
+}
+
+input[type="text"], textarea {
+	background-color: #c4a8ea;
+}
+
+input[type="password"], textarea{
+	background-color: #c4a8ea;
+}

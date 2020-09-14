@@ -1,0 +1,16 @@
+marks_sheet
+sector
+special
+update `gen_info` set choiceone='HND Nursing' where choiceone='HND In Nursing'
+list
+
+relates |-classes1->classes->special->
+items
+
+insert table special to ebaiak online
+update recording mraks script in students/hod/
+Director where marks are initally stored is resits
+insert resits into school finances db
+add new table>school_finaces called track
+
+live edit storer

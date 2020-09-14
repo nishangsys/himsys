@@ -1,0 +1,2 @@
+DELETE FROM `students` where fname=''
+DELETE FROM `students` where matricule=''
