@@ -37,11 +37,13 @@
 		include '../Cash/bank_recording.php';
 	}
 	if(isset($_GET['cash_record'])){
-		include '../Cash/cash_record.php';
+		include '../Cash/chose_students.php';
 	}
-	if(isset($_GET['crecording'])){
-		include '../Cash/cash_recording.php';
+	
+	if(isset($_GET['resits'])){
+		include '../Cash/resits.php';
 	}
+	
 	if(isset($_GET['bank_accounts'])){
 		include '../Cash/bank_accounts.php';
 	}

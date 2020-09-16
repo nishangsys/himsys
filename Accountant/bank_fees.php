@@ -8,7 +8,7 @@
 	}
   </style>
   <div class="alert alert-success" style="font-size:18px">
-  <strong>Our System Says !</strong> Recording Fees Paid by Bank
+  <strong>Our System Says !</strong> Recording Fees paid throughBank
 </div>
    <div class="col-sm-12">
       <div class="well">

@@ -1,13 +1,13 @@
 ﻿<?php
 
 include '../includes/dbc.php';
-  $a1=mysql_query("SELECT * FROM rushs where roll='1'") or die(mysql_error());
- while ($ad=mysql_fetch_assoc($a1)){
-	 $ad1[''];
-	$current=$ad['year'];
-	 $as=$ad['extra'];
-	$ass=$ad['extra2'];
- }
+	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
+while($bu=$d->fetch_assoc()){
+	 $ayear_name=$bu['year_name'];
+	 $ayear=$bu['id'];
+	
+}
 
 ?>
     <link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.css" />
@@ -42,14 +42,16 @@ include '../includes/dbc.php';
         </h3>
         <?php
 		 $ayear;
-		 $d=$con->query("select  * from daily where exp='' and reason='registration' order by id DESC") or die(mysqli_error($con));
+		 $d=$con->query("SELECT * from levels,special,years,students,our_accounts,daily  where  year_id='$ayear' AND   daily.exp='' and daily.reason='registration' and daily.method=our_accounts.id  AND daily.cust_id= students.matricule AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id 
+		 
+		") or die(mysqli_error($con));
 $i=1;
 ?>
  <thead>
                                         <tr>
                                             <th>#</th>
                                                     <th>Student</th> <th>Rec #</th>
-                <th>Program</th>                                <th>Cash</th>
+                <th>Reason</th>                                <th>Payments<br>Method</th>
                  <th>Bank</th>
                                                                                                                             
 
@@ -66,9 +68,10 @@ $i=1;
        
            <td><?php  echo $i++; ?></td>
           <td style="text-transform:capitalize"><?php  echo $bu['staffname']; ?></td>
-<td><?php  echo $bu['id']; ?></td> <td><?php  echo $bu['purpose']; ?></td>                                                        
-                                                         <td><?php  echo $bu['rec']; ?></td>
-                                                           <td><?php  echo $bu['bank']; ?></td>
+<td><?php  echo $bu['matricule']; ?></td> 
+<td><?php  echo $bu['reason']; ?></td>
+  <td><?php  echo $bu['name']; ?></td>
+   <td><?php  echo $bu['rec']; ?></td>
                                                               <td><?php  echo $bu['date']; ?></td>
                                            
                                                          <td><a href="../Cash/reg_print.php?id=<?php  echo $bu['id']; ?>" target="new">  <button type="submit" class="btn btn-success" name="do" class="btn btn-success">Registration Receipts</button></a></td>
@@ -83,7 +86,7 @@ $i=1;
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 
                                 
-                                <?php $d=$con->query("SELECT SUM(discount) as regs,SUM(adminp) as adminp,SUM(tshirt) as tshirt,SUM(sunion) as sunion FROM daily where reason='registration' and year='$current'  ") or die(mysqli_error($con));
+                                <?php $d=$con->query("SELECT SUM(discount) as regs,SUM(adminp) as adminp,SUM(tshirt) as tshirt,SUM(sunion) as sunion FROM daily where reason='registration' and year='$ayear'  ") or die(mysqli_error($con));
 								while($bu=$d->fetch_assoc()){ 
 			$totreg=$bu['regs'];
 			$totadmin=$bu['adminp'];

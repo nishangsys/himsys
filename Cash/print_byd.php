@@ -1,14 +1,6 @@
 <?PHP
 include  '../includes/dbc.php';
 session_start();
-$cus1="SELECT * from client ";
-$run1=mysql_query($cus1) or die (mysql_error());
- while ($rows=mysql_fetch_assoc($run1)){
-	 $clients=$rows['name'];
-	 $AD=$rows['address'];
-	 $TEL=$rows['as1'];
-	 $vil=$rows['as2'];
- }
 
 ?>
 
@@ -61,31 +53,26 @@ $run1=mysql_query($cus1) or die (mysql_error());
 	
 	  padding-bottom:20px;
   }
+  table,tr,th,td{
+	  border:1px solid#000;
+	  border-collapse:collapse;
+  }
 </style>
 </head>
 
 <body>
 <div class="sub">
-	<div class="head1">
-    	<div style="  height:130px; width:19%; float:left; border:1px dashed#000;  ">
-<IMG src="../logo.png" style="margin:AUTO ; width:120PX; height:120PX"  />
-</div>
 
-		<div style="  height:auto; width:79%; float:left; border:;  ">
+<?php include 'header.php'; 
 
-<div style="  height:AUTO; width:100%; float:left; text-align:center; background:#333; color:#FFF; 
-  border:1px DASHED#000;text-transform:uppercase; font-size:18px; font-weight:bold  ">  <?php echo $clients; ?> RECORDS FOR  <?php echo $_GET['type']; ?> </div>
-
-
-<div style="   width:100%; float:left; text-align:center;  
-  border:1px DASHED#000; font-size:16px;   "> <?php echo $AD; ?></div>
-  
-  <div style="   width:100%; float:left; text-align:center;  
-  border:1px DASHED#000; font-size:16px;  "> <?php echo $TEL; ?></div></div>
-
-
-    
-    </div>
+ 	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
+while($bu=$d->fetch_assoc()){
+	 $ayear_name=$bu['year_name'];
+	 $year_id=$bu['id'];
+	
+}
+?>
     
     
     
@@ -93,48 +80,44 @@ $run1=mysql_query($cus1) or die (mysql_error());
     
     
     
+      <?php $d=$con->query("SELECT * FROM special, daily where daily.reason='".$_GET['type']."' 
+		and daily.prog_id='".$_GET['dept']."' AND special.id=daily.prog_id GROUP BY prog_id ORDER BY special.prog_name   ") or die(mysqli_error($con));
+		while($rop=$d->fetch_assoc()){
+?>
     
+    <h3><?php echo $rop['prog_name']; ?> <?php echo $_GET['type']; ?> Reports for <?php echo $ayear_name; ?></h3>
+    <?php } ?>
     
-    
-    
-    <div class="head2">
-   
-        <?php $d=$con->query("SELECT * FROM daily where reason='".$_GET['type']."' and room='".$_GET['dept']."'  ") or die(mysqli_error($con));
+    <div class="head2" style="margin-top:20px">
+    <?php $d=$con->query("SELECT * FROM special, daily where daily.reason='".$_GET['type']."' 
+		and daily.prog_id='".$_GET['dept']."' AND special.id=daily.prog_id ORDER BY special.prog_name   ") or die(mysqli_error($con));
 $i=1;
 ?>
-
-                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
- <thead>
-                                        <tr>
+                                               <table  style="width:100%" style="line-height:1.5">
+                                             <thead>
+                                              <tr>
                                             <th>#</th>
                                                     <th>Student</th>
                                                    <th>Department</th>
-   <th>Level</th>
-                                                  <th>Cash Paid</th>
- <th>Bank Pmt</th>
-                                                                                                                                                 
+                                                     <th>Purpose</th>
+                                                  <th>Amt Paid</th>
+                                                                                                                            
 
                                             <th>Date</th>
-                                            
-                                            <th>Payment Mode</th>
                                          
                                         </tr>
                                     </thead>
                                     <tbody>
                                        <?php while($bu=$d->fetch_assoc()){ ?>
 
-      <tr>
+                                           <tr>
        
-           <td><?php  echo $i++; ?></td>
+                                                 <td><?php  echo $i++; ?></td>
                                             <td><?php  echo $bu['staffname']; ?></td>
-                                                 <td><?php  echo $bu['room']; ?></td>
-                                                      <td><?php  echo $bu['area']; ?></td>
-                                                           <td><?php  echo $bu['rec']; ?></td>
-        
-         <td><?php  echo $bu['amt']; ?></td>
+                                                 <td><?php  echo $bu['prog_name']; ?></td>
+                                                      <td><?php  echo $bu['reason']; ?></td>
+                                                           <td><?php  echo number_format($bu['rec']); ?></td>
                                                               <td><?php  echo $bu['date']; ?></td>
-            
-             <td><?php  echo $bu['company']; ?></td>
                                            
                                             
                                         </tr>
@@ -142,10 +125,11 @@ $i=1;
                                        <?php } ?>
                                     </tbody>
                              
+                             
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 
                                 
-                                <?php $d=$con->query("SELECT SUM(price),SUM(rec),SUM(amt) FROM daily where reason='".$_GET['type']."' and room='".$_GET['dept']."' GROUP BY year ") or die(mysqli_error($con));
+                                <?php $d=$con->query("SELECT SUM(price),SUM(rec),SUM(amt) FROM daily where reason='".$_GET['type']."' and prog_id='".$_GET['dept']."' GROUP BY year ") or die(mysqli_error($con));
 $i=1;
 ?>
   <table class="table table-bordered">                                       <?php while($bu=$d->fetch_assoc()){ ?>

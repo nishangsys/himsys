@@ -12,7 +12,7 @@
  <table>
  <tr><td>
   Department:</td><td>
-  <select class="form-control" name="level" style="width:300px" required>
+  <select class="form-control" name="prog" style="width:300px" required>
 <?php
 $an=$con->query("SELECT * FROM special order by prog_name") or die(mysqli_error($con));
 while($rows=$an->fetch_assoc()){
@@ -85,6 +85,7 @@ while($rows=$an->fetch_assoc()){
                              <th style="text-align:center;">S/N</th>
 
                               <th style="text-align:center;">Student's Name</th>
+                               <th style="text-align:center;">Matricule</th>
                           <th style="text-align:center;">Program</th>
                                     <th style="text-align:center;">Level</th>
                                      <th style="text-align:center;">Expected</th>
@@ -110,6 +111,7 @@ while($rows=$an->fetch_assoc()){
 
 						
 								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['fname']; ?></td>
+                                	<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['matric']; ?></td>
 								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['prog_name']; ?></td>
                                 	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['levels']; ?></td>
                                     <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['expected_amount']; ?></td>
@@ -144,7 +146,7 @@ while($rows=$an->fetch_assoc()){
                             <tbody>
 								<?php
 							
-								$result= mysql_query("select  SUM(fee_amt) AS total FROM fee_paymts WHERE balance='0' and yearid='$ayear'  " ) or die (mysql_error());
+								$result= mysql_query("select  SUM(fee_amt) AS total,SUM(balance) as balance FROM fee_paymts WHERE balance='0' and yearid='$ayear'  " ) or die (mysql_error());
 								$num=1;
 								while ($row= mysql_fetch_array ($result) ){
 								$id=$row['id'];
@@ -162,7 +164,7 @@ while($rows=$an->fetch_assoc()){
 								
                                              <td style="text-align:center; word-break:break-all; width:80px; color:#fff; font-weight:bold"> </td>
 			
-            <td style="text-align:center; word-break:break-all; width:130px; background:#F00; color:#fff;">
+            <td style="text-align:center; word-break:break-all; width:130px; background:#F00; color:#fff;">  <?php echo number_format($row ['balance']); ?> 		
             					
         </td>     
 								

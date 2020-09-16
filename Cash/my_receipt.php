@@ -2,13 +2,13 @@
 
 include '../includes/dbc.php';
   $a1=mysql_query("SELECT * FROM rushs where roll='1'") or die(mysql_error());
- while ($ad=mysql_fetch_assoc($a1)){
-	 $ad1[''];
-	$current=$ad['year'];
-	 $as=$ad['extra'];
-	$ass=$ad['extra2'];
- }
-
+	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
+while($bu=$d->fetch_assoc()){
+	 $ayear_name=$bu['year_name'];
+	 $ayear=$bu['id'];
+	
+}
 ?>
     <link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="../assets/css/main.css" />
@@ -42,7 +42,9 @@ include '../includes/dbc.php';
         </h3>
         <?php
 		 $ayear;
-		 $d=$con->query("select  * from daily where exp='' order by id DESC") or die(mysqli_error($con));
+		 $d=$dbcon->query("SELECT * from daily  where  daily.year='$ayear' AND   daily.exp='' 
+		 and daily.rec>0 
+		 ") or die(mysqli_error($dbcon));
 $i=1;
 ?>
  <thead>
@@ -65,7 +67,7 @@ $i=1;
        
            <td><?php  echo $i++; ?></td>
           <td style="text-transform:capitalize"><?php  echo $bu['staffname']; ?></td>
-<td><?php  echo $bu['id']; ?></td> <td><?php  echo $bu['purpose']; ?></td>                                                        
+<td><?php  echo $bu['cust_id']; ?></td> <td><?php  echo $bu['reason']; ?></td>                                                        
                                                          <td><?php  echo $bu['rec']; ?></td>
                                                               <td><?php  echo $bu['date']; ?></td>
                                            

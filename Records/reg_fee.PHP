@@ -1,6 +1,6 @@
 ﻿<?php
 include '../includes/dbc.php';
-$year_id=$_GET['ayear'];
+echo $year_id=$_GET['year_id'];
 
 ?>
     <link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.css" />
@@ -34,7 +34,7 @@ $year_id=$_GET['ayear'];
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 
         </h3>
-        <?php $d=$conn->query("SELECT * FROM students where year_id='$ayear' and fname!='' order by roll DESC ") or die(mysqli_error($conn));
+        <?php $d=$conn->query("SELECT * FROM special,levels,years,students where students.year_id='$year_id' and students.fname!='' and students.level_id=levels.id AND students.dept_id=special.id  AND students.year_id=years.id order by students.id  DESC ") or die(mysqli_error($conn));
 $i=1;
 ?>
  <thead>
@@ -56,10 +56,10 @@ $i=1;
        
            <td><?php  echo $i++; ?></td>
           <td><?php  echo $bu['fname']; ?></td>
-                    <td><?php  echo $bu['departmet']; ?></td>
+                    <td><?php  echo $bu['prog_name']; ?></td>
 
           <td><?php  echo $bu['levels']; ?></td>
-          <td><?php  echo $bu['ayear']; ?></td>
+          <td><?php  echo $bu['year_name']; ?></td>
                                             <td> 
                              <a href=javascript:popcontact('../Acc/registration.php?cust=<?php echo $bu['id']; ?>') style="color:#fff; text-decoration:blink text-align:center; font-weight:bold;"><button type="button" class="btn btn-success btn-bg" >Registration, T-shirt others</button>
 </a>

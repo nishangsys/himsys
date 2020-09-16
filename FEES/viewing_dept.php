@@ -8,14 +8,14 @@
 
 <body>
 <?php
-$level=$_POST['level'];
+$prog_id=$_POST['level'];
 ?>
               <div class="row">
                        
          <div class="col-sm-12" style="background:#000; color:#FFF; text-align:center; padding:10PX 0PX">
-    <span style="color:#ff0; font-weight:bold"> <?php echo $level; ?></span> SCHOOL FEES REPORTS FOR <span style="color:#ff0; font-weight:bold"><?PHP echo $ayear; ?> ACADEMIC YEAR
+  SCHOOL FEES REPORTS FOR <span style="color:#ff0; font-weight:bold"><?PHP echo $ayear_name; ?> ACADEMIC YEAR
   
-       | <a href="ddo1.php?dept=<?php echo $level; ?>&year_id=<?PHP echo $ayear; ?>" target="_new"> <button type="submit" class="btn btn-warning" name="doLogin" class="btn btn-danger">Download a Copy</button></a>
+       | <a href="ddo1.php?dept=<?php echo $prog_id; ?>&year_id=<?PHP echo $ayear; ?>" target="_new"> <button type="submit" class="btn btn-warning" name="doLogin" class="btn btn-danger">Download a Copy</button></a>
       </span>
       </div>             
  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="screen">
@@ -45,6 +45,7 @@ $level=$_POST['level'];
                              <th style="text-align:center;">S/N</th>
 
                               <th style="text-align:center;">Student's Name</th>
+                                <th style="text-align:center;">Matricule</th>
                           <th style="text-align:center;">Program</th>
                                     <th style="text-align:center;">Level</th>
                                      <th style="text-align:center;">Amount Paid</th>
@@ -61,7 +62,8 @@ $level=$_POST['level'];
 						
 $ayear;
 							
-								$result= $conn->query("select  * from historic where year_id='$ayear' and amountpaid='$level' order by student_name" ) or die (mysqli_error($conn));
+								$result= $conn->query("select  * from levels,special,students,fee_paymts where  fee_paymts.yearid='$ayear' AND levels.id=fee_paymts.level_id AND special.id=fee_paymts.program_id AND fee_paymts.program_id='$prog_id'  
+								 AND students.matricule=fee_paymts.matric AND fee_paymts.yearid=students.year_id  order by fee_paymts.id" ) or die (mysqli_error($conn));
 								$num=1;
 								while ($row= $result->fetch_assoc () ){
 								$id=$row['id'];
@@ -70,11 +72,13 @@ $ayear;
                             <td style="text-align:center; word-break:break-all; width:20px;"> <?php echo $num++; ?></td>
 
 						
-								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $name=$row ['student_name']; ?></td>
-								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['amountpaid']; ?></td>
-                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['class']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $name=$row ['fname']; ?></td>
+                             	<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['matric']; ?></td>
+
+								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['prog_name']; ?></td>
+                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['levels']; ?></td>
                                     
-                        <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['amount_paid']; ?></td>
+                        <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['fee_amt']; ?></td>
 								
                                              <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['balance']; ?></td>
 			

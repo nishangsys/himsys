@@ -8,10 +8,10 @@
               <option>........</option>
 
        <?php
-	   $d=$con->query("SELECT * FROM special order by certi") or die(mysqli_error($con));
+	   $d=$con->query("SELECT * FROM special order by prog_name") or die(mysqli_error($con));
 	   while($df=$d->fetch_assoc()){
 	   ?>
-    <option value="<?php echo $df['prog_name']; ?>"><?php echo $df['prog_name']; ?></option>
+    <option value="<?php echo $df['id']; ?>"><?php echo $df['prog_name']; ?></option>
     <?php } ?>
  
   </select>
@@ -43,13 +43,13 @@ $zone=$_POST['dept'];
 
 	
 
-		$d=$con->query("SELECT * FROM special where certi='".$zone."' ") or die(mysqli_error($con));
+		$d=$con->query("SELECT * FROM students,special where special.id='".$zone."' AND special.id=students.dept_id ") or die(mysqli_error($con));
 while($bu=$d->fetch_assoc()){
 	 $fees=$bu['fees'];
 	 //$regs=$bu[''];
 	 $id=$bu['ids'];
-	 $bank=$bu['extra'];
-	 $regs=$bu['mattsy'];
+	 $prog_name=$bu['prog_name'];
+	 $prog_id=$bu['id'];
 	 $hl=$bu['conn'];
 	 $ll=$bu['depf'];
 	
@@ -79,13 +79,20 @@ input,select{
     <div class="col-sm-10" style="margin-left:30px">
 
 
- <form method="post" enctype="multipart/form-data" class="form-horizontal" action="../records/OTHs.php" role="form" >
+ <form method="post" enctype="multipart/form-data" class="form-horizontal" action="../Records/Saved_MissingNames.php"  role="form" >
     
      <table class="table table-bordered">
 
               <tr><td>Student's Names</td><td><input type="text" name="name" required="required" value="<?php echo $bs['fname'];; ?>" /></td></tr>
                
-              <tr><td>Program</td><td><input type="text" name="class" required="required" value="<?php echo $zone;; ?>" /></td></tr>
+              <tr><td>Program</td><td>
+                <select  class="form-control" required id="sel1" name="prog" >
+			         
+        <option value="<?php echo $prog_id; ?>"  ><?php echo $prog_name; ?> </option>
+   
+        
+      </select>
+              </td></tr>
                
                
                 <tr><td>Matricule</td><td><input type="text" name="matric" value="<?php echo $bs['matricule']; ?>" required="required"/></td></tr>
@@ -93,43 +100,58 @@ input,select{
               
               
                <tr><td>Sector</td><td> <select class="form-control" id="sel1" name="sector" onBlur="doCalc(this.form)" required>
-        <option value="<?php echo $day; ?>"  onBlur="doCalc(this.form)"></option>
+        <option  onBlur="doCalc(this.form)"></option>
     <?php 
 	
 	$d=$con->query("SELECT * FROM main_sects order by name   ") or die(mysqli_error($con));
  while($bu=$d->fetch_assoc()){ 
  $day=$bu['name'];
+ $idi=$bu['id'];
 					
-					echo "<option value='$day'>$day</option>";
+					echo "<option value='$idi'>$day</option>";
 					}
 					?>
   </select></td></tr>
-               
-                 <tr><td>Start Year</td><td> <select class="form-control" id="sel1" name="start" onBlur="doCalc(this.form)" required>
-        <option value="<?php echo $day; ?>"  onBlur="doCalc(this.form)"></option>
-    <?php 
-					for($day=2005;$day<=2020;$day++)
-					{
-					echo "<option value='$day'>$day</option>";
-					}
-					?>
+  
+  
+  <tr><td>Gender </td><td> <select class="form-control" id="sel1" name="sector" onBlur="doCalc(this.form)" required>
+        <option value="" ></option>
+
+			 <option value="Male">Male</option>
+              <option value="Female">Female</option>
   </select></td></tr>
                
+                 <tr><td>Start Year</td><td>  <select  class="form-control" required id="sel1" name="year_id" required >
+                 <option></option>
+
+        <?php
+							
+								$result = $con->query("SELECT * FROM years") or die(mysqli_error($con));
+				while($bu=$result->fetch_assoc()){
+								?>
+                              
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['year_name']; ?> </option>
+    <?php } ?> 
+        
+      </select></td></tr>
                
                
-               <tr><td>End Year</td><td>  <select class="form-control" id="sel1" name="end" onBlur="doCalc(this.form)" required>
-        <option value="<?php echo $day; ?>"  onBlur="doCalc(this.form)"></option>
-    <?php 
-					for($day=2005;$day<=2020;$day++)
-					{
-					echo "<option value='$day'>$day</option>";
-					}
-					?>
-  </select></td></tr>
-               
+            
               
              
-            <tr><td>Level</td><td><input type="text" name="lev" value="" required="required" /></td></tr>
+            <tr><td>Level</td><td> <select  class="form-control" required id="sel1" name="level_id" required >
+                 <option></option>
+
+        <?php
+							
+								$result = $con->query("SELECT * FROM levels") or die(mysqli_error($con));
+				while($bu=$result->fetch_assoc()){
+								?>
+                              
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['levels']; ?> </option>
+    <?php } ?> 
+        
+      </select></td></tr>
   
   
           <input type="hidden" name="ids"  value="16" required="required"  />
@@ -153,84 +175,16 @@ if(isset($_POST['add'])){
 	
 
 	
-$usr_email = $data['usr_email'];
-$user_name = $data['user_name'];
-$level=$_POST['level'];
-
- $first_name=$_POST['username'];
-$middle_name=$_POST['middle_name'];
-$last_name=$_POST['last_name'];
-
-$fname=$_POST['name'];
-
-$month=$_POST['month'];
-$part=$_POST['part'];
-$day=$_POST['day'];
-
-$year=$_POST['year'];
-$year_id=$_POST['ayear'];
-$dbirth=$_POST['month'];
-
-$place=$_POST['place'];
-$matric=$_POST['matric'];
-
-$nation=$_POST['nation'];
-$sex=$_POST['sex'];
-
-$religion=$_POST['religion'];
-$qualification=$_POST['qualification'];
-
-$address=$_POST['address'];
-$city=$_POST['city'];
-
-$fee=$_POST['fees'];
-$part=$_POST['part'];
-$POB=$_POST['pob'];
-$DOB=$_POST['dob'];
-$accepted=$feeamt/2;
-$guide=$_POST['guide'];
-$reg=$_POST['reg'];
-$bbm=$_POST['feeamt']-$_POST['part'];
-$all=$part+$reg;
-
-
-
-
-$cateory=$_POST['category'];
-
-$levels=$_POST['lev'];
-
-
-$contact1=$_POST['contact1'];
-$contact2=$_POST['contact2'];
-
-
-$guardian1=$_POST['gaurdain1'];
-$guardian2=$_POST['guardian2'];
-
-$hschool=$_POST['hschool'];
-$hgrade=$_POST['hgrade'];
-
-$oschool=$_POST['oschool'];
-$ograde=$_POST['ograde'];
-$pass=$_POST['pass'];
-$partd=$_POST['motive'];
-
-$ids=$_POST['ids'];
-$yid=$_POST['yid'];
-$ass=$_POST['ass'];
-$class1=$_POST['class'];
-$sector=$_POST['sector'];
-$matriculex=$_POST['matriculex'];
-
-$matricule=$_POST['matricule'];
-$cc=$_POST['department'];
-$month=date('m');
-$year=date('Y');
-
+$name= $data['name'];
+$level_id=$_POST['level_id'];
+ $matric=$_POST['matric'];
+$prog_id=$_POST['prog_id'];
+$year_id=$_POST['year_id'];
+$level_id=$_POST['level_id'];
+$sector_id=$_POST['sector'];
 $c=$conn->query("SELECT * FROM students WHERE 
 matricule='$matric' and year_id='$ayear' ") or die(mysqli_error($conn)) ;
-	if(mysqli_num_rows($c)>0){
+	if($c->num_rows>0){
 		echo "<script>alert('ERROR. $matric is already rgistered in the system this year')</script>";
 	}
 	else {

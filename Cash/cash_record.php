@@ -11,10 +11,10 @@
        <select class="form-control" id="sel1" name="dept" required>
        <option></option>
        <?php
-	   $d=$con->query("SELECT * FROM special order by certi") or die(mysqli_error($con));
+	   $d=$con->query("SELECT * FROM special order by prog_name") or die(mysqli_error($con));
 	   while($df=$d->fetch_assoc()){
 	   ?>
-    <option value="<?php echo $df['prog_name']; ?>"><?php echo $df['prog_name']; ?></option>
+    <option value="<?php echo $df['id']; ?>"><?php echo $df['prog_name']; ?></option>
     <?php } ?>
  
   </select>
@@ -51,7 +51,7 @@
 					
 								while ($row=$result->fetch_assoc()){
 	?>
-    <option value="<?php echo $row['levels']; ?>" required>Level <?php echo $row['levels']; ?></option>
+    <option value="<?php echo $row['id']; ?>" required>Level <?php echo $row['levels']; ?></option>
    <?php } ?>
   </select>
       </div>

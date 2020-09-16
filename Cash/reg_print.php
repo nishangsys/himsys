@@ -1,5 +1,5 @@
 <?php
-include  '../dbc.php';
+include  '../includes/dbc.php';
 require_once 'functions/functions.php';
 
 	
@@ -76,9 +76,9 @@ if(isset($_GET['id'])){
 	  $who=$_GET['id'];
 	
 		
-	  $select="SELECT * from daily where id='$who' and exp='' ";
-	$run=mysql_query($select) or die(mysql_error());
-	while ($row=mysql_fetch_assoc($run)){
+	  $select=$dbcon->query("SELECT * from levels,special,years,students,our_accounts,daily  where  daily.id='$who' AND   daily.method=our_accounts.id  AND daily.cust_id= students.matricule AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id and daily.reason='registration' GROUP BY daily.id") or die(mysqli_error($dbcon));
+	  $counts=$select->num_rows;
+	while ($row=$select->fetch_assoc()){
 		
 	
 	?>
@@ -129,7 +129,7 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:500px;margin-top:3px;">
-<?php echo $row['purpose'];?> <?php echo $row['reason'];?> PAID by  Bank / Cash</div>
+<?php echo $row['purpose'];?> <?php echo $row['reason'];?> paid through<?php echo $row['name'];?></div>
 
 <div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
 
@@ -141,7 +141,7 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:300px;margin-top:3px;">
-<?php echo $row['year'];?>.
+<?php echo $row['year_name'];?>.
 </div>
 
 <div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
@@ -156,13 +156,8 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:200px;border:1px solid #000;margin-top:3px;">
-<?php  $p=$row['rec'];
-	if(empty($p)){
-		echo $paid=$row['bank'];
-	}
-	else {
-		echo $paid=$row['rec'];
-	}?> <i>frs C. F. A</i>
+<?php  $paid=$row['rec'];
+	echo $paid;?> <i>frs C. F. A</i>
 </div>
 <div style=" float:left; width:100px;margin-top:3px;">
 DATE
@@ -233,7 +228,7 @@ ___________________<br /><br />Student Signature
 
 
 
-<div class="mainbox">
+<div class="mainbox" >
 
 <?php include 'header.php'; ?>
     
@@ -244,10 +239,10 @@ ___________________<br /><br />Student Signature
 if(isset($_GET['id'])){
 	 $who=$_GET['id'];
 	
+		  $select=$dbcon->query("SELECT * from levels,special,years,students,our_accounts,daily  where  daily.id='$who' AND   daily.method=our_accounts.id  AND daily.cust_id= students.matricule AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id  and daily.reason='registration' GROUP BY daily.id ") or die(mysqli_error($dbcon));
+	  $counts=$select->num_rows;
+	while ($row=$select->fetch_assoc()){
 		
-	  $select="SELECT * from daily where id='$who' and exp='' ";
-	$run=mysql_query($select) or die(mysql_error());
-	while ($row=mysql_fetch_assoc($run)){
 		
 	
 	?>
@@ -298,7 +293,7 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:500px;margin-top:3px;">
-<?php echo $row['purpose'];?> <?php echo $row['reason'];?> PAID by  Bank / Cash</div>
+<?php echo $row['purpose'];?> <?php echo $row['reason'];?> paid through<?php echo $row['name'];?></div>
 
 <div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
 
@@ -310,7 +305,7 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:300px;margin-top:3px;">
-<?php echo $row['year'];?>.
+<?php echo $row['year_name'];?>.
 </div>
 
 <div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
@@ -325,13 +320,8 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:200px;border:1px solid #000;margin-top:3px;">
-<?php  $p=$row['rec'];
-	if(empty($p)){
-		echo $paid=$row['bank'];
-	}
-	else {
-		echo $paid=$row['rec'];
-	};?> <i>frs C. F. A</i>
+<?php  $paid=$row['rec'];
+	echo $paid;;?> <i>frs C. F. A</i>
 </div>
 <div style=" float:left; width:100px;margin-top:3px;">
 DATE

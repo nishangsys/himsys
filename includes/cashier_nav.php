@@ -11,12 +11,12 @@ $query =$con->query("SELECT * FROM users WHERE id=".$_SESSION['id']) or die(mysq
  
  }
  
- 	 //////////select academic year//////////////
-$d=$con->query("SELECT * FROM rush where roll='1'") or die(mysqli_error($con));
+  	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
 while($bu=$d->fetch_assoc()){
-	 $year_id=$bu['year'];
-	 $year=$bu['extra'];
-	 $year2=$bu['extra1'];
+	 $ayear_name=$bu['year_name'];
+	 $ayear=$bu['id'];
+	
 }
 
 ///////////////select semester////////////

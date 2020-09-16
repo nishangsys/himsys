@@ -1,18 +1,5 @@
 
-<?php 
 
-
-
-$cus1="SELECT * from client ";
-$run1=mysql_query($cus1) or die (mysql_error());
- while ($rows=mysql_fetch_assoc($run1)){
-	 $clients=$rows['name'];
-	 $AD=$rows['address'];
-	 $TEL=$rows['as1'];
-	 $vil=$rows['as2'];
- }
- 
-?>
 
 
 

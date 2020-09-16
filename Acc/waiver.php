@@ -32,7 +32,15 @@ while($bu=$d->fetch_assoc()){
 		 $name=$rows['fname'];
 	
 	
+$dop=$con->query("SELECT * FROM `settings` where prog_id='".$rows['dept_id']."'  AND level_id='".$rows['level_id']."' ") or die(mysqli_error($con));
 
+$countss=$dop->num_rows;
+while($bus=$dop->fetch_assoc()){
+	 $fees=$bus['fees'];	
+	 $bank=$bus['bank'];
+	
+	
+}
 	 
 	
 	?>
@@ -88,29 +96,14 @@ function checkAvailability() {
 </script>
 
 
-<?php
-$am=$con->query("SELECT * FROM modes") or die(mysqli_error($con));
-
- while($us=$am->fetch_array()){ 
-
- ?>
- <a href="?cust=<?php echo $_GET['cust']; ?>&mo=<?php echo $us['name']; ?>" style="color:#000; border:1px solid#00; padding:5px 50px; width:400px; color:#F00; font-weight:bold; font-family:'Arial Black', Gadget, sans-serif">
-   <?php echo $us['name']; ?> TRANSACTION
-         
-    </a>
- 
- <?php } ?>
-  
   
   <div style="clear:both"></div>
   <div class="col-sm-12">
-  <?PHP
- /////check if transaction type is checked and open the form
- if(isset($_GET['mo'])){ 
-  ?>
+ 
   
-  
-  
+   <div class="alert alert-info">
+  <strong>Recording Waiver Paymeents for <?php echo $rows['fname']; ?> this <?php echo $rows['year_name']; ?></strong> 
+</div>
   
       <div class="well">
  <form class="form-horizontal" action="" method="post" name="form">
@@ -146,22 +139,18 @@ while($bu=$d->fetch_assoc()){
         <input type="text" class="form-control" id="email"  name="class" value="<?php echo $rows['matricule'];; ?>"  readonly="readonly">
       </div>
     </div>
-         <div class="form-group">
+ <div class="form-group">
       <label class="control-label col-sm-2" for="email">Bank/Method:</label>
       <div class="col-sm-10">
-       <select  class="form-control" required id="sel1" name="bank" >
-     <option value="<?php echo $_GET['mo']; ?>"><?php echo $_GET['mo']; ?></option>
-       
-        <option value="CASH"  >CASH </option>  
-       
-        <option value="<?php echo $bank; ?>"  ><?php echo $bank; ?> </option>  
+       <select  class="form-control" required id="sel1" name="method" >
+
         <?php
 							
 								$result = $con->query("SELECT * FROM our_accounts") or die(mysqli_error($con));
 				while($bu=$result->fetch_assoc()){
 								?>
                               
-        <option value="<?php echo $bu['name']; ?>"  ><?php echo $bu['name']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
     <?php } ?> 
         
       </select>
@@ -184,7 +173,7 @@ while($bu=$d->fetch_assoc()){
       <label class="control-label col-sm-2" for="email">Level:</label>
       <div class="col-sm-10">
           
-       <select class="form-control" id="sel1" name="dept_id" required>
+       <select class="form-control" id="sel1" name="level_id" required>
     <option value="<?php echo $rows['level_id'];; ?>"><?php echo $rows['levels'];; ?></option>
    
   </select>
@@ -207,7 +196,14 @@ while($bu=$d->fetch_assoc()){
     </div>
     
     
-   
+        <input type="hidden" class="form-control" name="feeamt" value="<?php
+	
+		 echo $fees;
+			 
+		
+						 
+				  ?>" onBlur="doCalc(this.form)" required="required" r>
+     
      <div class="form-group">
       <label class="control-label col-sm-2" for="pwd"> Waiver Amount:</label>
       <div class="col-sm-10">
@@ -284,14 +280,12 @@ while($bu=$d->fetch_assoc()){
     
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-primary" name="save" class="btn btn-danger">Save</button>
+        <button type="submit" class="btn btn-primary" name="save" class="btn btn-danger">Save Waiver Payments</button>
       </div>
     </div>
   </form>
   
   
-  
-<?php }?>
 
  <hr />
 
@@ -341,34 +335,33 @@ $year_id=$_POST['year_id'];
 $matriculex=$_POST['matric'];
 
 $waver=$_POST['waver'];;
-$mmm=$_GET['mo'];
-	if($mmm=='CASH'){
-		$r='CASH';
-		$cash=$waver;
-		$bankk=0;
-	}
-	else {
-		 $r=$bank;
-		$cash=0;
-		$bankk=$waver;
-	}
-	
 
 $student_id=$_POST['student_id'];
+$dept_id=$_POST['dept_id'];
+$level_id=$_POST['level_id'];
 $dates=date('d-m-Y');
-$a=$dbcon->query("SELECT * FROM fee_paymts where yearid='$year_id' and student_id='$student_id' ") or die(mysqli_error($dbcon));
+$method=$_POST['method'];;
+$feeamt=$_POST['feeamt'];
+$a=$dbcon->query("SELECT * FROM fee_paymts where yearid='$year_id' and matric='$matriculex' ") or die(mysqli_error($dbcon));
 	 $count=$a->num_rows;
+	 
+	 $a=$dbcon->query("SELECT * FROM daily WHERE cust_id='$matriculex' AND year='$year_id' AND reason='waiver' AND waver>0") or die(mysqli_error($dbcon));
+	 $check_daily=$a->num_rows;
 	
+	if($check_daily>0){
+		echo "<script>alert('Record already Exists for this ".$fname." '); </script>";
 
-	if($count>0){	 
+			echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';	
+	}
+	else if($count>0){	 
 
 
 			 $daily_delete=$dbcon->query("DELETE FROM daily WHERE cust_id='$matriculex' AND year='$year_id' AND reason='waiver' AND waver>0 ") or die(mysqli_error($dbcon));
 						
 			 $daily=$dbcon->query("INSERT INTO daily set cust_id='$matriculex',day='$day',staffname='$fname',waver='$waver', date='$dates',month='$month',year='$year_id',reason='waiver',qty='1',paidto='$active',rec='$waver',
-						purpose='waiver'") or die(mysqli_error($dbcon));
+						purpose='waiver',prog_id='$dept_id', level_id='$level_id',fyear='$year', method='$method'") or die(mysqli_error($dbcon));
 						
-			$update_feepmts=$dbcon->query("UPDATE fee_paymts SET waiver='$waver'  where yearid='$year_id' and student_id='$student_id' ") or die(mysqli_error($dbcon));
+			$update_feepmts=$dbcon->query("UPDATE fee_paymts SET waiver='$waver'  where yearid='$year_id' and matric='$matriculex' ") or die(mysqli_error($dbcon));
 
 			echo "<script>alert('Record Created Successfully!'); </script>";
 
@@ -376,10 +369,14 @@ $a=$dbcon->query("SELECT * FROM fee_paymts where yearid='$year_id' and student_i
 
 	}
 	else {
-		
-			echo "<script>alert('ERROR. Please Input Atleast First Installment before Recording Scholarship!'); </script>";
+		$daily=$dbcon->query("INSERT INTO daily set cust_id='$matriculex',day='$day',staffname='$fname',waver='$waver', date='$dates',month='$month',year='$year_id',reason='waiver',qty='1',paidto='$active',rec='$waver',
+						purpose='waiver',prog_id='$dept_id', level_id='$level_id',fyear='$year', method='$method'") or die(mysqli_error($dbcon));
+						
+			$update_feepmts=$dbcon->query("INSERT INTO fee_paymts SET waiver='$waver' ,yearid='$year_id' ,student_id='$student_id',matric='$matriculex',expected_amount='$feeamt',program_id='$dept_id',level_id='$level_id' ") or die(mysqli_error($dbcon));
 
+		
 			echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';	
+
 		
 	}
 }

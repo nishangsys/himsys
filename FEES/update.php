@@ -6,10 +6,10 @@ function doCalc(form) {
   <?php
   if(isset($_GET['name'])){
 	 $name=$_GET['name'];
-	  $id=$_GET['id'];
+	  echo $id=$_GET['id'];
 	  $year_id=$_GET['ayear'];
-	   $a=mysql_query("SELECT * from historic WHERE roll='$id'   ") or die(mysql_error());
-	 while($ad=mysql_fetch_assoc($a)){
+	   $a=$dbcon->query("SELECT * from fee_paymts WHERE id='$id'   ") or die(mysqli_error($dbcon));
+	 while($ad=$a->fetch_assoc()){
 
   
   ?>

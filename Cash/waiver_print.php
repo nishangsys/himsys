@@ -1,5 +1,5 @@
 <?php
-include  '../dbc.php';
+include  '../includes/dbc.php';
 require_once 'functions/functions.php';
 
 	
@@ -53,7 +53,6 @@ body{
 table,tr,td{
 	border:1px solid#000;
 	border-collapse:collapse;
-	line-height:1.8;
 }
 </style>
 </head>
@@ -75,26 +74,11 @@ onClick="window.print()"/>
     <?PHP
 if(isset($_GET['id'])){
 	  $who=$_GET['id'];
-	  
-	  $d=$con->query("select  staffname,cust_id,SUM(rec+bank) as paid ,year from daily where id='".$who."' GROUP BY staffname") or die(mysqli_error($con));
-while($bu=$d->fetch_assoc()){
-	$n=$bu['staffname'];
-	$m=$bu['cust_id'];
-	$paids=$bu['paid'];
-	$ay=$bu['year'];
-}
 	
-	
-	////get total paid soafr
-	$d=$con->query("select SUM(rec+bank) as sofar from daily where  staffname='$n' and cust_id='$m' and year='$ay' and reason='waiver'") or die(mysqli_error($con));
-$a=1;
-while($bu=$d->fetch_assoc()){
-	$tp=$bu['sofar'];
-}
 		
-	  $select="SELECT * from daily where id='$who' and exp='' ";
-	$run=mysql_query($select) or die(mysql_error());
-	while ($row=mysql_fetch_assoc($run)){
+	  $select=$dbcon->query("SELECT * from levels,special,years,students,our_accounts,daily  where  daily.id='$who' AND   daily.method=our_accounts.id  AND daily.cust_id= students.matricule AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id and daily.reason='waiver' GROUP BY daily.id") or die(mysqli_error($dbcon));
+	  $counts=$select->num_rows;
+	while ($row=$select->fetch_assoc()){
 		
 	
 	?>
@@ -128,7 +112,7 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:300px;margin-top:3px;">
-<?php echo $n;?>.
+<?php echo $row['staffname'];?>.
 </div>
 
 <div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
@@ -145,10 +129,22 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:500px;margin-top:3px;">
-waiver for  <?php echo $ay;?> School Year</div>
+ <?php echo $row['reason'];?> paid through <?php echo $row['name'];?></div>
 
 <div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
 
+
+<div style=" float:left; width:170px; height:25px;font-size:17px;"> Academic year:</div>
+
+
+<div style=" float:left; width:500px;border-bottom:1px solid #000;font-weight:normal; height:25px;font-size:17px;"> 
+
+
+<div style=" float:left; width:300px;margin-top:3px;">
+<?php echo $row['year_name'];?>.
+</div>
+
+<div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
 
 
 <div style=" float:left; width:700px;margin-top:3px;TEXT-ALIGN:CENTER; font-family:arial; height:300px; 
@@ -160,7 +156,14 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:200px;border:1px solid #000;margin-top:3px;">
-<?php   echo number_format($tp); ?> <i>frs C. F. A</i>
+<?php  $paid=$row['rec'];
+	echo $paid;?> <i>frs C. F. A</i>
+</div>
+<div style=" float:left; width:100px;margin-top:3px;">
+DATE
+</div>
+<div style=" float:left; width:200px;border-bottom:1px solid #000;margin-top:3px;">
+<?php echo $row['date'];?>
 </div>
 
 
@@ -173,53 +176,30 @@ font-size:13px; ">
 <div style=" float:left; width:170px; height:25px;font-size:17px;"> <i>Amount in Words</i></div>
 
 
-<div style=" float:left; width:500px; height:25px; border-bottom:none; font-size:16px; font-family:Chaparral Pro Light; border-bottom:1PX dashed#000"><i><?php echo convert_number_to_words($tp) .'&nbsp; FCFA'; ?></i></div>
+<div style=" float:left; width:500px; height:25px; border-bottom:none; font-size:16px; font-family:Chaparral Pro Light; border-bottom:1PX dashed#000"><i><?php echo convert_number_to_words($paid) .'&nbsp; FCFA'; ?></i></div>
     
-  </div>  
+  </div><div style=" clear:both; height:30px"></div>
+  
+<div style="float:left; margin:10px 30px; height:30px; ">
+
+___________________<br /><br />Bursar Signature
+</div>
 
 
 
 
 
-<table>
-<td>#</td>
-<td>Date</td>
-<td>Cash</td><td>Bank Pmt</td><td>Bank</td><td>Date </td></tr>
-<?php
-$d=$con->query("select  * from daily where  staffname='$n' and cust_id='$m' and year='$ay' and reason='waiver'") or die(mysqli_error($con));
-$a=1;
-while($bu=$d->fetch_assoc()){
-?>
-<tr>
-<td><?php echo $a++; ?></td>
-<td><?php echo $bu['date']; ?></td>
-<td><?php echo number_format($bu['rec']); ?></td><td><?php echo number_format($bu['bank']); ?></td><td><?php echo $bu['company']; ?></td><td><?php echo $bu['time']; ?></td></tr>
-<?php } ?>
-</table>
+  
+<div style="float:right; margin:10px 30px; height:30px;">
 
-
-
-<div style=" font-size:16px; line-height:1.5; height:auto; margin-top:-10px; overflow:hidden;  color:#333; width:98%">
-
-   <div class="clear"></div>
- <div class="lefo">
-     <p>Cashier's Signature<br />
-     <b>....................</b>
-     
-     </p>
-     
-     </div>
-     <div class="righto">
-     <p>student Signature<br />
-     <b>......................</b>
-     </div>
-    
+___________________<br /><br />Student Signature
+</div>
 </div>
 
 </div>
 </div>
 </div></div>
-</div>
+
 
 
 
@@ -227,7 +207,7 @@ while($bu=$d->fetch_assoc()){
 
 
 
-<div class="mainbox">
+<div class="mainbox" >
 
 <?php include 'header.php'; ?>
     
@@ -236,27 +216,12 @@ while($bu=$d->fetch_assoc()){
    
     <?PHP
 if(isset($_GET['id'])){
-	  $who=$_GET['id'];
-	  
-	  $d=$con->query("select  staffname,cust_id,SUM(rec+bank) as paid ,year from daily where id='".$who."' GROUP BY staffname") or die(mysqli_error($con));
-while($bu=$d->fetch_assoc()){
-	$n=$bu['staffname'];
-	$m=$bu['cust_id'];
-	$paids=$bu['paid'];
-	$ay=$bu['year'];
-}
+	 $who=$_GET['id'];
 	
-	
-	////get total paid soafr
-	$d=$con->query("select SUM(rec+bank) as sofar from daily where  staffname='$n' and cust_id='$m' and year='$ay' and reason='waiver'") or die(mysqli_error($con));
-$a=1;
-while($bu=$d->fetch_assoc()){
-	$tp=$bu['sofar'];
-}
+		  $select=$dbcon->query("SELECT * from levels,special,years,students,our_accounts,daily  where  daily.id='$who' AND   daily.method=our_accounts.id  AND daily.cust_id= students.matricule AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id  and daily.reason='waiver' GROUP BY daily.id ") or die(mysqli_error($dbcon));
+	  $counts=$select->num_rows;
+	while ($row=$select->fetch_assoc()){
 		
-	  $select="SELECT * from daily where id='$who' and exp='' ";
-	$run=mysql_query($select) or die(mysql_error());
-	while ($row=mysql_fetch_assoc($run)){
 		
 	
 	?>
@@ -290,7 +255,7 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:300px;margin-top:3px;">
-<?php echo $n;?>.
+<?php echo $row['staffname'];?>.
 </div>
 
 <div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
@@ -307,10 +272,22 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:500px;margin-top:3px;">
-waiver for  <?php echo $ay;?> School Year</div>
+ <?php echo $row['reason'];?> paid through <?php echo $row['name'];?></div>
 
 <div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
 
+
+<div style=" float:left; width:170px; height:25px;font-size:17px;"> Academic year:</div>
+
+
+<div style=" float:left; width:500px;border-bottom:1px solid #000;font-weight:normal; height:25px;font-size:17px;"> 
+
+
+<div style=" float:left; width:300px;margin-top:3px;">
+<?php echo $row['year_name'];?>.
+</div>
+
+<div style=" float:left; width:200px;  height:25px;margin-top:3px;"></div></div>
 
 
 <div style=" float:left; width:700px;margin-top:3px;TEXT-ALIGN:CENTER; font-family:arial; height:300px; 
@@ -322,7 +299,14 @@ font-size:13px; ">
 
 
 <div style=" float:left; width:200px;border:1px solid #000;margin-top:3px;">
-<?php   echo number_format($tp); ?> <i>frs C. F. A</i>
+<?php  $paid=$row['rec'];
+	echo $paid;;?> <i>frs C. F. A</i>
+</div>
+<div style=" float:left; width:100px;margin-top:3px;">
+DATE
+</div>
+<div style=" float:left; width:200px;border-bottom:1px solid #000;margin-top:3px;">
+<?php echo $row['date'];?>
 </div>
 
 
@@ -335,7 +319,7 @@ font-size:13px; ">
 <div style=" float:left; width:170px; height:25px;font-size:17px;"> <i>Amount in Words</i></div>
 
 
-<div style=" float:left; width:500px; height:25px; border-bottom:none; font-size:16px; font-family:Chaparral Pro Light; border-bottom:1PX dashed#000"><i><?php echo convert_number_to_words($tp) .'&nbsp; FCFA'; ?></i></div>
+<div style=" float:left; width:500px; height:25px; border-bottom:none; font-size:16px; font-family:Chaparral Pro Light; border-bottom:1PX dashed#000"><i><?php echo convert_number_to_words($paid) .'&nbsp; FCFA'; ?></i></div>
     
   </div>  
 
@@ -343,38 +327,21 @@ font-size:13px; ">
 
 
 
-<table>
-<td>#</td>
-<td>Date</td>
-<td>Cash</td><td>Bank Pmt</td><td>Bank</td><td>Date </td></tr>
-<?php
-$d=$con->query("select  * from daily where  staffname='$n' and cust_id='$m' and year='$ay' and reason='waiver'") or die(mysqli_error($con));
-$a=1;
-while($bu=$d->fetch_assoc()){
-?>
-<tr>
-<td><?php echo $a++; ?></td>
-<td><?php echo $bu['date']; ?></td>
-<td><?php echo number_format($bu['rec']); ?></td><td><?php echo number_format($bu['bank']); ?></td><td><?php echo $bu['company']; ?></td><td><?php echo $bu['time']; ?></td></tr>
-<?php } ?>
-</table>
+<div style=" clear:both; height:30px"></div>
+  
+<div style="float:left; margin:10px 30px; height:30px; ">
+
+___________________<br /><br />Bursar Signature
+</div>
 
 
 
-<div style=" font-size:16px; line-height:1.5; height:auto; margin-top:-10px; overflow:hidden;  color:#333; width:98%">
 
-   <div class="clear"></div>
- <div class="lefo">
-     <p>Cashier's Signature<br />
-     <b>....................</b>
-     
-     </p>
-     
-     </div>
-     <div class="righto">
-     <p>student Signature<br />
-     <b>......................</b>
-     </div>
+
+  
+<div style="float:right; margin:10px 30px; height:30px;">
+
+___________________<br /><br />Student Signature
 </div>
 
 </div>

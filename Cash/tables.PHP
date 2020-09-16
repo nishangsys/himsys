@@ -34,7 +34,8 @@ include '../includes/dbc.php';
         </h3>
         <?php 
 		 $reson=$_GET['type'];
-		$d=$con->query("SELECT * FROM daily where purpose='$reson'  order by id DESC  ") or die(mysqli_error($con));
+		$d=$dbcon->query("SELECT * FROM levels,special,daily where daily.reason='$reson' 
+		and levels.id=daily.level_id AND special.id=daily.prog_id order by daily.staffname  ") or die(mysqli_error($dbcon));
 $i=1;
 ?>
  <thead>
@@ -42,7 +43,7 @@ $i=1;
                                             <th>#</th>
                                                     <th>Student</th>
                                                    <th>Department</th>
-   <th>Level</th>
+                                                     <th>Purpose</th>
                                                   <th>Amt Paid</th>
                                                                                                                             
 
@@ -53,13 +54,13 @@ $i=1;
                                     <tbody>
                                        <?php while($bu=$d->fetch_assoc()){ ?>
 
-      <tr>
+                                               <tr>
        
-           <td><?php  echo $i++; ?></td>
+                                                 <td><?php  echo $i++; ?></td>
                                             <td><?php  echo $bu['staffname']; ?></td>
-                                                 <td><?php  echo $bu['purpose']; ?></td>
-                                                      <td><?php  echo $bu['area']; ?></td>
-                                                           <td><?php  echo $bu['price']; ?></td>
+                                                 <td><?php  echo $bu['prog_name']; ?></td>
+                                                      <td><?php  echo $bu['reason']; ?></td>
+                                                           <td><?php  echo number_format($bu['rec']); ?></td>
                                                               <td><?php  echo $bu['date']; ?></td>
                                            
                                             
@@ -68,7 +69,7 @@ $i=1;
                                        <?php } ?>
                                     </tbody>
                                 </table>
-                                mmmm
+                              
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 
                                 

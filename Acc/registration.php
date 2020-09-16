@@ -13,63 +13,26 @@ $active=$userRow['full_name'];
 if(isset($_GET['cust'])){
 	
 	$who=$_GET['cust'];
-$d=$con->query("SELECT * FROM rush where roll='1'") or die(mysqli_error($con));
+	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
 while($bu=$d->fetch_assoc()){
-	 $year_id=$bu['year'];
-	 $year=$bu['extra'];
-	$year2=$bu['extra2'];
+	 $ayear_name=$bu['year_name'];
+	 $ayear=$bu['id'];
+	
 }
 
 
-
-	  $select=$conn->query("SELECT * from students  where roll='".$who."' ") or die(mysqli_error($conn));
+	  $select=$conn->query("SELECT * from levels,special,years,students  where students.id='".$who."' AND year_id='$ayear' AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id ") or die(mysqli_error($conn));
 	while ($rows=$select->fetch_assoc()){
-		$AY=$rows['year_id'];
-		$matrics=$rows['matricule'];
-		$id=$rows['c110'];
-		$POB=$rows['cxx1'];
-		$DOB=$rows['cxx2'];
-		 $l=$rows['levels'];
-          $deptss=$rows['departmet'];
-		 $sessionss=$rows['cxx6'];
+			$dept_id=$rows['dept_id'];
+			$level_id=$rows['level_id'];
+			$matrics=$rows['matricule'];
 	
-		
-	 //////////Fees, bank ,regsitrating from settings tbl in school_db//////////////
-	// $dop=("SELECT * FROM `settings` where prog LIKE '%".$deptss."%' and levels LIKE '%".$rows['levels']."%'  ");
 
 	
-$dop=$con->query("SELECT * FROM `settings` where prog ='".$deptss."' and levels ='".$rows['levels']."'  ") or die(mysqli_error($con));
-$countss=$dop->num_rows;
- if($countss<1){
-	 echo "<script>alert('SORRY. Please tell the Accountant to set Registration Packs for $deptss')</script>";
- }
- else {
-while($bus=$dop->fetch_assoc()){
-	 $fees=$bus['fees'];	
-	 $bank=$bus['bank'];
-	  $adminp=$bus['adminp'];
-	  $sunion=$bus['sunion'];
-	  $tshirt=$bus['tshirt'];
-	  $session=$bus['cxx6'];
-	  $regfee=$bus['reg'];
-	  $regs=$bus['reg']+$sunion+$adminp+$tshirt;
-	  
-	
-	
-}
-
-
- //////////Setting Fees from classes12 tbl//////////////
-$a=$conn->query("SELECT * FROM historic where matricule='".$matrics."' ") or die(mysqli_error($conn));
-while($b=$a->fetch_assoc()){
-	$ak=$b['cxx6'];
-	
-	
-}
-
 
 ////////////////check from the historique if name exits, then return error else run script			 
-	$a=$con->query("SELECT * FROM daily where cust_id='$matrics' and year='$year_id' AND reason='registration' ") or die(mysqli_error($con));
+	$a=$con->query("SELECT * FROM daily where cust_id='$matrics' and year='$ayear' AND reason='registration' ") or die(mysqli_error($con));
 $coun=$a->num_rows;
 if($coun>0){
 	echo "<script>alert('Sorry ".$rows['fname']." has paid his or her Registration,T shirts and others')</script>";
@@ -77,6 +40,23 @@ if($coun>0){
 }
 else {
 	 
+	 
+	 		
+$dops=$con->query("SELECT * FROM `settings` where prog_id='$dept_id'  AND level_id='$level_id' ") or die(mysqli_error($con));
+
+$countss=$dops->num_rows;
+while($buss=$dops->fetch_assoc()){
+	 $fees=$buss['fees'];	
+	 $bank=$buss['bank'];
+	   $adminp=$buss['adminp'];
+	  $sunion=$buss['sunion'];
+	  $tshirt=$buss['tshirt'];
+	 
+	  $regfee=$buss['reg'];
+	  $regs=$buss['reg']+$sunion+$adminp+$tshirt;
+	  
+}
+	
 	
 	?>
  
@@ -125,28 +105,10 @@ function checkAvailability() {
 </script>
 
 
-<?php
-$am=$con->query("SELECT * FROM modes") or die(mysqli_error($con));
-
- while($us=$am->fetch_array()){ 
-
- ?>
- <a href="?cust=<?php echo $_GET['cust']; ?>&mo=<?php echo $us['name']; ?>" style="color:#000; border:1px solid#00; padding:5px 50px; width:400px; color:#F00; font-weight:bold; font-family:'Arial Black', Gadget, sans-serif">
-   <?php echo $us['name']; ?> TRANSACTION
-         
-    </a>
- 
- <?php } ?>
-  
   
   <div style="clear:both"></div>
   <div class="col-sm-12">
-  <?PHP
- /////check if transaction type is checked and open the form
- if(isset($_GET['mo'])){ 
-  ?>
-  
-  
+
   
   
       <div class="well">
@@ -156,11 +118,12 @@ $am=$con->query("SELECT * FROM modes") or die(mysqli_error($con));
       <div class="col-sm-10">
       
   <input name="username" type="text" value="<?php echo $rows['fname'];; ?>" id="username" class="demoInputBox" onBlur="checkAvailability()" style="width:65%; border:2px solid#f00" required="required"><span id="user-availability-status" style="color:#f00" > <?php
-  
-  $d=$conn->query("SELECT * FROM historic where matricule='$matrics' and year_id!='$year_id' AND balance>0  ") or die(mysqli_error($conn));
+ 
+  $d=$conn->query("SELECT * FROM fee_paymts where matric='".$rows['matricule']."' and yearid!='$year_id' AND balance>0  ") or die(mysqli_error($conn));
   $counts=$d->num_rows;
 while($bu=$d->fetch_assoc()){
-	 $bal=$bu['balance'];
+	$bal=$bu['balance'];
+	
 	 $b=number_format($bal);
 }	
 	if($counts>0){
@@ -186,18 +149,15 @@ while($bu=$d->fetch_assoc()){
          <div class="form-group">
       <label class="control-label col-sm-2" for="email">Bank/Method:</label>
       <div class="col-sm-10">
-       <select  class="form-control" required id="sel1" name="bank" >
-<option value="<?php echo $_GET['mo']; ?>"><?php echo $_GET['mo']; ?></option>       
-        <option value="CASH"  >CASH </option>  
-       
-        <option value="<?php echo $bank; ?>"  ><?php echo $bank; ?> </option>  
+       <select  class="form-control" required id="sel1" name="method" >
+
         <?php
 							
 								$result = $con->query("SELECT * FROM our_accounts") or die(mysqli_error($con));
 				while($bu=$result->fetch_assoc()){
 								?>
                               
-        <option value="<?php echo $bu['name']; ?>"  ><?php echo $bu['name']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
     <?php } ?> 
         
       </select>
@@ -207,7 +167,10 @@ while($bu=$d->fetch_assoc()){
       <div class="form-group">
       <label class="control-label col-sm-2" for="email">Dept:</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="email"  name="class" value="<?php echo $rows['departmet'];; ?>" readonly>
+        <select class="form-control" id="sel1" name="dept_id" required>
+    <option value="<?php echo $rows['dept_id'];; ?>"><?php echo $rows['prog_name'];; ?></option>
+   
+  </select>
       </div>
     </div>
     
@@ -326,14 +289,8 @@ while($bu=$d->fetch_assoc()){
     
     <input type="hidden" name="matric" value="<?php echo $rows['matricule'];
 	 ?>" />
-    
-      <input type="hidden" name="disc" value="0" />
-    
-     <input type="hidden" name="levels" value="<?php echo $l ?>" />
-    
-    
-    
-    
+     <input type="hidden" name="level_id" value="<?php echo $rows['level_id']; ?>" />
+       <input type="hidden" name="ayear" value="<?php echo $ayear; ?>" />
     
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
@@ -343,7 +300,7 @@ while($bu=$d->fetch_assoc()){
   </form>
     
 </div></div>
-<?php }}?>
+<?php } ?>
 
 <?php
 
@@ -369,6 +326,7 @@ $fname="$first_name $middle_name $last_name";
 $month=$_POST['month'];
 $part=$_POST['part'];
 $day=$_POST['day'];
+$ayear=$_POST['ayear'];
 
 $year=$_POST['year'];
 $year_id=$_POST['year_id'];
@@ -377,86 +335,31 @@ $dbirth=$_POST['month'];
 $place=$_POST['place'];
 $matric=$_POST['matric'];
 
-$nation=$_POST['nation'];
-
-
-$religion=$_POST['religion'];
-$qualification=$_POST['qualification'];
-
-$address=$_POST['address'];
-$city=$_POST['city'];
-
-$feeamt=$_POST['feeamt'];
 $part=$_POST['part'];
 
-$guide=$_POST['guide'];
 $reg=$_POST['reg'];
 echo $totreg=$sunion+$adminpp+$tshirt+$reg;
  $all=$feeamt+$reg;
 // $bbm=($_POST['feeamt']-($_POST['part']+$_POST['reg']+$_POST['disc']));
  $bbm=$all-($_POST['part']+$_POST['disc']);
 
+$level_id=$_POST['level_id'];
+$dept_id=$_POST['dept_id'];
 
-
-
-$cateory=$_POST['category'];
-
-$levels=$_POST['levs'];
-
-
-$contact1=$_POST['contact1'];
-$contact2=$_POST['contact2'];
-
-
-$guardian1=$_POST['gaurdain1'];
-$guardian2=$_POST['guardian2'];
-
-$hschool=$_POST['hschool'];
-$hgrade=$_POST['hgrade'];
-
-$oschool=$_POST['oschool'];
-$ograde=$_POST['ograde'];
-$pass=$_POST['pass'];
-$partd=$_POST['motive'];
-
-$as=$_POST['as'];
-$paid=$_POST['part'];
-$class1=$_POST['class'];
 $matriculex=$_POST['matric'];
 
 $matricule=$_POST['matricule'];
-$cc=$_POST['department'];
+
 $month=$_POST['month'];;
 $year=$_POST['year'];;
 $day=$_POST['day'];;
-$bank=$_POST['bank'];;
-$debts=$_POST['debts'];
-$mmm=$_GET['mo'];
-	if($mmm=='CASH'){
-		$r='CASH';
-		$cash=$paid;
-		$bankk=0;
-	}
-	else {
-		echo $r=$bank;
-		$cash=0;
-		$bankk=$paid;
-	}
-	
-$bal=$_POST['balance'];;
-$waver=$_POST['waver'];;
+$method=$_POST['method'];;
+
+
 	$date=$day."-".$month."-".$year;
 	$dd=date('d-m-Y');
 /************************ SERVER SIDE VALIDATION **************************************/
 /********** This validation is useful if javascript is disabled in the browswer ***/
-
-
-
-
-
-// stores sha1 of password
- $sha1pass = PwdHash($data['pass']);
-
 
 
 $dates=date('d-m-Y');
@@ -475,8 +378,8 @@ else {
 
 
 
- $daily=$con->query("INSERT INTO daily set cust_id='$matriculex',room='$room',day='$day',staffname='$fname',discount=' $regfee',amt='$part',date='$date',month='$month',year='$year_id',reason='registration',qty='1',area='1',price='$paid',total='$part',owed='$bal',company='$r',paidto='$active',time='$time',
-			purpose='$class1',rec='$cash',bank='$bankk',sunion='$sunion',adminp='$adminpp',tshirt='$tshirt' ,levels='$l',session='$sessionss',waver='$waver'") or die(mysqli_error($con));
+ $daily=$con->query("INSERT INTO daily set cust_id='$matriculex',prog_id='$dept_id', level_id='$level_id', day='$day',staffname='$fname',discount=' $regfee',amt='',rec='$part',date='$date',month='$month',year='$ayear',reason='registration',qty='1',area='1',price='$paid',total='$part',owed='$bal',company='$r',paidto='$active',time='$time',fyear='$year',
+			purpose='$class1',method='$method',sunion='$sunion',adminp='$adminpp',tshirt='$tshirt' ,levels='$l',waver='$waver'") or die(mysqli_error($con));
 
 
 echo "<script>alert('Record Created Successfully!'); </script>";
@@ -490,4 +393,4 @@ echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';
 
 
 
-<?php } } ?>
+<?php }  ?>

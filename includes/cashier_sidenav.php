@@ -112,34 +112,28 @@
      
      
               
-       <li class="panel ">   
-      <a href="?income_class" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-  <i class="icon-copy  "></i> Sources of Income
-<span class="pull-right">
- </span>
- </a>
-     </li> 
+                   <li class="panel ">   
+                  <a href="?income_class" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
+              <i class="icon-copy  "></i> Sources of Income
+            <span class="pull-right">
+             </span>
+             </a>
+                 </li> 
+                            
                 
-    <li class="panel ">
-    
-      <a href="?bank_record" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-                       <i class="icon-cog"></i>  Bank Payments
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li> 
                         
                         
-     <li class="panel ">
+     			<li class="panel ">
     
-      <a href="?cash_record" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
+     				 <a href="?cash_record" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
                        <i class="icon-dollar"></i> Receive Payments
 	   
                         <span class="pull-right">
                         </span>
                         </a>
-                        </li>                      
+                        </li>         
+                        
+                                        
                         
                         
                         
@@ -153,55 +147,12 @@
                         </span>
                         </a>
                         </li> 
-                        
-                         <li class="panel ">
-    
-      <a href="?#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-                       <i class="icon-dollar"></i> DeleRecords
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li>                      
+                                        
                                        
                         
-                                        
-            
-      <li class="panel ">
-                    <a href="?bank_accounts" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-           <i class="icon-user"></i> Add a bank Account  
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li>                       
+                
                         
-                        
-                        
-                        
-                           
-                        
-            
-      <li class="panel ">
-                    <a href="?deposits" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-           <i class="icon-briefcase"></i> Bank Deposits  
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li>                       
-                                     
-                        
-         
-      <li class="panel ">
-                    <a href="?withdrawal" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav" style="color:#f00; font-weight:bold">
-           <i class="icon-folder-open"></i> Bank Withdrawal 
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li>                                   
-                        
+
                         
                         
                         

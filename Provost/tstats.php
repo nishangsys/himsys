@@ -56,47 +56,48 @@ function checkAvailability() {
     </thead>
     <tbody>
      <?php
-        $d=mysql_query("SELECT departmet,COUNT(matricule) FROM students where year_id='$ayear' group by departmet order by COUNT(matricule) desc") or die(mysql_error());
+         $d=$dbcon->query("SELECT * from students,special where students.dept_id=special.id  AND students.year_id='$ayear' GROUP BY students.dept_id") or die(mysqli_error($dbcon));
+	   
 	   $i=1;
 	  
 	   ?>
       <tr>
      
-       <?php  while($df=mysql_fetch_assoc($d)){?>
+       <?php while($df=$d->fetch_assoc()){?>
         <td><?php echo $i++; ?></td>
         
-        <td><?php echo $df['departmet']; ?></td>
+        <td><?php echo $df['prog_name']; ?></td>
       <td> <?php
-        $dm=mysql_query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and departmet='".$df['departmet']."' order by  COUNT(matricule) desc") or die(mysql_error());
-		while($dfm=mysql_fetch_assoc($dm)){
+        $dm=$dbcon->query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and dept_id='".$df['dept_id']."' ") or die(mysqli_error($dbcon));;
+		while($dfm=$dm->fetch_assoc()){
 			$X=$dfm['expected'];
 			echo number_format($dfm['expected']);
 		}	  
 	   ?></td>
       <td style="color:#060; font-weight:bold"> <?php
-       $dm=mysql_query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and departmet='".$df['departmet']."' and sex LIKE '%M%' order by  COUNT(matricule) desc") or die(mysql_error());
-		while($dfm=mysql_fetch_assoc($dm)){
+        $dm=$dbcon->query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and dept_id='".$df['dept_id']."' AND sex='male' ") or die(mysqli_error($dbcon));;
+		while($dfm=$dm->fetch_assoc()){
 			$X=$dfm['expected'];
 			echo number_format($dfm['expected']);
-		}
+		}	
 	   ?></td>
        <td > <?php
-        $dm=mysql_query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and departmet='".$df['departmet']."' and sex LIKE '%F%' order by  COUNT(matricule) desc") or die(mysql_error());
-		while($dfm=mysql_fetch_assoc($dm)){
+         $dm=$dbcon->query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and dept_id='".$df['dept_id']."' AND sex='female' ") or die(mysqli_error($dbcon));;
+		while($dfm=$dm->fetch_assoc()){
 			$X=$dfm['expected'];
 			echo number_format($dfm['expected']);
-		}  
+		}	
 	   ?></td>
        
        
        
        
           <td style="color:#009; font-weight:bold"> <?php
-         $dm=mysql_query("SELECT COUNT(nationality) as alls FROM students where year_id='$ayear' and departmet='".$df['departmet']."' and nationality!=''") or die(mysql_error());
-		while($dfm=mysql_fetch_assoc($dm)){
-			$X=$dfm['alls'];
-			echo number_format($dfm['alls']);
-		}
+        $dm=$dbcon->query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and dept_id='".$df['dept_id']."' AND nationality IS NOT NULL AND nationality!='cameroonian' ") or die(mysqli_error($dbcon));;
+		while($dfm=$dm->fetch_assoc()){
+			$X=$dfm['expected'];
+			echo number_format($dfm['expected']);
+		}	
 	   ?> </td>
       </tr>
       <?php } ?>
@@ -118,36 +119,36 @@ function checkAvailability() {
         
         <td>TOTAL</td>
       <td> <?php
-        $dm=mysql_query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' GROUP BY ayear ") or die(mysql_error());
-		while($dfm=mysql_fetch_assoc($dm)){
+       $dm=$dbcon->query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear'  ") or die(mysqli_error($dbcon));;
+		while($dfm=$dm->fetch_assoc()){
 			$X=$dfm['expected'];
 			echo number_format($dfm['expected']);
-		}	  
+		}	 
 	   ?></td>
       <td style="color:#060; font-weight:bold"> <?php
-        $dm=mysql_query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and sex like '%m%' GROUP BY ayear ") or die(mysql_error());
-		while($dfm=mysql_fetch_assoc($dm)){
+      $dm=$dbcon->query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear'  AND sex='male' ") or die(mysqli_error($dbcon));;
+		while($dfm=$dm->fetch_assoc()){
 			$X=$dfm['expected'];
 			echo number_format($dfm['expected']);
 		}		  
 	   ?></td>
        <td style="color:#F00; font-weight:bold"> <?php
-          $dm=mysql_query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' and sex like '%F%' GROUP BY ayear ") or die(mysql_error());
-		while($dfm=mysql_fetch_assoc($dm)){
+         $dm=$dbcon->query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear' AND sex='female' ") or die(mysqli_error($dbcon));;
+		while($dfm=$dm->fetch_assoc()){
 			$X=$dfm['expected'];
 			echo number_format($dfm['expected']);
-		}		
+		}	
 	   ?> </td>
        
        
        
        
           <td style="color:#009; font-weight:bold"> <?PHP
-           $dm=mysql_query("SELECT COUNT(nationality) as alls FROM students where year_id='$ayear'  and nationality!='' GROUP BY ayear") or die(mysql_error());
-		while($dfm=mysql_fetch_assoc($dm)){
-			$X=$dfm['alls'];
-			echo number_format($dfm['alls']);
-		}
+           $dm=$dbcon->query("SELECT COUNT(matricule) as expected FROM students where year_id='$ayear'  AND nationality IS NOT NULL AND nationality!='cameroonian' ") or die(mysqli_error($dbcon));;
+		while($dfm=$dm->fetch_assoc()){
+			$X=$dfm['expected'];
+			echo number_format($dfm['expected']);
+		}	
 		  
 		  ?></td>
       </tr>

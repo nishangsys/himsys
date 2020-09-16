@@ -41,7 +41,7 @@ $("#suggesstion-box").hide();
         </h3>
         <?php
 		 $ayear;
-		 $d=$dbcon->query("SELECT * from levels,special,years,students,our_accounts,daily  where  year_id='$ayear' AND   daily.exp='' and daily.rec>0 AND daily.method=our_accounts.id  AND daily.cust_id= students.matricule AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id  GROUP BY students.matricule order by students.fname
+		 $d=$dbcon->query("SELECT * from levels,special,years,students,our_accounts,daily  where  year_id='$ayear' AND   daily.exp='' and daily.rec>0 AND daily.method=our_accounts.id  AND daily.cust_id= students.matricule AND students.level_id=levels.id and students.dept_id=special.id AND daily.cust_id='".$_GET['id']."' AND students.year_id=years.id  
 		 ") or die(mysqli_error($dbcon));
 $i=1;
 ?>
@@ -69,7 +69,7 @@ $i=1;
                                                          <td><?php  echo $bu['rec']; ?></td>
                                                               <td><?php  echo $bu['date']; ?></td>
                                            
-                                                         <td><a href="?viewmy_trans&id=<?php  echo $bu['matricule']; ?>&hdhdhd" >  <button type="submit" class="btn btn-success" name="do" class="btn btn-success">View All Transactions</button></a></td>
+                                                         <td><a href="../Cash/print.php?id=<?php  echo $bu['id']; ?>" target="new">  <button type="submit" class="btn btn-success" name="do" class="btn btn-success">Print it</button></a></td>
                                            
                                                    
                                         </tr>
@@ -78,31 +78,6 @@ $i=1;
                                     </tbody>
                                 </table>
                                 
-                                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                
-                                
-                                <?php $d=$con->query("SELECT SUM(daily.rec)  FROM levels,special,years,students,our_accounts,daily where year='$ayear' AND   daily.exp='' and daily.rec>0 AND daily.method=our_accounts.id  AND daily.cust_id= students.matricule AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id   ") or die(mysqli_error($con));
-$i=1;
-?>
-  <table class="table table-bordered">                                       <?php while($bu=$d->fetch_assoc()){ ?>
-
-      <tr>
-       
-                                                      <td>GROSS TOTAL</td>
-                                                           <td style="background:#00F; color:#fff; font-weight:bold"><?php  echo number_format($bu['SUM(price)']); ?> XAF</td>
-                                                                                                              <td>TOTAL CASH</td>
-                                                           <td style="background:#00F; color:#fff; font-weight:bold"><?php  echo number_format($bu['SUM(rec)']); ?> XAF</td>
-                                                                                                              <td>TOTAL BANK</td>
-                                                           <td style="background:#00F; color:#fff; font-weight:bold"><?php  echo number_format($bu['SUM(amt)']); ?> XAF</td>
-                                           
-                                            
-                                        </tr>
-                                     
-                                       <?php } ?>
-                                  
-                                </table>
-
-
 
  
 

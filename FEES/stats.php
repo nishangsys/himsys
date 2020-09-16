@@ -1,13 +1,4 @@
-<?php
-define ("DB_HOST", "localhost"); // set database host
-define ("DB_USER", "nishang"); // set database user
-define ("DB_PASS","google1234"); // set database password
-define ("DB_NAME","hims_finance"); // set database name
 
-$link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
-$db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
-
-?>
 
 <style>
 
@@ -48,7 +39,7 @@ function checkAvailability() {
   <div class="col-sm-12">
      
      <div class="alert alert-warning">
-  <strong>Nishang Says!</strong> <?php echo $ayear; ?> Fee Records Statistics
+  <strong>Nishang Says!</strong> <?php echo $ayear_name; ?> Fee Records Statistics
 </div>
      
      
@@ -67,8 +58,8 @@ function checkAvailability() {
     </thead>
     <tbody>
      <?php
-        $d=$con->query("SELECT * FROM special order by certi") or die(mysqli_error($con));
-	   $i=1;
+        $d=$dbcon->query("SELECT * from students,special where students.dept_id=special.id  AND students.year_id='$ayear' GROUP BY students.dept_id") or die(mysqli_error($dbcon));
+	   
 	  
 	   ?>
       <tr>
@@ -78,24 +69,25 @@ function checkAvailability() {
         
         <td><?php echo $df['prog_name']; ?></td>
       <td> <?php
-        $dm=mysql_query("SELECT sum(expected_amount) as expected FROM historic where year_id='$ayear' and amountpaid='".$df['prog_name']."' ") or die(mysql_error());
+        $dm=mysql_query("SELECT sum(expected_amount) as expected FROM fee_paymts where yearid='$ayear' and program_id='".$df['dept_id']."' ") or die(mysql_error());
 		while($dfm=mysql_fetch_assoc($dm)){
 			$X=$dfm['expected'];
 			echo number_format($dfm['expected']);
 		}	  
 	   ?></td>
       <td style="color:#060; font-weight:bold"> <?php
-        $dm=mysql_query("SELECT sum(amount_paid) as paid FROM historic where year_id='$ayear' and amountpaid='".$df['prog_name']."'  ") or die(mysql_error());
+           $dm=mysql_query("SELECT sum(fee_amt) as PAID FROM fee_paymts where yearid='$ayear' and program_id='".$df['dept_id']."' ") or die(mysql_error());
 		while($dfm=mysql_fetch_assoc($dm)){
-			$PAID=$dfm['paid'];
-			echo number_format($dfm['paid']);
+			$PAID=$dfm['PAID'];
+			echo number_format($PAID);
 		}	  
 	   ?></td>
        <td style="color:#F00; font-weight:bold"> <?php
-        $dm=mysql_query("SELECT sum(balance) as bal FROM historic where year_id='$ayear' and amountpaid='".$df['prog_name']."' GROUP BY amountpaid ") or die(mysql_error());
+          $dm=mysql_query("SELECT sum(balance) as expected FROM fee_paymts where yearid='$ayear' and program_id='".$df['dept_id']."' ") or die(mysql_error());
 		while($dfm=mysql_fetch_assoc($dm)){
-			echo number_format($dfm['bal']);
-		}	  
+			$owed=$dfm['expected'];
+			echo number_format($owed);
+		}	   
 	   ?></td>
        
        
@@ -129,24 +121,25 @@ function checkAvailability() {
         
         <td>TOTAL</td>
       <td> <?php
-        $dm=mysql_query("SELECT sum(expected_amount) as expected FROM historic where year_id='$ayear' GROUP BY ayear ") or die(mysql_error());
+        $dm=mysql_query("SELECT sum(expected_amount) as expected FROM fee_paymts where yearid='$ayear' ") or die(mysql_error());
 		while($dfm=mysql_fetch_assoc($dm)){
 			$X=$dfm['expected'];
 			echo number_format($dfm['expected']);
-		}	  
+		}	   
 	   ?></td>
       <td style="color:#060; font-weight:bold"> <?php
-        $dm=mysql_query("SELECT sum(amount_paid) as paid FROM historic where year_id='$ayear' GROUP BY ayear ") or die(mysql_error());
+          $dm=mysql_query("SELECT sum(fee_amt) as PAID FROM fee_paymts where yearid='$ayear' ") or die(mysql_error());
 		while($dfm=mysql_fetch_assoc($dm)){
-			$PAID=$dfm['paid'];
-			echo number_format($dfm['paid']);
-		}	  
+			$PAID=$dfm['PAID'];
+			echo number_format($PAID);
+		}	   
 	   ?></td>
        <td style="color:#F00; font-weight:bold"> <?php
-        $dm=mysql_query("SELECT sum(balance) as bal FROM historic where year_id='$ayear'  GROUP BY ayear ") or die(mysql_error());
+         $dm=mysql_query("SELECT sum(balance) as expected FROM fee_paymts where yearid='$ayear' and program_id='".$df['dept_id']."' ") or die(mysql_error());
 		while($dfm=mysql_fetch_assoc($dm)){
-			echo number_format($dfm['bal']);
-		}	  
+			$owed=$dfm['expected'];
+			echo number_format($owed);
+		}	     
 	   ?> </td>
        
        

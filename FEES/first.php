@@ -371,8 +371,16 @@ if($level=='11' or $level=='12' or $level=='20' or $level=='8'){
 	}
 	
 	if(isset($_GET['receipts'])){
-	include '../Cash/receipts.php';
+	include '../Fees/all_receipts.php';
 	}
+	
+	if(isset($_GET['viewmy_receipts'])){
+	include '../Fees/viewmy_receipts.php';
+	}
+	if(isset($_GET['viewmy_trans'])){
+	include '../Fees/viewmy_trans.php';
+	}
+	
 	if(isset($_GET['fee_receipts'])){
 	include '../Cash/fee_receipts.php';
 	}

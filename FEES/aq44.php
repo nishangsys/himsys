@@ -1,5 +1,5 @@
 <?php
-include  '../includes/conn.php';
+include  '../includes/dbc.php';
 
 
 ?>
@@ -43,52 +43,82 @@ onClick="window.print()"/>
 
 
 <?php include 'header.php'; 
-$dept=$_POST['level'];
-$levels=$_POST['levels'];
-$ay=$_POST['ay'];
+  $dept=$_POST['prog'];
+  $levels=$_POST['levels'];
+  $ayear=$_POST['ay'];
 ?>
 <div style="clear:both; margin-top:30px"></div>
+
+	<?php
+	
+			$result= $dbcon->query("select  * from fee_paymts,levels,special,students,years
+			 where  fee_paymts.yearid='$ayear' AND levels.id=fee_paymts.level_id AND special.id=fee_paymts.program_id AND
+			  fee_paymts.program_id='$dept'  AND fee_paymts.level_id='$levels' and fee_paymts.yearid=years.id
+								 AND students.matricule=fee_paymts.matric AND fee_paymts.yearid=students.year_id AND balance>0 GROUP BY yearid  order by fee_paymts.matric " ) or die (mysqli_error($dbcon));
+								$num=1;
+								while ($row=$result->fetch_assoc()){	
+								
+								
+								?>
            
-       <h1 style="font-size:16px; background:#333; color:#fff">Record of <?php echo $dept; ?> Uncompleted for <?php echo $ay; ?> of Level <?php echo $levels; ?></h1>             
-              <table  style="width:100%" style="line-height:1.5">
-                <thead>
-                                        <tr>
-                                            <th>#</th>
-                                             <th>NAME</th>
-        <th>CLASS</th>
-        <th>LEVEL</th>  
-         <th>AMT PAID</th>
-         <th>AMT OWED</th> 
-                                       </tr>
-                                    </thead>                                          
+       <h1 style="font-size:16px; background:#333; color:#fff">Peports of <?php echo $row['prog_name']; ?> Level <?php echo $row['levels']; ?>
+        Uncompleted for 
+	   <?php echo $row['year_name']; ?> Academic Year</h1>       
+       <?php } ?>  
+   <table cellpadding="0" cellspacing="0" style="width:100%" border="0" class="table table-striped table-bordered" id="example">
+                            
+                            <thead>
+                                <tr>
+                             <th style="text-align:center;">S/N</th>
+
+                              <th style="text-align:center;">Student's Name</th>
+                                <th style="text-align:center;">Matricule</th>
+                                     <th style="text-align:center;">Expected</th>
+                                      <th style="text-align:center;">Scholarship</th>                                   
+                               <th style="text-align:center;">Amount Paid</th>          
+                              
+                                   
+                 
+                                </tr>
+                            </thead>
                             <tbody>
 								<?php
-		
-								$supp;
-								
-$d=$dbcon->query("select * from historic WHERE amountpaid='$dept' and year_id='".$ay."' and balance>0 and class='$levels'   order by time,student_name ") or die(mysqli_error($dbcon));
-$i=1;
-while($bu=$d->fetch_assoc()){
+							
+								$result= $dbcon->query("select  * from fee_paymts,levels,special,students where  fee_paymts.yearid='$ayear' AND levels.id=fee_paymts.level_id AND special.id=fee_paymts.program_id AND fee_paymts.program_id='$dept'  AND fee_paymts.level_id='$levels' 
+								 AND students.matricule=fee_paymts.matric AND fee_paymts.yearid=students.year_id AND balance>0  order by fee_paymts.id" ) or die (mysqli_error($dbcon));
+								$num=1;
+								while ($row=$result->fetch_assoc()){
+								$id=$row['id'];
 								?>
 								<tr>
-                            <td > <?php echo $i++; ?></td>
-  <td style=" text-align:left;"><?php  echo $bu['student_name']; ?></td>
-                                            <td><?php echo $dept; ?></td>
-                                                  <td><?php  echo $bu['class']; ?></td>
-                                            <td><?php  echo $bu['amount_paid']; ?></td>
-                                                        <td><?php  echo $bu['balance']; ?></td>
-                       
+                            <td style="text-align:center; word-break:break-all; width:20px;"> <?php echo $num++; ?></td>
+
+						
+								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['fname']; ?></td>
+                                	<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['matric']; ?></td>
+								
+                                    <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['expected_amount']; ?></td>
+                                <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['scholar']; ?></td>
+
+                                    
+  
+                <td style="text-align:center; word-break:break-all; width:80px; color:#060; font-weight:b"> <?php echo $row ['fee_amt']; ?></td>                    		
+                                        
+           
+								
+								
+                             
+					</tr>		
+								
+                             
 					</tr>		
                            
 								
 								<?php } ?>
                               <tbody>
-                              
-                           
-                              
-                        </table>
- 
-
+                        		  
+                         </tbody>
+                         </table>
 </page>
 
    <?php ?>

@@ -1,37 +1,120 @@
-ecjsjs
+    
+     
+     <style type="text/css">
 
-<style>
-body{ font-family:Arial, Helvetica, sans-serif;
-font-size:16px;
-font-weight:bold}
-.demoInputBox{padding:7px; border:#F0F0F0 1px solid; border-radius:4px;}
-.status-available{color:#000; background:#FF0; padding:10px 10px}
-.status-not-available{color:#ff0;background:#F00; padding:10px 10px}
-</style>
+		.gst20{
+
+			margin-top:20px;
+
+		}
+
+		#hdTuto_search{
+
+			display: none;
+
+		}
+
+		.list-gpfrm-list a{
+
+			text-decoration: none !important;
+
+		}
+
+		.list-gpfrm li{
+
+			cursor: pointer;
+			padding: 10px 10px;
+			border-bottom:1px solid#000;
+
+		}
+
+		.list-gpfrm{
+
+			list-style-type: none;
+
+    		background: #d4e8d7;
+
+		}
+
+		.list-gpfrm li:hover{
+
+			color: white;
+
+			background-color: #3d3d3d;
+
+		}
+
+	</style>
+    
+    
+    
+    
+    
+            
+<script src="../Cash/js/jquery_search.js"></script>
+
 <script type="text/javascript">
-function doCalc(form) {
-		 
 
-  form.balance.value = ((parseInt(form.feeamt.value)-parseInt(form.part.value)));
+	$(document).ready(function(){
 
-}
-</script>
+	//Autocomplete search using PHP, MySQLi, Ajax and jQuery
 
-<script src="../fees/jquery-2.1.1.min.js" type="text/javascript"></script>
-<script>
-function checkAvailability() {
-	$("#loaderIcon").show();
-	jQuery.ajax({
-	url: "../fees/check_availability.php",
-	data:'username='+$("#username").val(),
-	type: "POST",
-	success:function(data){
-		$("#user-availability-status").html(data);
-		$("#loaderIcon").hide();
-	},
-	error:function (){}
+		//generate suggestion on keyup
+
+		$('#querystr').keyup(function(e){
+
+			e.preventDefault();
+
+			var form = $('#hdTutoForm').serialize();
+
+			$.ajax({
+
+				type: 'POST',
+
+				url: '../Cash/search_students.php',
+
+				data: form,
+
+				dataType: 'json',
+
+				success: function(response){
+
+					if(response.error){
+
+						$('#hdTuto_search').hide();
+
+					}
+
+					else{
+
+						$('#hdTuto_search').show().html(response.data);
+
+					}
+
+				}
+
+			});
+
+		});
+
+
+
+		//fill the input
+
+		$(document).on('click', '.list-gpfrm-list', function(e){
+
+			e.preventDefault();
+
+			$('#hdTuto_search').hide();
+
+			var fullname = $(this).data('fullname');
+
+			$('#querystr').val(fullname);
+
+		});
+
 	});
-}
+
 </script>
 
   <?php
@@ -53,15 +136,28 @@ $bid=$_POST['bid'];
   <strong>Bank: <span style="color:#f00"><?php echo $bank; ?></span>| Current Balance: <span style="color:#f00"><?php echo $bal; ?></span></strong>
 </div>
       <div class="well">
- <form class="form-horizontal" action="" method="post" name="form">
+ 	<div class="row justify-content-center gst20">
+<form id="hdTutoForm" method="POST" action="">
+
+
+    
+    
     <div class="form-group">
       <label class="control-label col-sm-2" for="email">Full Names:</label>
       <div class="col-sm-10">
-      
-  <input name="username" type="text" id="username" class="demoInputBox" onBlur="checkAvailability()" style="width:60%" required="required"><span id="user-availability-status"></span>    
+      	<input type="text" id="querystr" name="querystr" class="form-control" placeholder="Search Name" aria-describedby="basic-addon2" autocomplete="off">
+                    
+                    	<input type="hidden" id="querystr" name="names" class="form-control" >
+                    
 
-     
-      </div>
+
+				</div>
+
+			
+
+			<ul class="list-gpfrm" id="hdTuto_search"></ul>
+
+
     </div>
     
       

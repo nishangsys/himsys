@@ -9,14 +9,20 @@ $active=$userRow['full_name'];
  $level=$userRow['banned'];
  
  }
- $y=date('Y');
+ 	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
+while($bu=$d->fetch_assoc()){
+	 $ayear_name=$bu['year_name'];
+	 $ayear=$bu['id'];
+	
+}
 if(isset($_GET['cust'])){
 	
 	$who=$_GET['cust'];
 
 
 
-	  $select=$conn->query("SELECT * from levels,special,years,students  where students.id='".$who."' AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id ") or die(mysqli_error($conn));
+	  $select=$conn->query("SELECT * from levels,special,years,students  where students.id='".$who."' AND year_id='$ayear' AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id ") or die(mysqli_error($conn));
 	while ($rows=$select->fetch_assoc()){
 		$year_id=$rows['year_id'];
 		$matrics=$rows['matricule'];	
@@ -49,10 +55,9 @@ while($bu=$d->fetch_assoc()){
 
 ////////////////check from the historique if name exits, then return error else run script			 
 	$a=$dbcon->query("SELECT * FROM fee_paymts where matric='$matrics' and yearid='$year_id' AND fee_amt>0 ") or die(mysqli_error($dbcon));
-if(mysql_num_rows($a)>0){
+if($a->num_rows>0){
 	echo "<script>alert('Sorry ".$rows['fname']." has paid his or her first installment/Registration before so go and instead update the amount')</script>";
-	echo "<img src='../img/nb.png'>";
-}
+	echo '<meta http-equiv="Refresh" content="0; url=../Fees/new_paymt.php?id='.$who.' ">';	}
 else {
 	 
 	
@@ -103,26 +108,11 @@ function checkAvailability() {
 </script>
 
 
-<?php
-$am=$con->query("SELECT * FROM modes") or die(mysqli_error($con));
-
- while($us=$am->fetch_array()){ 
-
- ?>
- <a href="?cust=<?php echo $_GET['cust']; ?>&mo=<?php echo $us['name']; ?>" style="color:#000; border:1px solid#00; padding:5px 50px; width:400px; color:#F00; font-weight:bold; font-family:'Arial Black', Gadget, sans-serif">
-   <?php echo $us['name']; ?> TRANSACTION
-         
-    </a>
- 
- <?php } ?>
   
   
   <div style="clear:both"></div>
   <div class="col-sm-12">
-  <?PHP
- /////check if transaction type is checked and open the form
- if(isset($_GET['mo'])){ 
-  ?>
+
    <div class="form-row">
 
     
@@ -136,11 +126,11 @@ $am=$con->query("SELECT * FROM modes") or die(mysqli_error($con));
       <div class="col-sm-10">
       
   <input name="username" type="text" value="<?php echo $rows['fname'];; ?>" id="username" class="demoInputBox" onBlur="checkAvailability()" style="width:65%; border:2px solid#f00" required="required"><span id="user-availability-status" style="color:#f00" > <?php
-  
-  $d=$conn->query("SELECT * FROM fee_paymts where matric='$matrics' and yearid!='$year_id' AND balance>0  ") or die(mysqli_error($conn));
+ 
+  $d=$conn->query("SELECT * FROM fee_paymts where matric='".$rows['matricule']."' and yearid!='$year_id' AND balance>0  ") or die(mysqli_error($conn));
   $counts=$d->num_rows;
 while($bu=$d->fetch_assoc()){
-	 $bal=$bu['balance'];
+	$bal=$bu['balance'];
 	
 	 $b=number_format($bal);
 }	
@@ -164,29 +154,24 @@ while($bu=$d->fetch_assoc()){
         <input type="text" class="form-control" id="email"  name="class" value="<?php echo $rows['matricule'];; ?>"  readonly="readonly">
       </div>
     </div>
-    <!--
-         <div class="form-group">
-      <label class="control-label col-sm-2" for="email"></label>
+  
+  <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Bank/Method:</label>
       <div class="col-sm-10">
-       <select  class="form-control" required id="sel1" name="bank" >
-   
-       
-        <option value="<?php echo $_GET['mo']; ?>"  ><?php echo $_GET['mo']; ?> </option>  
-       
-        <option value="<?php echo $bank; ?>"  ><?php echo $bank; ?> </option>  
+       <select  class="form-control" required id="sel1" name="method" >
+
         <?php
 							
 								$result = $con->query("SELECT * FROM our_accounts") or die(mysqli_error($con));
 				while($bu=$result->fetch_assoc()){
 								?>
                               
-        <option value="<?php echo $bu['name']; ?>"  ><?php echo $bu['name']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
     <?php } ?> 
         
       </select>
       </div>
-    </div>-->
-    
+    </div>
       <div class="form-group">
       <label class="control-label col-sm-2" for="email">Dept:</label>
       <div class="col-sm-10">
@@ -253,12 +238,8 @@ while($bu=$d->fetch_assoc()){
       </div>
     </div>
     
-      <div class="form-group">
-      <label class="control-label col-sm-2" for="pwd"> Student Union:</label>
-      <div class="col-sm-10">
-        <input type="number" class="form-control" id="pwd" name="student_union" value="0" onBlur="doCalc(this.form)" >
-      </div>
-    </div>
+        <input type="hidden" class="form-control" id="pwd" name="student_union" value="0" onBlur="doCalc(this.form)" >
+     
     
      <div class="form-group">
       <label class="control-label col-sm-2" for="pwd"> Fee Paid:</label>
@@ -347,7 +328,7 @@ while($bu=$d->fetch_assoc()){
   </form>
     
 </div></div>
-<?php }}?>
+<?php }?>
 
 <?php
 
@@ -368,7 +349,7 @@ $part=$_POST['part'];
 $year=$_POST['year'];
 $scholar=$_POST['scholar'];
 $year_id=$_POST['year_id'];
-$feeamt=$_POST['feeamt'];
+$feeamt=$_POST['feeamt']+$_POST['debts'];
 $part=$_POST['part'];
 
 $all=$feeamt+$reg;
@@ -396,35 +377,20 @@ $day=$_POST['day'];;
 $bank=$_POST['bank'];
 $sunion=$_POST['student_union'];
 $debts=$_POST['debts'];
-$mmm=$_GET['mo'];
-	if($mmm=='CASH'){
-		$r='CASH';
-		$cash=$paid;
-		$bankk=0;
-	}
-	else {
-		echo $r=$yb;
-		$cash=0;
-		$bankk=$paid;
-	}
-	
+
+$fees_paid=$part-$sunion;	
 $bal=$_POST['balance'];
 $student_id=$_POST['student_id'];
 $waver=$_POST['waver'];
-
+$fee_bal=$bal-$sunion;
+$method=$_POST['method'];;
 	$date=$day."-".$month."-".$year;
 	$dd=date('d-m-Y');
-/************************ SERVER SIDE VALIDATION **************************************/
-/********** This validation is useful if javascript is disabled in the browswer ***/
 
-/*
-
-if ($bbm<0) {
-echo "<script>alert('Negative Balance please of $bbm')</script>";
-//header("Location: register.php?msg=$err");
-exit();
-} 
-*/
+$a=$dbcon->query("SELECT * FROM fee_paymts where yearid='$year_id' and matric='$matriculex' ") or die(mysqli_error($dbcon));
+	 $count=$a->num_rows;
+	 
+	 
 if ($feeamt<100000) {
 echo "<script>alert('Please Tell the Account to Input Fees Amount for this Program')</script>";
 //header("Location: register.php?msg=$err");
@@ -435,8 +401,25 @@ $dates=date('d-m-Y');
 $time=date('d-m-Y G:i:s');
 
 /////if debts exist update old debt to zero
+    if($count>0){
+		
+		 $query551=$conn->query("UPDATE fee_paymts  set  
+balance='0',updated_at='$date' WHERE matric='$matriculex' and yearid!='$year_id' and balance>0 " ) or die(mysqli_error($conn));
+		
 
-	if($debts>0){
+ $query55=$conn->query("UPDATE fee_paymts  set  
+ scholar='$scholar',program_id='$dept_id',
+fee_amt='$fees_paid',expected_amount='$feeamt',balance='$fee_bal',created_at='$date' ,debts='$debts',level_id='$levels'  WHERE matric='$matriculex' and yearid ='$year_id'" ) or die(mysqli_error($conn));
+
+ $daily=$con->query("INSERT INTO daily set cust_id='$matriculex',day='$day',staffname='$fname',discount=' $regfee',rec='$part',date='$date',month='$month',year='$year_id',reason='fees',qty='1',area='1',price='$paid',total='$part',owed='$bal',company='$r',paidto='$active',time='$time',
+			purpose='".$_GET['mo']."',scholar='$scholar',method='$method',sunion='$sunion',adminp='$adminp',tshirt='$tshirt',levels='$l',waver='$waver' ,fyear='$year' ,level_id='$levels',prog_id='$dept_id'") or die(mysqli_error($con));
+
+
+echo "<script>alert('Record Created Successfully!'); </script>";
+
+echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';	
+	}
+	else if($debts>0){
 		
 		 $query551=$conn->query("UPDATE fee_paymts  set  
 balance='0',updated_at='$date' WHERE matric='$matriculex' and yearid!='$year_id'" ) or die(mysqli_error($conn));
@@ -445,15 +428,15 @@ balance='0',updated_at='$date' WHERE matric='$matriculex' and yearid!='$year_id'
 
  $query55=$conn->query("insert into fee_paymts  set  
 matric='$matriculex',scholar='$scholar',program_id='$dept_id',
-fee_amt='$part',expected_amount='$feeamt',balance='$bal',created_at='$date' ,yearid='$year_id',debts='$debts',waiver='$waver',student_id='$student_id' ,sunion='$sunion',level_id='$levels' " ) or die(mysqli_error($conn));
+fee_amt='$fees_paid',expected_amount='$feeamt',balance='$fee_bal',created_at='$date' ,yearid='$year_id',debts='$debts',waiver='$waver',student_id='$student_id' ,sunion='$sunion',level_id='$levels' " ) or die(mysqli_error($conn));
 
 
 
 
 
 
- $daily=$con->query("INSERT INTO daily set cust_id='$matriculex',day='$day',staffname='$fname',discount=' $regfee',amt='$part',date='$date',month='$month',year='$year_id',reason='fees',qty='1',area='1',price='$paid',total='$part',owed='$bal',company='$r',paidto='$active',time='$time',
-			purpose='".$_GET['mo']."',scholar='$scholar',rec='$cash',bank='$bankk',sunion='$sunion',adminp='$adminp',tshirt='$tshirt',levels='$l',session='$session',waver='$waver' ") or die(mysqli_error($con));
+ $daily=$con->query("INSERT INTO daily set cust_id='$matriculex',day='$day',staffname='$fname',discount=' $regfee',rec='$part',date='$date',month='$month',year='$year_id',reason='fees',qty='1',area='1',price='$paid',total='$part',owed='$bal',company='$r',paidto='$active',time='$time',
+			purpose='".$_GET['mo']."',scholar='$scholar',method='$method',sunion='$sunion',adminp='$adminp',tshirt='$tshirt',levels='$l',waver='$waver' ,fyear='$year' ,level_id='$levels',prog_id='$dept_id'") or die(mysqli_error($con));
 
 
 echo "<script>alert('Record Created Successfully!'); </script>";
@@ -466,15 +449,15 @@ echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';
  
 
  $query55=$conn->query("insert into fee_paymts  set  
-matric='$matriculex',scholar='$scholar',program_id='$dept_id',
-fee_amt='$part',expected_amount='$feeamt',balance='$bal',created_at='$date' ,yearid='$year_id',debts='$debts',waiver='$waver' ,student_id='$student_id' ,sunion='$sunion',level_id='$levels'" ) or die(mysqli_error($conn));
+matric='$matriculex',scholar='$scholar',
+fee_amt='$fees_paid',expected_amount='$feeamt',balance='$fee_bal',created_at='$date' ,yearid='$year_id',debts='$debts',waiver='$waver' ,student_id='$student_id' ,sunion='$sunion',level_id='$levels',program_id='$dept_id'" ) or die(mysqli_error($conn));
 
 
 
 
 
- $daily=$con->query("INSERT INTO daily set cust_id='$matriculex',day='$day',staffname='$fname',discount=' $regfee',amt='$part',date='$date',month='$month',year='$year_id',reason='fees',qty='1',area='1',price='$paid',total='$part',owed='$bal',company='$r',paidto='$active',time='$time',
-			purpose='".$_GET['mo']."',scholar='$scholar',rec='$cash',bank='$bankk',sunion='$sunion',adminp='$adminp',tshirt='$tshirt' ,levels='$l',session='$sessionss',waver='$waver'") or die(mysqli_error($con));
+ $daily=$con->query("INSERT INTO daily set cust_id='$matriculex',day='$day',staffname='$fname',discount=' $regfee',rec='$part',date='$date',month='$month',year='$year_id',reason='fees',qty='1',area='1',price='$paid',total='$part',owed='$bal',company='$r',paidto='$active',time='$time',
+			purpose='".$_GET['mo']."',scholar='$scholar',method='$method',sunion='$sunion',adminp='$adminp',tshirt='$tshirt' ,levels='$l',waver='$waver',fyear='$year',level_id='$levels',prog_id='$dept_id' ") or die(mysqli_error($con));
 
 
 echo "<script>alert('Record Created Successfully!'); </script>";

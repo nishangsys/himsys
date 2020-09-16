@@ -57,38 +57,7 @@
                        
                     </a>                   
                 </li>
-                 <li class="panel ">
-    
-      <a href="?imports&link=Import <?php echo $ayear; ?> Names" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-                       <i class="icon-cog"></i> Import <?php echo $ayear; ?> Names
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li> 
                 
-                    <li class="panel ">
-                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
-                        <i class="icon-pencil"></i> Admission Center
-	   
-                        <span class="pull-right">
-                            <i class="icon-angle-left"></i>
-                        </span>
-                          &nbsp; <span class="label label-success">3</span>&nbsp;
-                    </a>
-                    <ul class="collapse" id="form-nav">
-                        <li class=""><a href="?new&link= New Intake"><i class="icon-angle-right"></i> New Intake </a></li>
-                        <li class=""><a href="?old&link= Returning Student"><i class="icon-angle-right"></i> Returning Student</a></li>
-                        
-                      
-                         
-                     <li class=""><a href="?foreigners&link= Foreigners"><i class="icon-angle-right"></i> Foreigners</a></li>
-                    
-                    
-                     <li class=""><a href="?others&link=others"><i class="icon-angle-right"></i> Others</a></li>
-                    
-                    </ul>
-                </li>
 
                             <li class="panel ">
     

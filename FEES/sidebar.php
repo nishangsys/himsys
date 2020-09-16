@@ -249,7 +249,7 @@ form,table{
           <li><a href="?otherst&link=Our Students On scholarship">Add Missing Name</a></li>
           
           <li><a href="?import_names&link=Import Names">Import Names</a></li>
-           <li><a href="?settings&link=Import Names">Set Matricule</a></li>
+          
             <li><a href="?lasts&link=Import Names">Last Admissions</a></li>
           
           
@@ -296,13 +296,7 @@ form,table{
     </ul>
     </li>
     
-      <li class="has-sub"> <a href="#">Update Center</a>
-      <ul>
-        <li><a href="?update">Finance Update</a></li>
-        <li><a href="?updatem">Name / Matricule</a></li>
-      </ul>
-    </li>
-      
+   
      <li class="has-sub"> <a href="#">Other Reports Center</a>
       <ul>
                <li><a href="?todays">Todays Report</a></li>
@@ -311,7 +305,7 @@ form,table{
         <li><a href="?reg_receipts">Student Union</a></li>
      <li><a href="?frecords">Waiver Reports</a></li>
           <li><a href="?reg_receipts">	T-shirts</a></li>
-  <li><a href="?scholar">Scholarship Students</a></li>
+
 
     </ul>
     </li> 
@@ -334,11 +328,6 @@ form,table{
      <li class="has-sub" style="background:#a67c00" > <a href="#">Receipts Center</a>
       <ul>
               <li><a href="?receipts">Individual Receipts</a></li>
-
-        <li><a href="?fee_receipts">fEES Receipts</a></li>
-        <li><a href="?reg_receipts">Registration's </a></li>
-          <li><a href="?waiver_receipts">Waiver Receipts </a></li>
-     
 
 
       </ul>

@@ -128,7 +128,7 @@ if(isset($_GET['delete'])){
 </form>
           
       <?php
-	  $do12=$con->query("SELECT * from income_classes  where  year_id='$ayear' order by name ") or die(mysqli_error($con));
+	  $do12=$con->query("SELECT * from income_classes order by name ") or die(mysqli_error($con));
 	  $i=1;
       
       

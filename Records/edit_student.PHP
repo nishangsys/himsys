@@ -1,5 +1,13 @@
 ﻿<?php
 include '../includes/dbc.php';
+
+ 	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
+while($bu=$d->fetch_assoc()){
+	 $ayear_name=$bu['year_name'];
+	 $year_id=$bu['id'];
+	
+}
 echo $year_id=$_GET['ayear'];
 
 ?>
@@ -34,7 +42,7 @@ echo $year_id=$_GET['ayear'];
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 
         </h3>
-        <?php $d=$conn->query("SELECT * FROM students where year_id='$ayear' ") or die(mysqli_error($conn));
+        <?php $d=$conn->query("SELECT * FROM special,levels, students where students.year_id='$ayear' AND special.id=students.dept_id and levels.id=students.level_id ") or die(mysqli_error($conn));
 $i=1;
 ?>
  <thead>
@@ -56,10 +64,10 @@ $i=1;
        
            <td><?php  echo $i++; ?></td>
           <td><?php  echo $bu['fname']; ?></td>
-                    <td><?php  echo $bu['departmet']; ?></td>
+                    <td><?php  echo $bu['prog_name']; ?></td>
 
           <td><?php  echo $bu['levels']; ?></td>
-          <td><?php  echo $bu['ayear']; ?></td>
+          <td><?php  echo $ayear_name; ?></td>
                                             <td> <a href=javascript:popcontact('../Records/editt.php?cust=<?php echo $bu['id']; ?>') style="color:#fff; text-decoration:blink text-align:center; font-weight:bold;"><button class="btn btn-success" >Edit Me</button></a> |
      
        

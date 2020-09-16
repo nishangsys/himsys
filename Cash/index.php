@@ -41,6 +41,7 @@
 
   
 <?php
+
 include '../includes/cashier_nav.php';
 ?>
 

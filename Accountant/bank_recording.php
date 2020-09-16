@@ -55,7 +55,7 @@ function checkAvailability() {
   
   <div class="col-sm-12">
   <div class="alert alert-success" style="font-size:18px">
-  <strong>Our System Says !</strong> Recording Other Payments order than Fees Paid by Bank
+  <strong>Our System Says !</strong> Recording Other Payments order than Fees paid throughBank
 </div>
       <div class="well">
  <form class="form-horizontal" action="" method="post" name="form">

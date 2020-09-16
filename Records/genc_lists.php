@@ -6,7 +6,7 @@
       <?php
 	  $year=date('Y');
 	  
-	   $d=$conn->query("SELECT departmet,count(fname) as alls,ayear,levels FROM students where year_id='$ayear' GROUP BY  levels") or die(mysqli_error($conn));
+	   $d=$conn->query("SELECT dept_id,count(students.matricule) as alls,students.year_id,students.level_id as level_id,levels.levels as levels FROM levels,students  where students.year_id='$ayear' and levels.id=students.level_id GROUP BY  students.level_id") or die(mysqli_error($conn));
 $i=1;
 ?>                       
                                 
@@ -49,7 +49,7 @@ $i=1;
 
         <td>
         
-        <a href="ddo12.php?list=<?php echo $bu['departmet']; ?>&link=<?php echo $bu['prog']; ?> lists&year_id=<?php echo $ayear; ?>&level=<?php echo $bu['levels']; ?>&id=<?php echo $bu['id']; ?> "><button class="btn btn-success"   >Excel Download </button>
+        <a href="ddo12.php?list=<?php echo $bu['depat_id']; ?>&link=<?php echo $bu['prog']; ?> lists&year_id=<?php echo $ayear; ?>&level=<?php echo $bu['level_id']; ?>&id=<?php echo $bu['id']; ?> "><button class="btn btn-success"   >Excel Download </button>
         
         
         

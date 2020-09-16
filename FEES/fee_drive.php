@@ -20,17 +20,15 @@ function doCalc(form) {
    <div class="form-group">
       <label class="control-label col-sm-2" for="email">Choose a Department:</label>
       <div class="col-sm-10">
-  <select class="form-control" name="dept" style="width:300px" required>
-  <?php
-							
-								$result = $con->query("SELECT * FROM settings group by prog") or die(mysqli_error($con));
-				while($bu=$result->fetch_assoc()){
-								?>
-                              
-        <option value="<?php echo $bu['prog']; ?>"  ><?php echo $bu['prog']; ?> </option>
-    <?php } ?> 
+    <select class="form-control" name="prog" style="width:300px" required>
+<?php
+$an=$con->query("SELECT * FROM special order by prog_name") or die(mysqli_error($con));
+while($rows=$an->fetch_assoc()){
+?>
+    <option value="<?php echo $rows['id']; ?>"><?php echo $rows['prog_name']; ?></option>
+    <?php } ?>
+    </select>
     
-  </select>
 </div>
 </div>
       
@@ -39,13 +37,15 @@ function doCalc(form) {
    <div class="form-group">
       <label class="control-label col-sm-2" for="email">Level:</label>
       <div class="col-sm-10">
-  <select class="form-control" name="level" style="width:300px" required>
-    <option value="<?php echo $ad['olddebt']; ?>"><?php echo $ad['olddebt']; ?></option>
-    <option value="200">200</option>
-    <option value="300">300</option>
-    <option value="400">400</option>
-            <option value="500">500</option>
-
+  <select class="form-control" name="levels" style="width:100px" required>
+  <option></option>
+<?php
+$an=$dbcon->query("SELECT * FROM levels order by levels") or die(mysqli_error($dbcon));
+while($rows=$an->fetch_assoc()){
+?>
+    <option value="<?php echo $rows['id']; ?>"><?php echo $rows['levels']; ?></option>
+    <?php } ?>
+    
   </select>
 </div>
 </div>

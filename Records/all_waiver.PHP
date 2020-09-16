@@ -49,6 +49,8 @@ $i=1;
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
+                                            <th>Matricule</th>
+                              
                                             <th>Department</th>
                               
                               <th>Level</th>
@@ -64,7 +66,8 @@ $i=1;
        
            <td><?php  echo $i++; ?></td>
           <td><?php  echo $bu['fname']; ?></td>
-                    <td><?php  echo $bu['prog_name']; ?></td>
+        <td><?php  echo $bu['matricule']; ?></td>
+         <td><?php  echo $bu['prog_name']; ?></td>
 
           <td><?php  echo $bu['levels']; ?></td>
           <td><?php  echo $bu['year_name']; ?></td>

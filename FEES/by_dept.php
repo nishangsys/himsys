@@ -20,14 +20,12 @@ function doCalc(form) {
       <label class="control-label col-sm-2" for="email">Choose a Department:</label>
       <div class="col-sm-10">
   <select class="form-control" name="level" style="width:300px" required>
- <?php
-							
-								$result = $conn->query("SELECT * FROM historic where year_id='$ayear' group by amountpaid") or die(mysqli_error($conn));
-				while($bu=$result->fetch_assoc()){
-								?>
-                              
-        <option value="<?php echo $bu['amountpaid']; ?>"  ><?php echo $bu['amountpaid']; ?> </option>
-    <?php } ?> 
+<?php
+$an=$con->query("SELECT * FROM special order by prog_name") or die(mysqli_error($con));
+while($rows=$an->fetch_assoc()){
+?>
+    <option value="<?php echo $rows['id']; ?>"><?php echo $rows['prog_name']; ?></option>
+    <?php } ?>
     
   </select>
 </div>

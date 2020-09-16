@@ -1,5 +1,5 @@
 <?php
-include  '../includes/conn.php';
+include  '../includes/dbc.php';
 	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -43,7 +43,7 @@ $name=$_GET['name'];
 ?>
 <div style="clear:both; margin-top:30px"></div>
            
-       <h1 style="font-size:16px; background:#333; color:#fff">Record of <?php echo $_GET['class']; ?> for <?php echo $_GET['ayear']; ?></h1>             
+       <h1 style="font-size:16px; background:#333; color:#fff">Record of <?php echo $_GET['class']; ?> for <?php echo $_GET['yn']; ?></h1>             
               <table  style="width:100%" style="line-height:1.5">
                 <thead>
                                         <tr>
@@ -58,14 +58,14 @@ $name=$_GET['name'];
 								//$date=date('d-m-Y');
 								$supp;
 								
-$d=$con->query("select * from daily WHERE reason='".$_GET['class']."' and year='".$_GET['ayear']."'   ") or die(mysqli_error($con));
+$d=$dbcon->query("select * from special, daily WHERE daily.reason='".$_GET['class']."' and daily.year='".$_GET['year_id']."' AND special.id=daily.prog_id  ORDER BY special.prog_name ");
 $i=1;
 while($bu=$d->fetch_assoc()){
 								?>
 								<tr>
                             <td > <?php echo $i++; ?></td>
   <td style=" text-align:left;"><?php  echo $bu['staffname']; ?></td>
-                                            <td><?php  echo $bu['room']; ?></td>
+                                            <td><?php  echo $bu['prog_name']; ?></td>
                                             <td><?php  echo $bu['rec']; ?></td>
                        
 					</tr>		

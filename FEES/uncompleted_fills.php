@@ -9,22 +9,22 @@ body{
   <table>
  <tr><td>
   Department:</td><td>
-  <select class="form-control" name="level" style="width:300px" required>
+  <select class="form-control" name="prog" style="width:300px" required>
 <?php
-$an=$con->query("SELECT * FROM settings GROUP BY prog") or die(mysqli_error($con));
+$an=$con->query("SELECT * FROM special order by prog_name") or die(mysqli_error($con));
 while($rows=$an->fetch_assoc()){
 ?>
-    <option value="<?php echo $rows['prog']; ?>"><?php echo $rows['prog']; ?></option>
+    <option value="<?php echo $rows['id']; ?>"><?php echo $rows['prog_name']; ?></option>
     <?php } ?>
     
   </select>
 </td><td>Year:</td><td>
  <select class="form-control" name="ay" style="width:200px" required>
 <?php
-$an=$dbcon->query("SELECT * FROM historic where amount_paid>0  GROUP BY ayear order by ayear") or die(mysqli_error($dbcon));
+$an=$dbcon->query("SELECT * FROM fee_paymts,years WHERE years.id=fee_paymts.yearid GROUP BY yearid") or die(mysqli_error($dbcon));
 while($rows=$an->fetch_assoc()){
 ?>
-    <option value="<?php echo $rows['ayear']; ?>"><?php echo $rows['ayear']; ?></option>
+    <option value="<?php echo $rows['yearid']; ?>"><?php echo $rows['year_name']; ?></option>
     <?php } ?>
     
   </select>
@@ -33,10 +33,10 @@ while($rows=$an->fetch_assoc()){
   <select class="form-control" name="levels" style="width:100px" required>
   <option></option>
 <?php
-$an=$dbcon->query("SELECT * FROM historic where amount_paid>0  GROUP BY class order by class") or die(mysqli_error($dbcon));
+$an=$dbcon->query("SELECT * FROM levels order by levels") or die(mysqli_error($dbcon));
 while($rows=$an->fetch_assoc()){
 ?>
-    <option value="<?php echo $rows['class']; ?>"><?php echo $rows['class']; ?></option>
+    <option value="<?php echo $rows['id']; ?>"><?php echo $rows['levels']; ?></option>
     <?php } ?>
     
   </select></td><td>
@@ -84,11 +84,14 @@ while($rows=$an->fetch_assoc()){
                              <th style="text-align:center;">S/N</th>
 
                               <th style="text-align:center;">Student's Name</th>
+                               <th style="text-align:center;">Matricule</th>
                           <th style="text-align:center;">Program</th>
                                     <th style="text-align:center;">Level</th>
-                                     <th style="text-align:center;">Academic Year</th>
+                                     <th style="text-align:center;">Expected</th>
+                                      <th style="text-align:center;">Scholarship</th>
                                    
-                               <th style="text-align:center;">Amount Paid</th>            <th style="text-align:center;">Amount Owed</th>
+                               <th style="text-align:center;">Amount Paid</th>          
+                                 <th style="text-align:center;">Amount Owed</th>
                                        
                                    
                  
@@ -97,22 +100,25 @@ while($rows=$an->fetch_assoc()){
                             <tbody>
 								<?php
 							
-								$result= mysql_query("select  * from historic WHERE balance>0 and year_id='$ayear'  order by student_name" ) or die (mysql_error());
+								$result= $dbcon->query("select  * from fee_paymts,levels,special,students where  fee_paymts.yearid='$ayear' AND levels.id=fee_paymts.level_id AND special.id=fee_paymts.program_id  AND students.matricule=fee_paymts.matric AND fee_paymts.yearid=students.year_id AND balance>0  order by fee_paymts.id" ) or die (mysqli_error($dbcon));
 								$num=1;
-								while ($row= mysql_fetch_array ($result) ){
+								while ($row=$result->fetch_assoc()){
 								$id=$row['id'];
 								?>
 								<tr>
                             <td style="text-align:center; word-break:break-all; width:20px;"> <?php echo $num++; ?></td>
 
 						
-								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['student_name']; ?></td>
-								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['amountpaid']; ?></td>
-                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['time']; ?></td>
-                                    <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['ayear']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['fname']; ?></td>
+                                	<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['matric']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['prog_name']; ?></td>
+                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['levels']; ?></td>
+                                    <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['expected_amount']; ?></td>
+                                <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['scholar']; ?></td>
+
                                     
   
-                                             <td style="text-align:center; word-break:break-all; width:80px; color:#060; font-weight:b"> <?php echo $row ['amount_paid']; ?></td>                    		
+                                             <td style="text-align:center; word-break:break-all; width:80px; color:#060; font-weight:b"> <?php echo $row ['fee_amt']; ?></td>                    		
                                              <td style="text-align:center; word-break:break-all; width:80px; color:#f00; font-weight:b"> <?php echo $row ['balance']; ?></td>
 			
           		
@@ -139,7 +145,7 @@ while($rows=$an->fetch_assoc()){
                             <tbody>
 								<?php
 							
-								$result= mysql_query("select  SUM(amount_paid),SUM(balance) FROM historic WHERE balance>0 and year_id='$ayear' " ) or die (mysql_error());
+								$result= mysql_query("select  SUM(fee_amt) AS total,SUM(balance) as balance  FROM fee_paymts WHERE balance>0 and yearid='$ayear'  " ) or die (mysql_error());
 								$num=1;
 								while ($row= mysql_fetch_array ($result) ){
 								$id=$row['id'];
@@ -153,12 +159,12 @@ while($rows=$an->fetch_assoc()){
                                 	<td style="text-align:center; word-break:break-all; width:80px;"> </td>
                                       	<td style="text-align:center; word-break:break-all; width:80px;"> .</td>
                                     
-                        <td style="text-align:center; word-break:break-all; width:130px; background:#060; font-weight:bold; color:#fff"> <?php echo number_format($row ['SUM(amount_paid)']); ?></td>
+                        <td style="text-align:center; word-break:break-all; width:130px; background:#060; font-weight:bold; color:#fff"> <?php echo number_format($row ['total']); ?></td>
 								
-                                             <td style="text-align:center; word-break:break-all; width:80px; color:#fff; font-weight:bold">
+                                             <td style="text-align:center; word-break:break-all; width:80px; color:#fff; font-weight:bold"> </td>
+			
             <td style="text-align:center; word-break:break-all; width:130px; background:#F00; color:#fff;">
-          <?php echo number_format($row ['SUM(balance)']); ?> </td>
-			  					
+           <?php echo number_format($row ['balance']); ?> 					
         </td>     
 								
 								

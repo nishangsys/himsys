@@ -1,7 +1,4 @@
 
-  <?php
- $ayear;
-?>
 
  <div class="row">
  

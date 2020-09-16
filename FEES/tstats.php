@@ -1,5 +1,5 @@
 
-
+tt
 <style>
 body{ font-family:Arial, Helvetica, sans-serif;
 font-size:16px;
@@ -58,16 +58,16 @@ function checkAvailability() {
     </thead>
     <tbody>
      <?php
-        $d=mysql_query("SELECT * FROM classes12 order by class") or die(mysql_error());
-	   $i=1;
+         $d=$dbcon->query("SELECT * from students,special where students.dept_id=special.id  GROUP BY students.dept_id") or die(mysqli_error($dbcon));
+	   
 	  
 	   ?>
       <tr>
      
-       <?php  while($df=mysql_fetch_assoc($d)){?>
+       <?php  while($df=$d->fetch_assoc()){?>
         <td><?php echo $i++; ?></td>
         
-        <td><?php echo $df['amountpaid']; ?></td>
+        <td><?php echo $df['prog_name']; ?></td>
       <td> <?php
         $dm=mysql_query("SELECT sum(expected_amount) as expected FROM historic where year_id='$ayear' and class='".$df['amountpaid']."' ") or die(mysql_error());
 		while($dfm=mysql_fetch_assoc($dm)){

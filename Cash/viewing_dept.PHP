@@ -32,40 +32,33 @@ include '../includes/dbc.php';
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 
         </h3>
-        <?php $d=$con->query("SELECT * FROM daily where reason='".$_GET['type']."' and room='".$_GET['dept']."'  ") or die(mysqli_error($con));
+        <?php $d=$con->query("SELECT * FROM special, daily where daily.reason='".$_GET['type']."' 
+		and daily.prog_id='".$_GET['dept']."' AND special.id=daily.prog_id ORDER BY special.prog_name   ") or die(mysqli_error($con));
 $i=1;
 ?>
- <thead>
-                                        <tr>
+ <thead> <tr>
                                             <th>#</th>
                                                     <th>Student</th>
                                                    <th>Department</th>
-   <th>Level</th>
-                                                  <th>Cash Paid</th>
- <th>Bank Pmt</th>
-                                                                                                                                                 
+                                                     <th>Purpose</th>
+                                                  <th>Amt Paid</th>
+                                                                                                                            
 
                                             <th>Date</th>
-                                            
-                                            <th>Payment Mode</th>
                                          
                                         </tr>
                                     </thead>
                                     <tbody>
                                        <?php while($bu=$d->fetch_assoc()){ ?>
 
-      <tr>
+                                           <tr>
        
-           <td><?php  echo $i++; ?></td>
+                                                 <td><?php  echo $i++; ?></td>
                                             <td><?php  echo $bu['staffname']; ?></td>
-                                                 <td><?php  echo $bu['room']; ?></td>
-                                                      <td><?php  echo $bu['area']; ?></td>
-                                                           <td><?php  echo $bu['rec']; ?></td>
-        
-         <td><?php  echo $bu['amt']; ?></td>
+                                                 <td><?php  echo $bu['prog_name']; ?></td>
+                                                      <td><?php  echo $bu['reason']; ?></td>
+                                                           <td><?php  echo number_format($bu['rec']); ?></td>
                                                               <td><?php  echo $bu['date']; ?></td>
-            
-             <td><?php  echo $bu['company']; ?></td>
                                            
                                             
                                         </tr>
@@ -76,7 +69,7 @@ $i=1;
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 
                                 
-                                <?php $d=$con->query("SELECT SUM(price),SUM(rec),SUM(amt) FROM daily where reason='".$_GET['type']."' and room='".$_GET['dept']."' GROUP BY year ") or die(mysqli_error($con));
+                                <?php $d=$con->query("SELECT SUM(price),SUM(rec),SUM(amt) FROM daily where reason='".$_GET['type']."' and prog_id='".$_GET['dept']."' GROUP BY year ") or die(mysqli_error($con));
 $i=1;
 ?>
   <table class="table table-bordered">                                       <?php while($bu=$d->fetch_assoc()){ ?>

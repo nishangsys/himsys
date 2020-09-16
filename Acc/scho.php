@@ -309,7 +309,8 @@ $a=$dbcon->query("SELECT * FROM fee_paymts where yearid='$year_id' and matric='$
 		
 			echo "<script>alert('ERROR. Please Input Atleast First Installment before Recording Scholarship!'); </script>";
 
-			echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';	
+		echo '<meta http-equiv="Refresh" content="0; url=../Acc/ofees.php?cust='.$who.' ">';	
+		
 		
 	}
 

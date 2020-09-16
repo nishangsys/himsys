@@ -69,7 +69,7 @@ $i=1;
                                                          <td><?php  echo $bu['rec']; ?></td>
                                                               <td><?php  echo $bu['date']; ?></td>
                                            
-                                                         <td><a href="?viewmy_trans&id=<?php  echo $bu['matricule']; ?>&hdhdhd" >  <button type="submit" class="btn btn-success" name="do" class="btn btn-success">View All Transactions</button></a></td>
+                                                         <td><a href="?viewmy_receipts&id=<?php  echo $bu['matricule']; ?>&hdhdhd" >  <button type="submit" class="btn btn-success" name="do" class="btn btn-success">View All Receipts</button></a></td>
                                            
                                                    
                                         </tr>

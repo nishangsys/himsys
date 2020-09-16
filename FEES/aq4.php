@@ -43,14 +43,30 @@ onClick="window.print()"/>
 
 
 <?php include 'header.php'; 
- $dept=$_POST['level'];
+  $dept=$_POST['prog'];
   $levels=$_POST['levels'];
   $ayear=$_POST['ay'];
 ?>
 <div style="clear:both; margin-top:30px"></div>
+
+	<?php
+	
+			$result= $dbcon->query("select  * from fee_paymts,levels,special,students,years
+			 where  fee_paymts.yearid='$ayear' AND levels.id=fee_paymts.level_id AND special.id=fee_paymts.program_id AND
+			  fee_paymts.program_id='$dept'  AND fee_paymts.level_id='$levels' and fee_paymts.yearid=years.id
+								 AND students.matricule=fee_paymts.matric AND fee_paymts.yearid=students.year_id AND balance='0'
+								 GROUP BY yearid  order by students.fname" ) or die (mysqli_error($dbcon));
+								$num=1;
+								while ($row=$result->fetch_assoc()){	
+								
+								
+								?>
            
-       <h1 style="font-size:16px; background:#333; color:#fff">Record of <?php echo $dept; ?> Completed for <?php echo $ay; ?> of Level <?php echo $levels; ?></h1>         
-   <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
+       <h1 style="font-size:16px; background:#333; color:#fff">Peports of <?php echo $row['prog_name']; ?> Level <?php echo $row['levels']; ?>
+        Completed for 
+	   <?php echo $row['year_name']; ?> Academic Year</h1>       
+       <?php } ?>  
+   <table cellpadding="0" cellspacing="0" style="width:100%" border="0" class="table table-striped table-bordered" id="example">
                             
                             <thead>
                                 <tr>
@@ -69,8 +85,8 @@ onClick="window.print()"/>
                             <tbody>
 								<?php
 							
-								$result= $dbcon->query("select  * from fee_paymts,levels,special,students where  fee_paymts.yearid='$ayear' AND levels.id=fee_paymts.level_id AND special.id=fee_paymts.program_id  AND
-							 students.matricule=fee_paymts.matric AND fee_paymts.yearid=students.year_id AND balance='0'  order by fee_paymts.id" ) or die (mysqli_error($dbcon));
+								$result= $dbcon->query("select  * from fee_paymts,levels,special,students where  fee_paymts.yearid='$ayear' AND levels.id=fee_paymts.level_id AND special.id=fee_paymts.program_id AND fee_paymts.program_id='$dept'  AND fee_paymts.level_id='$levels' 
+								 AND students.matricule=fee_paymts.matric AND fee_paymts.yearid=students.year_id AND balance='0'  order by fee_paymts.id" ) or die (mysqli_error($dbcon));
 								$num=1;
 								while ($row=$result->fetch_assoc()){
 								$id=$row['id'];

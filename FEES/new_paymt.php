@@ -38,23 +38,16 @@ while($bu=$d->fetch_assoc()){
 	 $ayear=$bu['id'];
 	
 }
-$am=$con->query("SELECT * FROM modes") or die(mysqli_error($con));
-
- while($us=$am->fetch_array()){ 
 
  ?>
- <a href="?new_paymt=<?php echo $_GET['new_paymt']; ?>&id=<?php echo $_GET['id']; ?>&year_id=<?php echo $_GET['ayear']; ?>&mo=<?php echo $us['name']; ?>" style="color:#000; border:1px solid#00; padding:5px 50px; width:400px; color:#F00; font-weight:bold; font-family:'Arial Black', Gadget, sans-serif">
-   <?php echo $us['name']; ?> TRANSACTION
-         
-    </a>
- 
- <?php } ?>
+
  
  
  
   <?PHP
- /////check if transaction type is checked and open the form
- if(isset($_GET['mo'])){ 
+  if(isset($_GET['id'])){
+	 $id=$_GET['id'];
+	
   ?>
 
 <script type="text/javascript">
@@ -66,10 +59,7 @@ function doCalc(form) {
 }
 </script>
   <?php
-  if(isset($_GET['new_paymt'])){
-	 $name=$_GET['new_paymt'];
-	  $id=$_GET['id'];
-	  $year_id=$_GET['ayear'];
+ 
 	  
 	  $bb =$con->query("SELECT * FROM users WHERE id=".$_SESSION['id']) or die(mysqli_error($con));
 
@@ -106,7 +96,11 @@ while($bus=$d->fetch_assoc()){
 	
   
   ?>
-  
+  <div class="alert alert-info">
+  <strong>Recording New Fees Installment for <?php echo $bus['fname']; ?> this <?php echo $bus['year_name']; ?></strong> 
+</div>
+
+
   <div class="col-sm-12">
       <div class="well">
  <form class="form-horizontal" action="" method="post" name="form" > 
@@ -115,24 +109,22 @@ while($bus=$d->fetch_assoc()){
     <div class="form-group">
       <label class="control-label col-sm-2" for="email">Full Names:</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="email" placeholder="Enter Full Names" name="first_name" value="<?php echo $bus['fname']; ?>" required="required">
+        <input type="text" class="form-control" id="email" placeholder="Enter Full Names" name="first_name" value="<?php echo $bus['fname']; ?>" required="required" readonly="readonly">
       </div>
     </div>
     
      <div class="form-group">
-      <label class="control-label col-sm-2" for="email">Bank:</label>
+      <label class="control-label col-sm-2" for="email">Bank/Method:</label>
       <div class="col-sm-10">
-       <select required class="form-control" id="sel1" name="bank" >
-       <option></option>
-       
-        <option value="CASH"  >CASH </option>  
+       <select  class="form-control" required id="sel1" name="method" >
+
         <?php
 							
 								$result = $con->query("SELECT * FROM our_accounts") or die(mysqli_error($con));
 				while($bu=$result->fetch_assoc()){
 								?>
                               
-        <option value="<?php echo $bu['name']; ?>"  ><?php echo $bu['name']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
     <?php } ?> 
         
       </select>
@@ -141,7 +133,7 @@ while($bus=$d->fetch_assoc()){
    <div class="form-group">
       <label class="control-label col-sm-2" for="email">Level:</label>
       <div class="col-sm-10">
-  <select class="form-control" name="level" style="width:300px" required>
+  <select class="form-control" name="levels" style="width:300px" required>
     <option value="<?php echo $ad['level_id']; ?>"><?php echo $bus['levels']; ?></option>
    
   </select>
@@ -186,13 +178,6 @@ while($bus=$d->fetch_assoc()){
       </div>
     </div>
     
-	   <div class="form-group">
-      <label class="control-label col-sm-2" for="pwd"> Paid at :</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="pwd" name="pads" value="<?php echo $_GET['mo']; ?>" onBlur="doCalc(this.form)" readonly="readonly" style="color:#f00; font-weight:bold" >
-      </div>
-    </div>
- 
    
     
     <div class="form-group">
@@ -207,11 +192,7 @@ while($bus=$d->fetch_assoc()){
     <input type="hidden" name="student_id" value="<?php echo $bus['id'] ?>" />
     
       <input type="hidden" name="mats" value="<?php echo $bus['matricule'] ?>" />
-    
-     <input type="hidden" name="levels" value="<?php echo $l ?>" />
-    
-    
-    
+   
       <table style="margin-left:120px">
    <tr><td>Day Paid</td><td> 
         <select class="form-control" id="sel1" name="day" onBlur="doCalc(this.form)" required>
@@ -265,7 +246,7 @@ while($bus=$d->fetch_assoc()){
 </div></div>
 <?php } } ?>
 
-<?php } } ?>
+<?php }  ?>
 
 <?php
 if(isset($_POST['do'])){
@@ -364,19 +345,8 @@ $dates=$date=$day."-".$month."-".$year;;
 $bank=$_POST['bank'];
 $active=$_POST['active'];
 $time=date('d-m-Y G:i:s');
+$method=$_POST['method'];;
 
-
-$mmm=$_GET['mo'];
-	if($mmm=='CASH'){
-		$r='CASH';
-		$cash=$part;
-		$bankk=0;
-	}
-	else {
-		echo $r=$bank;
-		$cash=0;
-		$bankk=$part;
-	}
 	echo $dates;
 $query55556=$con->query("UPDATE daily  set  
 company='$bank' where cust_id='".$matric."'  and year='$ayear'" ) or die(mysqli_error($con));
@@ -393,14 +363,11 @@ echo '<meta http-equiv="Refresh" content="0; url=first.php?pay_again">';
 	}
 	else {
 
- $daily=$con->query("INSERT INTO daily set cust_id='$matric',room='$room',paidtou='$dates',paidto='$active',day='$day',staffname='$fname',discount='$reg',amt='$part',levels='$level',
-			rec='$cash',date='$dates',month='$month',year='$ayear',reason='fees',qty='1',area='1',price='$part',total='$part',owed='$balance',
-			purpose='$mmm',company='$bank',time='$time',bank='$bankk',session='$s'") or die(mysqli_error($con));
+ $daily=$con->query("INSERT INTO daily set cust_id='$matric',paidto='$active',day='$day',staffname='$fname',discount='$reg',rec='$part',levels='$level',date='$dates',month='$month',year='$ayear',reason='fees',qty='1',area='1',price='$part',total='$part',owed='$balance',
+			purpose='$mmm',company='$bank',time='$time',fyear='$year' ,level_id='$levels',prog_id='$dept_id',method='$method'") or die(mysqli_error($con));
 
-
- $query55=$conn->query("UPDATE fee_paymts  set  
-balance='$balance',fee_amt='$totapiad'  where student_id='$student_id'  " ) or die(mysqli_error($conn));
-
+$query55=$conn->query("UPDATE fee_paymts  set  
+balance='$balance',fee_amt='$totapiad'  where matric='$matric'  " ) or die(mysqli_error($conn));
 
 
 echo "<script>alert('Record Created Successfully!'); </script>";

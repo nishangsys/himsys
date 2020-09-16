@@ -58,13 +58,13 @@ $day=$_POST['day'];;
  
 	$today=$day."-".$month."-".$year;
 	
-											$result= $con->query("select  * from daily where paidtou='$today' order  by  id desc  " ) or die (mysqli_error($con));
+											$result= $con->query("select  * from daily where date='$today' order  by  id desc  " ) or die (mysqli_error($con));
 								
 								$num=1;
 								}
 								else {
 									$today=date('d-m-Y');
-										$result= $con->query("select  * from daily where paidtou='$today' order  by  id desc  " ) or die (mysqli_error($con));
+										$result= $con->query("select  * from daily where date='$today' order  by  id desc  " ) or die (mysqli_error($con));
 								
 								}
 ?>
@@ -154,13 +154,13 @@ $day=$_POST['day'];;
  
 	$today=$day."-".$month."-".$year;
 	
-											$result= $con->query("select  SUM(rec) from daily where paidtou='$today' order  by  id desc  " ) or die (mysqli_error($con));
+											$result= $con->query("select  SUM(rec) from daily where date='$today' order  by  id desc  " ) or die (mysqli_error($con));
 								
 								$num=1;
 								}
 								else {
 									$today=date('d-m-Y');
-										$result= $con->query("select  SUM(rec) from daily where paidtou='$today' order  by  id desc  " ) or die (mysqli_error($con));
+										$result= $con->query("select  SUM(rec) from daily where date='$today' order  by  id desc  " ) or die (mysqli_error($con));
 								
 								}
 				while ($row= $result->fetch_assoc() ){
