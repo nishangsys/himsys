@@ -1,0 +1,139 @@
+body {
+  background: #fff; 
+  font-size:12px;
+  font-family:Arial, Helvetica, sans-serif;
+}
+page {
+  background: white;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+}
+page[size="A4"] {  
+  width: 21cm;
+  height: 29.7cm; 
+}
+page[size="A4"][layout="landscape"] {
+  width: 29.7cm;
+  height: 21cm;  
+}
+page[size="A3"] {
+  width: 29.7cm;
+  height: 42cm;
+}
+page[size="A3"][layout="landscape"] {
+  width: 42cm;
+  height: 29.7cm;  
+}
+page[size="A5"] {
+  width: 14.8cm;
+  height: 21cm;
+}
+page[size="A5"][layout="landscape"] {
+  width: 21cm;
+  height: 14.8cm;  
+}
+@media print {
+  body, page {
+    margin: 0;
+    box-shadow: 0;
+  }
+}
+
+.main{
+	width:1060px;
+	height:760px;
+	border:1px solid#000;
+	margin:auto auto;
+	
+}
+.box1{
+	float:left;
+	padding:20px 5px;
+	border:1px solid#000;
+	width:300px;
+	height:32px;
+	
+}
+.box1_left{
+	width:180px;
+	height:40px;
+	margin-top:-20px;
+	float:left;
+	margin-left:-5px;
+	border:1px solid#000;
+	text-align:center;
+	
+}
+
+.semester_box{
+	float:left;
+	padding:0px 0px;
+	border:1px solid#000;
+	width:525px;
+	height:245px;
+	border-top:none;
+	border-bottom:none;
+	
+}
+.patition{
+	float:left; 
+	height:30px;
+	margin:0px;
+	text-align:center;
+	
+	 border:1px solid#000;
+	  width:40px;
+}
+.footer{
+	width:90%; 
+	float:left;
+	font-size:10px;
+	font-weight:bold;
+	padding:5px 5px;
+	margin:5px 30px;
+	border:;
+	text-align:left;
+	
+}
+.for_registry{
+	float: right;
+	bottom:20px;
+	right:60px;
+	height:20px;
+	width:260px;
+	margin-right:230px;
+	margin-top:40px;
+	border-top:;
+	font-weight:bold;
+	border:;
+	font-size:14px;
+}
+
+@media print {
+ .footer {page-break-after: always;}
+}
+
+
+/* ISO Paper Size */
+@page {
+  size: A4 landscape;
+}
+
+/* Size in mm */    
+@page {
+  size: 100mm 200mm landscape;
+}
+
+/* Size in inches */    
+@page {
+  size: 4in 6in landscape;
+}
+.for_grades{
+	width:30px;
+	 margin:0px;
+	 padding:0px;
+	  float:left;
+	 
+}

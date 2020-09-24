@@ -1,0 +1,8 @@
+
+SELECT 
+    matricule, 
+    COUNT(matricule),db1
+FROM
+    courses
+GROUP BY matricule
+HAVING COUNT(matricule) > 1 and db1='2018/2019';

@@ -165,7 +165,13 @@ while($bus=$d->fetch_assoc()){
      <div class="form-group">
       <label class="control-label col-sm-2" for="pwd">Fees Amount Owed:</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" name="feeamt" value="<?php echo $ad['balance']; ?>" onBlur="doCalc(this.form)"  readonly >
+        <input type="text" class="form-control" name="feeamt" value="<?php   $bal=($ad['expected_amount']-$ad['fee_amt'])-$ad['scholar'];
+		if($bal<1){
+			echo 0;
+		}
+		else {
+			echo $bal;
+		}?>" onBlur="doCalc(this.form)"  readonly >
       </div>
     </div>
     

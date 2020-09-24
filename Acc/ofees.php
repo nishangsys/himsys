@@ -19,10 +19,15 @@ while($bu=$d->fetch_assoc()){
 if(isset($_GET['cust'])){
 	
 	$who=$_GET['cust'];
+	
+	  $select=$conn->query("SELECT * from students  where students.id='".$who."'  ") or die(mysqli_error($conn));
+	while ($rows=$select->fetch_assoc()){
+		$MATRIC=$rows['matricule'];
+	}
 
 
 
-	  $select=$conn->query("SELECT * from levels,special,years,students  where students.id='".$who."' AND year_id='$ayear' AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id ") or die(mysqli_error($conn));
+	  $select=$conn->query("SELECT * from levels,special,years,students  where students.matricule='".$MATRIC."' AND year_id='$ayear' AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id ") or die(mysqli_error($conn));
 	while ($rows=$select->fetch_assoc()){
 		$year_id=$rows['year_id'];
 		$matrics=$rows['matricule'];	

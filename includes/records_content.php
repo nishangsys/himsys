@@ -16,7 +16,7 @@
           <div class="well">
             <p>
             <h4 >
-            <strong>School Year: <span style="color:#f00"><?php echo $ayear; ?></span></strong>
+            <strong>School Year: <span style="color:#f00"><?php echo $ayear_name; ?></span></strong>
             
             
             | &nbsp;&nbsp;&nbsp;&nbsp; 
@@ -67,6 +67,10 @@
 	include '../Records/edit_student1.php';
 	}
 	
+	
+	if(isset($_GET['change_dept'])){
+	include '../Records/change_dept.php';
+	}
 	if(isset($_GET['c_list'])){
 	include '../Records/c_lists.php';
 	}
@@ -82,8 +86,18 @@
 	if(isset($_GET['resit'])){
 	include '../Records/resit.php';
 	}
-	if(isset($_GET['promote'])){
-	include '../Records/promote.php';
+	if(isset($_GET['calendar'])){
+	include '../Records/calendar.php';
+	}
+	
+	if(isset($_GET['chose_week'])){
+	include '../Records/chose_week.php';
+	}
+	if(isset($_GET['which_week'])){
+	include '../Records/which_week.php';
+	}
+	if(isset($_GET['which_date'])){
+	include '../Records/which_date.php';
 	}
 	if(isset($_GET['imports'])){
 	include '../Records/import.php';
@@ -97,6 +111,17 @@
 	include '../Exams/upload.php';
 	}
 	
+	if(isset($_GET['class_att'])){
+	include '../Records/class_att.php';
+	}	
+	
+	if(isset($_GET['daily_att'])){
+	include '../Records/daily_att.php';
+	}	
+	
+	if(isset($_GET['monthly_att'])){
+	include '../Records/monthly_att.php';
+	}
 	
 					?>
                     

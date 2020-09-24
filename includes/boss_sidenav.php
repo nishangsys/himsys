@@ -38,7 +38,31 @@
                 
     
                 
-                  
+                <li class="panel ">
+                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
+                        <i class="icon-tasks"> </i> Create User Accounts
+	   
+                        <span class="pull-right">
+                          <i class="icon-angle-left"></i>
+                        </span>
+                       &nbsp; <span class="label label-default">6</span>&nbsp;
+                    </a>
+                    <ul class="collapse" id="component-nav">
+                       
+ 
+ <li class=""><a href="?create_newuser"><i class="icon-angle-right"></i>Create User</a></li>   
+ <li class=""><a href="?create_hod"><i class="icon-angle-right"></i>Create HODs </a></li>
+ <li class=""><a href="?create_hos"><i class="icon-angle-right"></i>Create HOS </a></li>
+ <li class=""><a href="?create_cord"><i class="icon-angle-right"></i>Create Cordinators </a></li>
+<li class=""><a href="?all_hod"><i class="icon-angle-right"></i>All HODs </a></li>
+                        
+                                        </ul>
+                </li>
+         
+                
+               
+                
+        
 
 
             

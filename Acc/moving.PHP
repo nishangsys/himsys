@@ -151,7 +151,8 @@ while($bu=$d->fetch_assoc()){
     </div>
     
     
-    
+     <input type="hidden" class="form-control" id="email"  name="fyear" value="<?php echo $rows['year_id']; ?>" style="color:#f00; font-weight:bold" />
+        
     
     
      <div class="form-group">
@@ -233,24 +234,13 @@ $fname="$first_name $middle_name $last_name";
 
 
 $matric=$_POST['matric'];
-
-
+$debt=$_POST['debts'];
+$fyear=$_POST['fyear'];
 
 
 
 $matriculex=$_POST['matric'];
 
-$mmm=$_GET['mo'];
-	if($mmm=='CASH'){
-		$r='CASH';
-		$cash=$paid;
-		$bankk=0;
-	}
-	else {
-		echo $r=$yb;
-		$cash=0;
-		$bankk=$paid;
-	}
 	$year_id=$_POST['year_id'];
 	$dept_id=$_POST['dept_id'];
 	$student_id=$_POST['student_id'];
@@ -259,6 +249,15 @@ $mmm=$_GET['mo'];
 $names_tbl=$conn->query("insert into students  set  
 matricule='$matriculex',fname='$fname', 
 level_id='$level_ids',dept_id='$dept_id',year_id='$year_id'  " ) or die(mysqli_error($conn));
+
+
+ $query55=$conn->query("UPDATE fee_paymts  set balance='0' ,debts='$debt' WHERE   
+matric='$matriculex' AND yearid='$fyear' " ) or die(mysqli_error($conn));
+
+
+ $query55=$conn->query("insert into fee_paymts  set  
+matric='$matriculex',scholar='$scholar',
+fee_amt='$fees_paid',expected_amount='$feeamt',balance='$fee_bal',created_at='$date' ,yearid='$year_id',debts='$debts',waiver='$waver' ,student_id='$student_id' ,sunion='$sunion',level_id='$levels',program_id='$dept_id'" ) or die(mysqli_error($conn));
 	
 
 echo "<script>alert('Record Created Successfully!'); </script>";

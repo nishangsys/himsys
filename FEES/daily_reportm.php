@@ -1,46 +1,13 @@
-
 <style>
-.frmSearch {border: 1px solid #a8d4b1;background-color: #c6f7d0;margin: 2px 0px;padding:40px;border-radius:4px;}
-#country-list{float:left;list-style:none;margin-top:-3px;padding:0;width:400px;position: absolute;}
-#country-list li{padding: 10px; background: #036; border-bottom: #bbb9b9 1px solid ; color:#fff}
-#country-list li:hover{background:#ece3d2;cursor: pointer;}
-#search-box{padding: 10px;border: #a8d4b1 1px solid;border-radius:4px;}
-</style>
-<script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script>
-<script>
-$(document).ready(function(){
-	$("#search-box").keyup(function(){
-		$.ajax({
-		type: "POST",
-		url: "../Fees/searchs.php?year_id=<?php echo $ayear; ?>",
-		data:'keyword='+$(this).val(),
-		beforeSend: function(){
-			$("#search-box").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
-		},
-		success: function(data){
-			$("#suggesstion-box").show();
-			$("#suggesstion-box").html(data);
-			$("#search-box").css("background","#FFF");
-		}
-		});
-	});
-});
-
-function selectCountry(val) {
-$("#search-box").val(val);
-$("#suggesstion-box").hide();
+table{
+	text-align:left;
 }
-</script>
-
+</style>
 
   <?php
-  if(isset($_POST['ok'])){
-	  $matric=$_POST['user_name'];
-	  		$result= $dbcon->query("select  * from historic where matricule='$matric' and year_id='$ayear' order by student_name" ) or die (mysqli_error($dbcon));
-  }
-  else {
-	  		$result= $dbcon->query("select  * from historic where student_name!='' and year_id='$ayear' order by student_name" ) or die (mysqli_error($dbcon));
-  }
+ 
+	  		$result= $dbcon->query("SELECT * from levels,special,students  where  special.id=students.dept_id AND levels.id=students.level_id AND students.year_id='$ayear' " ) or die (mysqli_error($dbcon));
+ 
   ?>
 	
   
@@ -74,11 +41,11 @@ $("#suggesstion-box").hide();
                             <td style="text-align:center; word-break:break-all; width:20px;"> <?php echo $num++; ?></td>
 
 						
-								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $name=$row['student_name']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $name=$row['fname']; ?></td>
                                                         <td style="text-align:center; word-break:break-all; width:130px;"> <?php echo $row ['matricule']; ?></td>
 
-								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['amountpaid']; ?></td>
-                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $lev=$row ['time']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $row ['prog_name']; ?></td>
+                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $lev=$row ['levels']; ?></td>
                                     
 								
                                        

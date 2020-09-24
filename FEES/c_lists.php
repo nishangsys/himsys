@@ -60,10 +60,10 @@ onClick="window.print()"/>
 
 <br />
 
-  <?php  $d=$conn->query("SELECT * from levels,special,years,students  where  students.level_id=levels.id and students.dept_id='".$_GET['prog_id']."' and students.year_id='".$_GET['year_id']."' and students.dept_id=special.id  AND  level_id='".$_GET['level_id']."' AND students.year_id=years.id GROUP BY students.year_id order by students.fname ") or die(mysqli_error($conn));
+  <?php  $d=$conn->query("SELECT * from levels,special,years,students  where  students.level_id=levels.id and students.dept_id='".$_GET['prog_id']."' and students.year_id='".$_GET['year_id']."' and students.dept_id=special.id  AND  students.level_id='".$_GET['level_id']."' AND students.year_id=years.id GROUP BY students.year_id order by students.fname ") or die(mysqli_error($conn));
 	 while($rows=$d->fetch_assoc()){
 	  ?>    
- <h3><?php echo $rows['prog_name']; ?> Class Lists For <?php echo $rows['year_name'] ?>  </h3>
+ <h3><?php echo $rows['prog_name']; ?> Level <?php  echo $rows['levels']; ?> Class Lists For <?php echo $rows['year_name'] ?>  </h3>
  <?php } ?>
  
  

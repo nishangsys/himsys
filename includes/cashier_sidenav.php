@@ -50,13 +50,6 @@
             <ul id="menu" class="collapse">
 
                 
-                <li class="panel active">
-                    <a href="?pay" >
-                        <i class="icon-table"></i> PAY PART TIMERS
-	   
-                       
-                    </a>                   
-                </li>
                 
                  
                 <li  style="background:#F00"> <a href="../Fees/first.php" style=" color:#FFF; font-weight:bold" >FEES CENTER  </a>

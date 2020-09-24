@@ -48,9 +48,10 @@ include '../includes/dbc.php';
         </h3>
         <?php
 		$reason=$_GET['reason'];
-				$year_id=$_GET['year_id'];
+				echo $year_id=$_GET['year_id'];
 
-		 $d=$conn->query("SELECT * from historic where year_id='$year_id'  and balance>0") or die(mysqli_error($conn));
+		 $d=$conn->query("SELECT * from students,special,levels,fee_paymts where fee_paymts.yearid='$year_id'  and fee_paymts.balance>0
+		 AND fee_paymts.matric=students.matricule AND fee_paymts.level_id=levels.id AND fee_paymts.program_id=special.id ") or die(mysqli_error($conn));
 $i=1;
 ?>
  <thead>
@@ -60,8 +61,8 @@ $i=1;
                                 <th>Matricule</th>
                                 <th>Class</th>
                        
-                                       <th> Amt Paid</th>                                        
-                   <th>Amt Owed</th>                                                    </tr>
+                                       <th>Amount Paid</th>                                        
+                                        </tr>
                                     </thead>
                                     <tbody>
                                        <?php while($bu=$d->fetch_assoc()){ ?>
@@ -69,13 +70,11 @@ $i=1;
       <tr>
        
            <td><?php  echo $i++; ?></td>
-             <td><?php  echo $bu['student_name']; ?></td>
+             <td><?php  echo $bu['fname']; ?></td>
              <td><?php  echo $bu['matricule']; ?></td>
-             <td><?php  echo $bu['class']; ?></td>
+             <td><?php  echo $bu['prog_name']; ?></td>
 
-             <td><?php  echo number_format($bu['amount_paid']); ?></td>
-             
- <td style="color:#f00; font-weight:bold"><?php  echo number_format($bu['balance']); ?></td>
+             <td><?php  echo number_format($bu['fee_amt']); ?></td>
             
                                 
                                             
@@ -94,17 +93,15 @@ $i=1;
 		$reason=$_GET['reason'];
 				$year_id=$_GET['year_id'];
 
-		 $d=$conn->query("SELECT SUM(amount_paid) as tot,SUM(balance) as tots FROM historic where year_id='$year_id'  and balance>0") or die(mysqli_error($conn));
+		 $d=$conn->query("SELECT SUM(fee_amt) as tot  from fee_paymts where yearid='$year_id'  and balance>0") or die(mysqli_error($conn));
 while($bu=$d->fetch_assoc()){ 
 ?>
  <thead>
                                         <tr>
                                             <th>#</th>
                                
-                       <th >Total Amt Paid</th>
-               <th style=" background:#093; color:#fff"><?php echo number_format($bu['tot']);  ?> Frs</th>
-                <th >Total Amt Owed</th>
-               <th style=" background:#f00; color:#fff"><?php echo number_format($bu['tots']);  ?> Frs</th>                                        <th>#</th>
+                       <th >Total Amt in our Account</th>
+               <th style=" background:#093; color:#fff"><?php echo number_format($bu['tot']);  ?> Frs</th>                                        <th>#</th>
                                         
                                           <th>#</th>
                                     <th># </th>
@@ -132,12 +129,6 @@ while($bu=$d->fetch_assoc()){
 
     </div>
 
-     <!--END MAIN WRAPPER -->
-
-   <!-- FOOTER -->
-    <div id="footer">
-        <p>&copy;  binarytheme &nbsp;2014 &nbsp;</p>
-    </div>
     <!--END FOOTER -->
      <!-- GLOBAL SCRIPTS -->
     <script src="../assets/plugins/jquery-2.0.3.min.js"></script>

@@ -1,7 +1,7 @@
 <?php
 //include connection file 
 include '../../includes/dbc.php';
-$sql =$con->query( "SELECT * FROM `settings` order by prog ") or die(mysqli_error($con));
+$sql =$con->query( "SELECT * FROM special,levels,settings  WHERE special.id=settings.prog_id AND levels.id=settings.level_id order by special.prog_name ") or die(mysqli_error($con));
 
 
 
@@ -51,8 +51,8 @@ border:1px solid#000;
    <tbody id="_editable_table">
       <?php while( $res=$sql->fetch_assoc()) { ?>
       <tr data-row-id="<?php echo $res['id'];?>">
-         <td class="editable-col" contenteditable="true" col-index='0' oldVal ="<?php echo $res['prog'];?>"><?php echo $res['prog'];?></td>
-         <td class="editable-col" contenteditable="true" col-index='1' oldVal ="<?php echo $res['ids'];?>"><?php echo $res['ids'];?></td>
+         <td><?php echo $res['prog_name'];?></td>
+          <td><?php echo $res['levels'];?></td>
          <td class="editable-col" contenteditable="true" col-index='2' oldVal ="<?php echo $res['fees'];?>"><?php echo $res['fees'];?></td>
          
           <td class="editable-col" contenteditable="true" col-index='3' oldVal ="<?php echo $res['reg'];?>"><?php echo $res['reg'];?></td>

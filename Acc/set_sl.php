@@ -16,7 +16,7 @@
 								?>
                        
                  
-        <option value="<?php echo $bu['name']; ?>"  ><?php echo $bu['name']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
     <?php } ?> 
         
       </select></td></tr> 
@@ -30,7 +30,7 @@
 								?>
                        
               
-        <option value="<?php echo $bu['levels']; ?>"  ><?php echo $bu['levels']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['levels']; ?> </option>
         
     <?php } ?> 
     <option value="600"  >600</option>

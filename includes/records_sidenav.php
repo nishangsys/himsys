@@ -141,12 +141,43 @@
                         
                         
                          <li class="panel ">
-                    <a href="?edits&link=Change Department/Level" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
+                    <a href="?change_dept&link=Change Department/Level" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
                        <i class="icon-pencil   "> </i> Change Department/Level
                         <span class="pull-right">
                         </span>
                         </a>
                         </li>       
+                        
+                        
+                             
+                         <li class="panel ">
+                    <a href="?chose_week&link=Record Attendance" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
+                       <i class="icon-calendar   "> </i> Record Attendance
+                        <span class="pull-right">
+                        </span>
+                        </a>
+                        </li>     
+                        
+                        
+                                         
+      <li class="panel">
+                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#error-nav">
+                        <i class="icon-warning-sign"></i> Attendance Reports
+	   
+                        <span class="pull-right">
+                            <i class="icon-angle-left"></i>
+                        </span>
+                          &nbsp; <span class="label label-primary">2</span>&nbsp;
+                    </a>
+                    <ul class="collapse" id="error-nav">
+                        <li><a href="?daily_att&link=Daily Attendance Reports"><i class="icon-angle-right"></i> Daily Reports </a></li>
+                        <li><a href="?monthly_att&link=Daily Attendance Reports"><i class="icon-angle-right"></i> Month Reports  </a></li>
+                      
+                      
+                          <li><a href="?review_exp&link=Records Expenditure"><i class="icon-angle-right"></i> View Expenditure  </a></li>
+                      
+                    </ul>
+                </li>  
                         
                         
 

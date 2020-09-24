@@ -7,7 +7,7 @@ if(isset($_POST['ok'])){
 	$dept=$_POST['dept'];
 	$school=$_POST['school'];
 	$how=$_POST['how'];
-	$gh12=$con->query("SELECT * FROM special WHERE certi='$dept' ") or die(mysqli_error($con));
+	$gh12=$con->query("SELECT * FROM special WHERE prog_name='$dept' ") or die(mysqli_error($con));
 	 $count=$gh12->num_rows;
 	if($count>0){
 		echo "<script>alert('$dept is already in the System')</script>";
@@ -16,7 +16,7 @@ if(isset($_POST['ok'])){
 	}
 	else {
 	
-	$gh=$con->query("INSERT INTO special set school='$school',certi='$dept',gh='$how' ") or die(mysqli_error($con));
+	$gh=$con->query("INSERT INTO special set school='$school',prog_name='$dept',gh='$how' ") or die(mysqli_error($con));
 	
 	
 	$message='<div class="alert alert-success">
@@ -68,7 +68,7 @@ if(isset($_GET['delete'])){
 
 <hr />
 
-<?php $d=$con->query("SELECT * FROM special order by certi   ") or die(mysqli_error($con));
+<?php $d=$con->query("SELECT * FROM special order by prog_name   ") or die(mysqli_error($con));
 $i=1;
 ?>
        <table class="table table-bordered">

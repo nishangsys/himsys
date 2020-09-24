@@ -50,7 +50,8 @@ include '../includes/dbc.php';
 		$reason=$_GET['reason'];
 				$year_id=$_GET['year_id'];
 
-		 $d=$conn->query("SELECT * from historic where year_id='$year_id'  and balance<0") or die(mysqli_error($conn));
+		 $d=$conn->query("SELECT * from students,special,levels,fee_paymts where fee_paymts.yearid='$year_id'  and fee_paymts.balance<0
+		 AND fee_paymts.matric=students.matricule AND fee_paymts.level_id=levels.id AND fee_paymts.program_id=special.id ") or die(mysqli_error($conn));
 $i=1;
 ?>
  <thead>
@@ -69,11 +70,11 @@ $i=1;
       <tr>
        
            <td><?php  echo $i++; ?></td>
-             <td><?php  echo $bu['student_name']; ?></td>
+             <td><?php  echo $bu['fname']; ?></td>
              <td><?php  echo $bu['matricule']; ?></td>
-             <td><?php  echo $bu['class']; ?></td>
+             <td><?php  echo $bu['prog_name']; ?></td>
 
-             <td><?php  echo number_format($bu['amount_paid']); ?></td>
+             <td><?php  echo number_format($bu['fee_amt']); ?></td>
             
                                 
                                             
@@ -92,7 +93,7 @@ $i=1;
 		$reason=$_GET['reason'];
 				$year_id=$_GET['year_id'];
 
-		 $d=$conn->query("SELECT SUM(amount_paid) as tot  from historic where year_id='$year_id'  and balance<0") or die(mysqli_error($conn));
+		 $d=$conn->query("SELECT SUM(fee_amt) as tot  from fee_paymts where yearid='$year_id'  and balance<0") or die(mysqli_error($conn));
 while($bu=$d->fetch_assoc()){ 
 ?>
  <thead>

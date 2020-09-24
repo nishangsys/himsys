@@ -5,10 +5,10 @@ include '../includes/dbc.php';
 $d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
 while($bu=$d->fetch_assoc()){
 	 $ayear_name=$bu['year_name'];
-	 $year_id=$bu['id'];
+	$ayear=$bu['id'];
 	
 }
-echo $year_id=$_GET['ayear'];
+
 
 ?>
     <link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.css" />
@@ -49,11 +49,11 @@ $i=1;
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
+											 <th>Matricule</th>
                                             <th>Department</th>
                               
-                              <th>Level</th>
-                              
-                              <th>School year</th>
+                                            <th>Level</th>
+                             
                                          <th>Action</th>
                                         </tr>
                                     </thead>
@@ -64,16 +64,17 @@ $i=1;
        
            <td><?php  echo $i++; ?></td>
           <td><?php  echo $bu['fname']; ?></td>
-                    <td><?php  echo $bu['prog_name']; ?></td>
+		   <td><?php  echo $bu['matricule']; ?></td>
+         <td><?php  echo $bu['prog_name']; ?></td>
 
           <td><?php  echo $bu['levels']; ?></td>
-          <td><?php  echo $ayear_name; ?></td>
-                                            <td> <a href=javascript:popcontact('../Records/editt.php?cust=<?php echo $bu['id']; ?>') style="color:#fff; text-decoration:blink text-align:center; font-weight:bold;"><button class="btn btn-success" >Edit Me</button></a> |
+         
+                                            <td> <a href=javascript:popcontact('../Records/editt.php?cust=<?php echo $bu['id']; ?>') style="color:#fff; text-decoration:blink text-align:center; font-weight:bold;"><button class="btn btn-success" >Edit </button></a> 
      
-       
-          <a href=javascript:popcontact('../Records/edit_dept.php?cust=<?php echo $bu['id']; ?>') style="color:#fff; text-decoration:blink text-align:center; font-weight:bold;"><button class="btn btn-primary" >Change Dept</button></a></td>
-                                            
-                                        </tr>
+     
+     <a href=javascript:popcontact('../Records/personal.php?cust=<?php echo $bu['id']; ?>') style="color:#fff; text-decoration:blink text-align:center; font-weight:bold;"><button class="btn btn-primary" >Personal</button></a> 
+          <a href=javascript:popcontact('../Records/address.php?cust=<?php echo $bu['id']; ?>') style="color:#fff; text-decoration:blink text-align:center; font-weight:bold;"><button class="btn btn-success" >Address</button></a> 
+                                       </tr>
                                      
                                        <?php } ?>
                                     </tbody>

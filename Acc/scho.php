@@ -52,6 +52,13 @@ while($bus=$dop->fetch_assoc()){
 }
 
 
+	   $a=$dbcon->query("SELECT * from fee_paymts  WHERE matric='$matrics' AND yearid='$ayear'  ") or die(mysqli_error($dbcon));
+	 while($ad=$a->fetch_assoc()){
+		$fee_amt=$ad['expected_amount'];
+		$paid=$ad['fee_amt'];
+		$balance=$fee_amt-$paid;
+	 }
+
 	
 	
 	?>
@@ -233,6 +240,8 @@ function checkAvailability() {
     
      <input type="hidden" name="student_id" value="<?php echo $rows['id']; ?>" />
     
+     <input type="hidden" name="balance_fee" value="<?php echo $balance; ?>" />
+    
     
     
     <div class="form-group">
@@ -281,15 +290,21 @@ $matricule=$_POST['matricule'];
 $matriculex=$_POST['matric'];
 $dept_id=$_POST['dept_id'];
 $scolar=$_POST['scholar'];;
-
+$balance_fee=$_POST['balance_fee'];
+ $bals=$_POST['balance_fee']-$_POST['scholar'];
+$abbal=abs($bals);
 
 $student_id=$_POST['student_id'];
 $dates=date('d-m-Y');
 $a=$dbcon->query("SELECT * FROM fee_paymts where yearid='$year_id' and matric='$matrics' ") or die(mysqli_error($dbcon));
 	 $count=$a->num_rows;
+	if($bals<0){
+	echo "<script>alert('ERROR. You can only give a Scholarship of ".$abbal." to this Student'); </script>";
+	echo '<meta http-equiv="Refresh" content="0; url=../Acc/scho.php?cust='.$_GET['cust'].'">';	
+	}
 	
 
-	if($count>0){	 
+	else if($count>0){	 
 
 
 			 $daily_delete=$dbcon->query("DELETE FROM daily WHERE cust_id='$matriculex' AND year='$year_id' AND reason='scholarship' AND scholar>0 ") or die(mysqli_error($dbcon));

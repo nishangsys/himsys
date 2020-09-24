@@ -8,7 +8,7 @@
     
     background-position: center;  " >
 	<div style="height:120px; width:95% " >
-    <img src="header.png" />
+    <img src="../Cash/header.png" />
     </div>
     
    

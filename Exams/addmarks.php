@@ -12,12 +12,6 @@ $localIP = getHostByName(php_uname('n'));
 if(isset($_GET['cust'])){
 	
 	$who=$_GET['cust'];
-$d=$con->query("SELECT * FROM rush where roll='1'") or die(mysqli_error($con));
-while($bu=$d->fetch_assoc()){
-	 $year_id=$bu['year'];
-	 $year=$bu['extra'];
-	$year2=$bu['extra2'];
-}
 
   $query =$con->query("SELECT * FROM users WHERE id=".$_SESSION['id']) or die(mysqli_error($con));
 
@@ -28,25 +22,20 @@ while($bu=$d->fetch_assoc()){
  
  }
 	 
-	  $ass=$conn->query("SELECT * from students where roll='".$_GET['cust']."'  ") or die(mysqli_error($conn));
+	  $ass=$conn->query("SELECT * from students,special,years,my_marks where my_marks.id='".$_GET['cust']."' AND years.id=my_marks.year_id AND special.id=my_marks.dept_id AND  my_marks.matric=students.matricule   GROUP BY students.matricule") or die(mysqli_error($conn));
 	while ($bs=$ass->fetch_assoc()){
 		$lev=$bs['levels'];
+		$dept=$bs['departmet'];
+	 $matricule=$bs['matricule'];
+	 $name=$bs['fname'];
+ $depts=$userRow['departmet'];
+
+
+ 	
 		
 		
 		
 		
-		$d=$conn->query("SELECT * FROM classes12 where class='".$bs['departmet']."' ") or die(mysqli_error($conn));
-while($bu=$d->fetch_assoc()){
-	 $fees=$bu['fees'];
-	 //$regs=$bu[''];
-	 $id=$bu['ids'];
-	 $bank=$bu['extra'];
-	 $regs=$bu['mattsy'];
-	 $hl=$bu['conn'];
-	 $ll=$bu['depf'];
-	
-}			 
-	
 	
 	?>
  
@@ -65,37 +54,160 @@ input,select{
 	width:90%;
 	padding:5px 5px;
 }
-</style>
-       <br />
+.gst20{
+
+			margin-top:20px;
+
+		}
+
+		#hdTuto_search{
+
+			display: none;
+
+		}
+
+		.list-gpfrm-list a{
+
+			text-decoration: none !important;
+
+		}
+
+		.list-gpfrm li{
+
+			cursor: pointer;
+			padding: 10px 10px;
+			border-bottom:1px solid#000;
+
+		}
+
+		.list-gpfrm{
+
+			list-style-type: none;
+
+    		background: #d4e8d7;
+
+		}
+
+		.list-gpfrm li:hover{
+
+			color: white;
+
+			background-color: #3d3d3d;
+
+		}
+
+	</style>
+    
+    
+    
+    
+    
+            
+<script src="../Records/js/jquery_search.js"></script>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+
+	//Autocomplete search using PHP, MySQLi, Ajax and jQuery
+
+		//generate suggestion on keyup
+
+		$('#querystr').keyup(function(e){
+
+			e.preventDefault();
+
+			var form = $('#hdTutoForm').serialize();
+
+			$.ajax({
+
+				type: 'POST',
+
+				url: 'do_search.php?dept=<?php echo $dept; ?>',
+
+				data: form,
+
+				dataType: 'json',
+
+				success: function(response){
+
+					if(response.error){
+
+						$('#hdTuto_search').hide();
+
+					}
+
+					else{
+
+						$('#hdTuto_search').show().html(response.data);
+
+					}
+
+				}
+
+			});
+
+		});
+
+
+
+		//fill the input
+
+		$(document).on('click', '.list-gpfrm-list', function(e){
+
+			e.preventDefault();
+
+			$('#hdTuto_search').hide();
+
+			var fullname = $(this).data('fullname');
+
+			$('#querystr').val(fullname);
+
+		});
+
+	});
+
+</script>       <br />
    <div class="row">
     <div class="col-sm-10" style="margin-left:30px">
 
 
- <form method="post" enctype="multipart/form-data" class="form-horizontal" action="" role="form" >
+ <form method="post" enctype="multipart/form-data" class="form-horizontal" action="" role="form" id="hdTutoForm"  >
     
      <table class="table table-bordered">
 
-              <tr><td>Student's Names</td><td><input type="text" name="name"  value="<?php echo $bs['fname'];; ?>" readonly="readonly" /></td></tr>
+              <tr><td>Student's Names</td><td><input type="text" name="name"  value="<?php echo $name;; ?>" readonly="readonly" /></td></tr>
                
-              <tr><td>Program</td><td><input type="text" name="class" readonly="readonly" value="<?php echo $PRO=$bs['departmet'];; ?>" /></td></tr>
+              <tr><td>Program</td><td><input type="text" name="class" readonly="readonly" value="<?php echo  $bs['prog_name']; ?>" /></td></tr>
                
                
-                <tr><td>Matricule</td><td><input type="text" name="matric" value="<?php echo $bs['matricule']; ?>" readonly="readonly"/></td></tr>
+                <tr><td>Matricule</td><td><input type="text" name="matric" value="<?php echo $bs['matric']; ?>" readonly="readonly"/></td></tr>
                
               
-               <tr><td>Academic Year</td><td><input type="text" name="ayear" readonly="readonly" value="<?php  echo $bs['ayear'];
+               <tr><td>Academic Year</td><td><input type="text" name="ayear" readonly="readonly" value="<?php  echo $bs['year_name'];
 	 
  ?>" /></td></tr>
- <tr><td>Semester</td><td><input type="text" name="sem" value="<?php echo $term; ?>"   required="required"/></td></tr>
- <tr><td>Course Code</td><td><input type="text" name="course" value="<?php echo $course; ?>"  required="required"/></td></tr>
+ <tr><td>Semester</td><td> <input type="text" name="sem" readonly="readonly" value="<?php  echo $bs['sem'];
+	 
+ ?>" />
+  </select></td></tr>
+ <tr><td>Course Code</td><td>
+ <input type="text" name="querystr" readonly="readonly" value="<?php  echo $bs['code'];
+	 
+ ?>" />
+ 
+ 
+ </td></tr>
                
-                <tr><td>Ca Mark</td><td><input type="text" name="ca" value="<?php echo $ca; ?>"   required="required" style="border:2px solid#f00"/></td></tr>
+                <tr><td>Ca Mark</td><td><input type="text" name="nca" value="<?php echo $bs['ca']; ?>"    required="required" style="border:2px solid#f00"/></td></tr>
                 
-              <tr><td>Exams Mark</td><td><input type="text" name="nca" required="required"/></td></tr>
+              <tr><td>Exams Mark</td><td><input type="text" name="nexam" value="<?php echo $bs['exam']; ?>"  required="required"  /></td></tr>
               
-         <tr><td>Editing Done By</td><td><input type="text" name="user" value="<?php echo $whom; ?>" r readonly="readonly" /></td></tr>
+         <tr><td>Editing Done By</td><td><input type="text" name="user" value="<?php echo $whom; ?>"  required="required" /></td></tr>
   
   
+  <input type="hidden" name="fca" value="<?php echo $bs['ca']; ?>" readonly="readonly"   required="required" style="border:2px solid#f00"/>
+  <input type="hidden" name="fexam" value="<?php echo $bs['exam']; ?>" readonly="readonly"   required="required" style="border:2px solid#f00"/>
              
             
           <input type="hidden" name="ids"  value="<?php
@@ -108,7 +220,7 @@ input,select{
             </table>
     
     </form><br /><br />
-   
+   <?php }  } ?>
         </a>
         </div>
           <?php 
@@ -123,17 +235,21 @@ $nam=$_POST['name'];
 $class=$_POST['class'];
 $year=$_POST['ayear'];
 $matric=$_POST['matric'];
-$ca=$_POST['ca'];
 $nca=$_POST['nca'];
+$nexam=$_POST['nexam'];
+$fca=$_POST['fca'];
+$fexam=$_POST['fexam'];
+
+
 $user=$_POST['user'];
 $sem=$_POST['sem'];
-$cour=$_POST['course'];
+$cour=$_POST['querystr'];
 $month=date('G:i:s h:i:s');
 $year=date('Y');
-
-$res=$conn->query("INSERT resit set c101='$ca',c102='$nca',sex='$sem',year_id='$ayear' , fname='$cour',matricule='$matric',departmet='$PRO',levels='$lev'") or die(mysqli_error($conn)) ;
-	 $ats=$con->query("insert into track set sname='$nam',  
-smat='$matric',year_id='$year',fca='$ca',cca='$nca',edited='$user',ip='$localIP',comp='$computer',time='$month',reason='Added Course',course='$cour'") or die(mysqli_error($con)) ;
+$m=date('m');
+$res=$conn->query("UPDATE my_marks set ca='$nca',exam='$nexam' WHERE matric='$matric' AND id='".$_GET['cust']."'") or die(mysqli_error($conn)) ;
+	 $ats=$conn->query("insert into track set sname='$nam',fca='$fca',fexam='$fexam',  
+smat='$matric',year_id='$year',edited='$user',ip='$localIP',comp='$computer',time='$month',reason='Updated Course',course='$cour',nca='$nca',nexam='$nexam',month='$m' ") or die(mysqli_error($conn)) ;
 
 
 
@@ -143,8 +259,7 @@ echo "<script>alert('Record Created Successfully!'); </script>";
 echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';	
 	
 }
+
 	
-}
-	}
 	
 ?>

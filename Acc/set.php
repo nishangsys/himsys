@@ -9,12 +9,12 @@
               <tr><td>Program</td><td><select required class="form-control" id="sel1" name="prog" >
         <?php
 							
-								$result = $con->query("SELECT * FROM special order by certi") or die(mysqli_error($con));
+								$result = $con->query("SELECT * FROM special order by prog_name") or die(mysqli_error($con));
 				while($bu=$result->fetch_assoc()){
 								?>
                        
         <option></option>          
-        <option value="<?php echo $bu['prog_name']; ?>"  ><?php echo $bu['prog_name']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['prog_name']; ?> </option>
     <?php } ?> 
         
       </select></td></tr>
@@ -27,7 +27,7 @@
 								?>
                        
         <option></option>          
-        <option value="<?php echo $bu['levels']; ?>"  ><?php echo $bu['levels']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['levels']; ?> </option>
     <?php } ?> 
         
       </select></td></tr> 
@@ -44,7 +44,7 @@
 								?>
                        
                  
-        <option value="<?php echo $bu['name']; ?>"  ><?php echo $bu['name']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
          
       
     <?php } ?> 
@@ -104,12 +104,12 @@ $tshirt=$_POST['tshirt'];
 $adminp=$_POST['adminp'];
 
 
-$query55=$con->query("delete from settings where prog='$p' and levels='$l' and others='$section' " ) or die(mysqli_error($con)) ;
+$query55=$con->query("delete from settings where prog_id='$p' and level_id='$l' and others='$section' " ) or die(mysqli_error($con)) ;
 
 
 
 	 $ats=$con->query("insert into  settings  set  
-prog='$p',levels='$l',
+prog_id='$p',level_id='$l',
 fees='$f',bank='$b',reg='$r',others='$section',adminp='$adminp',tshirt='$tshirt',sunion='$sunion'") or die(mysqli_error($con)) ;
 
 
@@ -134,7 +134,8 @@ echo '<meta http-equiv="Refresh" content="0; url=?set_fees&link=Set%20Fees%20per
         </h3>
         <?php
 		$year_id=$_GET['year_id'];
-		 $d=$con->query("SELECT * FROM settings order by id desc ") or die(mysqli_error($con));
+		 $d=$con->query("SELECT * FROM special,levels,settings WHERE special.id=settings.prog_id and
+		 levels.id=settings.level_id order by settings.id desc ") or die(mysqli_error($con));
 $i=1;
 ?>
  <thead>
@@ -153,7 +154,7 @@ $i=1;
       <tr>
        
            <td><?php  echo $i++; ?></td>
-             <td><?php  echo $bu['prog']; ?></td>
+             <td><?php  echo $bu['prog_name']; ?></td>
              <td><?php  echo $bu['levels']; ?></td>
               <td><?php  echo $bu['fees']; ?></td>
                <td><?php  echo $bu['reg']+$bu['tshirt']+$bu['sunion']+$bu['adminp']; ?></td>

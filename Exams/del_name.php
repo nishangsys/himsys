@@ -12,12 +12,7 @@ $localIP = getHostByName(php_uname('n'));
 if(isset($_GET['cust'])){
 	
 	$who=$_GET['cust'];
-$d=$con->query("SELECT * FROM rush where roll='1'") or die(mysqli_error($con));
-while($bu=$d->fetch_assoc()){
-	 $year_id=$bu['year'];
-	 $year=$bu['extra'];
-	$year2=$bu['extra2'];
-}
+
 
   $query =$con->query("SELECT * FROM users WHERE id=".$_SESSION['id']) or die(mysqli_error($con));
 
@@ -28,27 +23,16 @@ while($bu=$d->fetch_assoc()){
  
  }
 	 
-	  $ass=$conn->query("SELECT * from students where roll='".$_GET['cust']."'  ") or die(mysqli_error($conn));
+	  $ass=$conn->query("
+	  SELECT * FROM levels,special,years,students where students.id='".$_GET['cust']."' AND students.dept_id=special.id AND levels.id=students.level_id AND students.year_id=years.id 
+	  ") or die(mysqli_error($conn));
 	while ($bs=$ass->fetch_assoc()){
 		$na=$bs['fname'];
 		$ay=$bs['ayear'];
 		
 		
 		
-		$d=$conn->query("SELECT * FROM classes12 where class='".$bs['departmet']."' ") or die(mysqli_error($conn));
-while($bu=$d->fetch_assoc()){
-	 $fees=$bu['fees'];
-	 //$regs=$bu[''];
-	 $id=$bu['ids'];
-	 $bank=$bu['extra'];
-	 $regs=$bu['mattsy'];
-	 $hl=$bu['conn'];
-	 $ll=$bu['depf'];
-	
-}			 
-		 
-	
-	
+
 	?>
  
   <link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.css" />
@@ -78,13 +62,13 @@ input,select{
 
               <tr><td>Student's Names</td><td><input type="text" name="name"  value="<?php echo $bs['fname'];; ?>" readonly="readonly" /></td></tr>
                
-              <tr><td>Program</td><td><input type="text" name="class" readonly="readonly" value="<?php echo $bs['departmet'];; ?>" /></td></tr>
+              <tr><td>Program</td><td><input type="text" name="class" readonly="readonly" value="<?php echo $bs['prog_name'];; ?>" /></td></tr>
                
                
                 <tr><td>Matricule</td><td><input type="text" name="matric" value="<?php echo $bs['matricule']; ?>" readonly="readonly"/></td></tr>
                
               
-               <tr><td>Academic Year</td><td><input type="text" name="ayear" readonly="readonly" value="<?php  echo $bs['ayear'];
+               <tr><td>Academic Year</td><td><input type="text" name="ayear" readonly="readonly" value="<?php  echo $bs['year_name'];
 	 
  ?>" /></td></tr>
  
@@ -129,7 +113,7 @@ $year=date('Y');
 	 $ats=$con->query("insert into track set sname='$nam',  
 smat='$matric',year_id='$year',fca='$ca',cca='$nca',edited='$user',ip='$localIP',comp='$computer',time='$month',reason='Deleted mark',course='$course'") or die(mysqli_error($con)) ;
 
-$res=$conn->query("DELETE FROM students where roll='$who'") or die(mysqli_error($conn)) ;
+$res=$conn->query("DELETE FROM students where id='$who'") or die(mysqli_error($conn)) ;
 
 
 

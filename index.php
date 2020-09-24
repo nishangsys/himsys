@@ -107,7 +107,7 @@ Limitations:
 For further usage, please contact me.
 
 ***********************************************************/
-include 'dbc.php';
+include 'includes/dbc.php';
 
 $err = array();
 

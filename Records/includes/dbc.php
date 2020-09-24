@@ -24,7 +24,7 @@ Note: If you use cpanel, the name will be like account_database
 *************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-$con = mysqli_connect('localhost','nishang','google1234','hospital');
+$con = mysqli_connect('localhost','nishang','google1234','university');
 
 // Check connection
 if (mysqli_connect_errno())
@@ -33,7 +33,7 @@ if (mysqli_connect_errno())
   }
 
 
-$conn = mysqli_connect('localhost','nishang','google1234','hospital');
+$conn = mysqli_connect('localhost','nishang','google1234','university');
 
 // Check connection
 if (mysqli_connect_errno())
@@ -55,7 +55,7 @@ if (mysqli_connect_errno())
 define ("DB_HOST", "localhost"); // set database host
 define ("DB_USER", "nishang"); // set database user
 define ("DB_PASS","google1234"); // set database password
-define ("DB_NAME","hospital"); // set database name
+define ("DB_NAME","university"); // set database name
 
 $link = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die("Couldn't make connection.");
 $db = mysql_select_db(DB_NAME, $link) or die("Couldn't select database");
@@ -178,8 +178,8 @@ function ChopStr($str, $len)
         return $str;
 
     $str = substr($str,0,$len);
-    if ($spc_hospital = strrhospital($str," "))
-            $str = substr($str,0,$spc_hospital);
+    if ($spc_university = strruniversity($str," "))
+            $str = substr($str,0,$spc_university);
 
     return $str . "...";
 }	
@@ -220,14 +220,14 @@ return true;
 function GenPwd($length = 7)
 {
   $password = "";
-  $hospitalsible = "0123456789bcdfghjkmnpqrstvwxyz"; //no vowels
+  $universitysible = "0123456789bcdfghjkmnpqrstvwxyz"; //no vowels
   
   $i = 0; 
     
   while ($i < $length) { 
 
     
-    $char = substr($hospitalsible, mt_rand(0, strlen($hospitalsible)-1), 1);
+    $char = substr($universitysible, mt_rand(0, strlen($universitysible)-1), 1);
        
     
     if (!strstr($password, $char)) { 
@@ -244,14 +244,14 @@ function GenPwd($length = 7)
 function GenKey($length = 7)
 {
   $password = "";
-  $hospitalsible = "0123456789abcdefghijkmnopqrstuvwxyz"; 
+  $universitysible = "0123456789abcdefghijkmnopqrstuvwxyz"; 
   
   $i = 0; 
     
   while ($i < $length) { 
 
     
-    $char = substr($hospitalsible, mt_rand(0, strlen($hospitalsible)-1), 1);
+    $char = substr($universitysible, mt_rand(0, strlen($universitysible)-1), 1);
        
     
     if (!strstr($password, $char)) { 

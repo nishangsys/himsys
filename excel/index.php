@@ -1,106 +1,47 @@
 <!DOCTYPE html>
-<?php 
-	include 'db.php';
-	
-
-
-?>	
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Import Excel To Mysql Database Using PHP </title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="Import Excel File To MySql Database Using php">
+<head>
+    <meta charset="UTF-8">
+    <title>Excel to mysql</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
 
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-		<link rel="stylesheet" href="css/bootstrap-custom.css">
+<div class="row">
+        <div class="col-sm-3">
+          <div class="well">
+          bbb
+          </div>
+        </div>
+        <div class="col-sm-9">
+          <div class="well">
+            <p>Just Forgot that I had to mention something about someone to someone about how I forgot something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p>
+          </div>
+        </div>
+        
+        
+        
+    <div class="row">
+        <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 well">
+        <img src="../Records/image.jpg">
 
+            <div class="form-group">
+                <h4>Excel to Mysql Import</h4>
+            </div>
+            <form method="post" action="import_excel.php" enctype="multipart/form-data">
 
-	</head>
-	<body>    
+                <div class="form-group">
+                   <input type="file" name="excelfile" id="excelfile">
+               </div>
 
-	<!-- Navbar
-    ================================================== -->
+                <div class="form-group">
+                    <button class="btn btn-info">Upload</button>
+                </div>
 
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container"> 
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href="#">Import Excel To Mysql Database Using PHP</a>
-				
-			</div>
-		</div>
-	</div>
-
-	<div id="wrap">
-	<div class="container">
-		<div class="row">
-			<div class="span3 hidden-phone"></div>
-			<div class="span6" id="form-login">
-				<form class="form-horizontal well" action="import.php" method="post" name="upload_excel" enctype="multipart/form-data">
-					<fieldset>
-						<legend>Import CSV/Excel file</legend>
-						<div class="control-group">
-							<div class="control-label">
-								<label>CSV/Excel File:</label>
-							</div>
-							<div class="controls">
-								<input type="file" name="file" id="file" class="input-large">
-							</div>
-						</div>
-						
-						<div class="control-group">
-							<div class="controls">
-							<button type="submit" id="submit" name="Import" class="btn btn-primary button-loading" data-loading-text="Loading...">Upload</button>
-							</div>
-						</div>
-					</fieldset>
-				</form>
-			</div>
-			<div class="span3 hidden-phone"></div>
-		</div>
-		
-
-		<table class="table table-bordered">
-			<thead>
-				  	<tr>
-				  		<th>ID</th>
-				  		<th>Subject</th>
-				  		<th>Description</th>
-				  		<th>Unit</th>
-				  		<th>Semester</th>
-				 		
-				 
-				  	</tr>	
-				  </thead>
-			<?php
-				$SQLSELECT = "SELECT * FROM subject ";
-				$result_set =  mysql_query($SQLSELECT, $conn);
-				while($row = mysql_fetch_array($result_set))
-				{
-				?>
-			
-					<tr>
-						<td><?php echo $row['SUBJ_ID']; ?></td>
-						<td><?php echo $row['SUBJ_CODE']; ?></td>
-						<td><?php echo $row['SUBJ_DESCRIPTION']; ?></td>
-						<td><?php echo $row['UNIT']; ?></td>
-						<td><?php echo $row['SEMESTER']; ?></td>
-					
-
-					</tr>
-				<?php
-				}
-			?>
-		</table>
-	</div>
-
-	</div>
-
-	</body>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
 </html>
