@@ -9,14 +9,15 @@
 <body>
 <?php
 $ayear;
-$d=$con->query("SELECT * FROM daily where thatyear!='' GROUP BY thatyear ") or die(mysqli_error($con));
+$d=$con->query("SELECT * FROM years,debts_recovered where debts_recovered.debt_year=years.id GROUP BY debts_recovered.debt_year order by debts_recovered.debt_year ") or die(mysqli_error($con));
 while($bn=$d->fetch_assoc()){
 ?>
 
-<a href="?recovered&this=<?php echo $bn['year']; ?>&that=<?php echo $bn['thatyear']; ?>">
-<div class="col-sm-6" style="border:2px solid#f00; color:#F03">
+<a href="?recovered&this=<?php echo $bn['cur_year']; ?>&that=<?php echo $bn['debt_year']; ?>&gsgdgdndn">
+<div class="col-sm-5" style="border:2px solid#f00; color:#F03">
          
-            <h4>  <?php echo $bn['thatyear']; ?> Debts Recovered in <?php echo $bn['year']; ?></h4>
+            <h4>  <?php echo $bn['year_name']; ?> Debts Recovered in <?php $ds=$con->query("SELECT * FROM years WHERE id='".$bn['cur_year']."' ") or die(mysqli_error($con));
+while($bns=$ds->fetch_assoc()){ echo $bns['year_name']; }?></h4>
             
          
         </div>
@@ -25,10 +26,15 @@ while($bn=$d->fetch_assoc()){
  <?php } 
  
 if(isset($_GET['this'])){ 
- $ac=$_GET['this']
- ?>
- 
+ $ac=$_GET['this'];
+ $ds=$con->query("SELECT * FROM years WHERE id='".$_GET['this']."' ") or die(mysqli_error($con));
+while($bns=$ds->fetch_assoc()){  $cur_year=$bns['year_name']; }
 
+
+ $ds=$con->query("SELECT * FROM years WHERE id='".$_GET['that']."' ") or die(mysqli_error($con));
+while($bns=$ds->fetch_assoc()){  $prev_year=$bns['year_name']; }
+
+?>
 
 
 
@@ -36,7 +42,7 @@ if(isset($_GET['this'])){
               <div class="row">
                        
          <div class="col-sm-12" style="background:#000; color:#FFF; text-align:center; padding:10PX 0PX">
-    <span style="color:#ff0; font-weight:bold">  <?php echo $ac; ?></span> ACADEMIC YEAR DEBTS RECOVERED IN <span style="color:#ff0; font-weight:bold"><?php echo $pa=$_GET['that']; ?></span>
+    <span style="color:#ff0; font-weight:bold">  <?php echo $prev_year; ?></span> ACADEMIC YEAR DEBTS RECOVERED IN <span style="color:#ff0; font-weight:bold"><?php echo $cur_year; ?></span>
   
        | <a href="do_debtors.php?dept=<?php echo $dept; ?>&level=<?php echo $level; ?>&year_id=<?PHP echo $ac; ?>" target="_new"> <button type="submit" class="btn btn-warning" name="doLogin" class="btn btn-danger">Download a Copy</button></a>
       </span>
@@ -80,7 +86,7 @@ if(isset($_GET['this'])){
                             <tbody>
 								<?php
 							
-								$result= $con->query("select  * from daily WHERE year='$ac'  and thatyear='$pa' order by id DESC" ) or die (mysqli_error($con));
+								$result= $con->query("select  * from years,special,levels,students,debts_recovered,users WHERE cur_year='".$_GET['this']."' and special.id=students.dept_id AND students.level_id=levels.id and users.id=debts_recovered.paidto and students.matricule=debts_recovered.matric   and debt_year='".$_GET['that']."' GROUP BY debts_recovered.id order by debts_recovered.id DESC" ) or die (mysqli_error($con));
 								$num=1;
 				while ($row= $result->fetch_assoc() ){
 								$id=$row['id'];
@@ -89,13 +95,13 @@ if(isset($_GET['this'])){
                             <td style="text-align:center; word-break:break-all; width:20px;"> <?php echo $num++; ?></td>
 
 						
-								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $name=$row ['staffname']; ?></td>
-								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['room']; ?></td>
-                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['year']; ?></td>
-                                    <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['thatyear']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $name=$row ['fname']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['prog_name']; ?></td>
+                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['levels']; ?></td>
+                                    <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['amt_paid']; ?></td>
                                     
                       		
-                                             <td style="text-align:center; word-break:break-all; width:80px; color:#f00; font-weight:b"> <?php echo $row ['rec']; ?></td>
+                                             <td style="text-align:center; word-break:break-all; width:80px; color:#f00; font-weight:b"> <?php echo $row ['full_name']; ?></td>
 			
           	
 								

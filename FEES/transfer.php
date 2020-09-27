@@ -81,7 +81,7 @@ if(isset($_GET['year'])){
                             <tbody>
 								<?php
 							
-								$result= $conn->query("select  * from historic WHERE balance>0  and year_id='$ac' order by roll DESC" ) or die (mysqli_error($conn));
+								$result= $conn->query("select  * from historic WHERE balance>0  and ayear='$ac' order by roll DESC" ) or die (mysqli_error($conn));
 								$num=1;
 				while ($row= $result->fetch_assoc() ){
 								$id=$row['id'];

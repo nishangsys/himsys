@@ -58,14 +58,35 @@ while($bu=$d->fetch_assoc()){
 	
 }
 
+$a=$dbcon->query("SELECT * FROM fee_paymts where matric='$matrics' and yearid='$year_id' ") or die(mysqli_error($dbcon));
+	if($d->num_rows<1){
+		$scolarship_amt=0;
+	}
+	else {
+	while($rs=$a->fetch_assoc()){
+		$scolarship_amt=$rs['scholar'];
+	}
+	}
+
 ////////////////check from the historique if name exits, then return error else run script			 
 	$a=$dbcon->query("SELECT * FROM fee_paymts where matric='$matrics' and yearid='$year_id' AND fee_amt>0 ") or die(mysqli_error($dbcon));
+	while($rs=$a->fetch_assoc()){
+		$scolarship_amt=$rs['scholar'];
+	}
 if($a->num_rows>0){
+	
 	echo "<script>alert('Sorry ".$rows['fname']." has paid his or her first installment/Registration before so go and instead update the amount')</script>";
 	echo '<meta http-equiv="Refresh" content="0; url=../Fees/new_paymt.php?id='.$who.' ">';	}
 else {
-	 
+	 $d=$conn->query("SELECT * FROM fee_paymts where matric='".$rows['matricule']."' and yearid!='$year_id' AND balance>0  ") or die(mysqli_error($conn));
+  $counts=$d->num_rows;
+while($bu=$d->fetch_assoc()){
+$bal=$bu['balance'];
+ $debt_id=$bu['id'];
 	
+	 $b=number_format($bal);
+}	
+    
 	?>
  
   <link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.css" />
@@ -117,6 +138,21 @@ function checkAvailability() {
   
   <div style="clear:both"></div>
   <div class="col-sm-12">
+  
+  <?php
+  if($bal>0){
+		
+		echo '  <a href="../Fees/receive_debts.php?cust='.$debt_id.'">
+    <div class="col-sm-12">
+          <div class="well">
+       Receive Debts  of '.$bal.' for this Student First Please
+          </div>
+        </div>
+     </a>';
+	}
+	else {
+	
+	?>
 
    <div class="form-row">
 
@@ -132,13 +168,7 @@ function checkAvailability() {
       
   <input name="username" type="text" value="<?php echo $rows['fname'];; ?>" id="username" class="demoInputBox" onBlur="checkAvailability()" style="width:65%; border:2px solid#f00" required="required"><span id="user-availability-status" style="color:#f00" > <?php
  
-  $d=$conn->query("SELECT * FROM fee_paymts where matric='".$rows['matricule']."' and yearid!='$year_id' AND balance>0  ") or die(mysqli_error($conn));
-  $counts=$d->num_rows;
-while($bu=$d->fetch_assoc()){
-	$bal=$bu['balance'];
-	
-	 $b=number_format($bal);
-}	
+  
 	if($counts>0){
 		echo "Is a Debtor with $b";
 		
@@ -256,7 +286,7 @@ while($bu=$d->fetch_assoc()){
      <div class="form-group">
       <label class="control-label col-sm-2" for="pwd">Scholarship: :</label>
       <div class="col-sm-10">
-        <input type="number" class="form-control" id="pwd" name="scholar" value="0" onBlur="doCalc(this.form)" >
+        <input type="number" class="form-control" id="pwd" name="scholar" value="<?php  echo $scolarship_amt;  ?>" onBlur="doCalc(this.form)" readonly="readonly" >
       </div>
     </div>
     
@@ -333,7 +363,7 @@ while($bu=$d->fetch_assoc()){
   </form>
     
 </div></div>
-<?php }?>
+<?php } } ?>
 
 <?php
 

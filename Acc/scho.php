@@ -33,6 +33,7 @@ while($bu=$d->fetch_assoc()){
 		$matrics=$rows['matricule'];	
 		$level_id=$rows['level_id'];
         $dept_id=$rows['dept_id'];
+		$l_name=$rows['levels'];
 		$student_id=$rows['id'];
 		$ayear=$rows['year_id'];
 		$ayear_name=$rows['year_name'];
@@ -53,11 +54,21 @@ while($bus=$dop->fetch_assoc()){
 
 
 	   $a=$dbcon->query("SELECT * from fee_paymts  WHERE matric='$matrics' AND yearid='$ayear'  ") or die(mysqli_error($dbcon));
+	  $counts=$a->num_rows;
+	   if($counts<1){
+		 $fee_amt=$fees;
+		 $paid=0;
+		$balance=$fee_amt-$paid;
+	 
+		   
+	   }
+	   else {
 	 while($ad=$a->fetch_assoc()){
 		$fee_amt=$ad['expected_amount'];
 		$paid=$ad['fee_amt'];
 		$balance=$fee_amt-$paid;
 	 }
+	   }
 
 	
 	
@@ -135,8 +146,7 @@ function checkAvailability() {
        <select required class="form-control" id="sel1" name="bank" >
        <option value="scholarship">scholarship</option>
       
-        <option value="<?php echo $bank; ?>"  ><?php echo $bank; ?> </option>  
-         <option></option>
+        
        
         <?php
 		
@@ -145,7 +155,7 @@ function checkAvailability() {
 				while($bu=$result->fetch_assoc()){
 								?>
                               
-        <option value="<?php echo $bu['name']; ?>"  ><?php echo $bu['name']; ?> </option>
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
     <?php } ?> 
         
       </select>
@@ -172,7 +182,14 @@ function checkAvailability() {
       <label class="control-label col-sm-2" for="email">Level:</label>
       <div class="col-sm-10">
       
-       <input type="text" class="form-control" id="email"  name="levs" value="<?php echo ($rows['levels']); ?> " style="color:#f00; font-weight:bold" />
+      <select required class="form-control" id="sel1" name="levs" >
+       
+        
+                              
+        <option value="<?php echo $level_id; ?>"  ><?php echo $l_name; ?> </option>
+   
+        
+      </select>
         
       </div>
     </div>
@@ -261,7 +278,7 @@ if(isset($_POST['save'])){
 	$_POST = array_map("ucwords", $_POST);
 	
 
-$level=$_POST['level'];
+$level=$_POST['levs'];
 
  $first_name=$_POST['username'];
 $middle_name=$_POST['middle_name'];
@@ -289,9 +306,9 @@ $matricule=$_POST['matricule'];
 
 $matriculex=$_POST['matric'];
 $dept_id=$_POST['dept_id'];
-$scolar=$_POST['scholar'];;
+ $scolar=$_POST['scholar'];;
 $balance_fee=$_POST['balance_fee'];
- $bals=$_POST['balance_fee']-$_POST['scholar'];
+$bals=$_POST['balance_fee']-$_POST['scholar'];
 $abbal=abs($bals);
 
 $student_id=$_POST['student_id'];
@@ -310,7 +327,7 @@ $a=$dbcon->query("SELECT * FROM fee_paymts where yearid='$year_id' and matric='$
 			 $daily_delete=$dbcon->query("DELETE FROM daily WHERE cust_id='$matriculex' AND year='$year_id' AND reason='scholarship' AND scholar>0 ") or die(mysqli_error($dbcon));
 						
 			 $daily=$dbcon->query("INSERT INTO daily set cust_id='$matriculex',day='$day',staffname='$fname',
-			 scholar='$scolar',date='$dates',month='$month',year='$year_id',reason='scholarship',qty='1',paidto='$active',
+			 scholar='$scolar',date='$dates',month='$month',year='$year_id',reason='scholarship',qty='1',paidto='$active',level_id='$level',
 						purpose='scholarship'") or die(mysqli_error($dbcon));
 						
 			$update_feepmts=$dbcon->query("UPDATE fee_paymts SET scholar='$scolar'  where yearid='$year_id' and matric='$matrics' ") or die(mysqli_error($dbcon));
@@ -322,9 +339,15 @@ $a=$dbcon->query("SELECT * FROM fee_paymts where yearid='$year_id' and matric='$
 	}
 	else {
 		
-			echo "<script>alert('ERROR. Please Input Atleast First Installment before Recording Scholarship!'); </script>";
+ $query55=$conn->query("insert into fee_paymts  set  
+matric='$matriculex',scholar='$scolar',
+fee_amt='0',expected_amount='$feeamt', created_at='$dates' ,yearid='$year_id',debts='',waiver='$waver' ,student_id='$student_id' ,sunion='$sunion',level_id='$level',program_id='$dept_id'" ) or die(mysqli_error($conn));
 
-		echo '<meta http-equiv="Refresh" content="0; url=../Acc/ofees.php?cust='.$who.' ">';	
+
+		
+			echo "<script>alert('Recording Successfull'); </script>";
+
+		echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';	
 		
 		
 	}

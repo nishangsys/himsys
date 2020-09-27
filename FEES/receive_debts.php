@@ -22,11 +22,13 @@ font-weight:bold}
 <?php
 include '../includes/dbc.php';
 @session_start();
+
 $bb =$con->query("SELECT * FROM users WHERE id=".$_SESSION['id']) or die(mysqli_error($con));
+
 
  while($userRow=$bb->fetch_array()){
  
-$active=$userRow['full_name'];
+ $active=$userRow['id'];
  $level=$userRow['banned'];
  
  }
@@ -45,8 +47,8 @@ while($bu=$d->fetch_assoc()){
  
  
   <?PHP
-  if(isset($_GET['id'])){
-	 $id=$_GET['id'];
+  if(isset($_GET['cust'])){
+	 $id=$_GET['cust'];
 	
   ?>
 
@@ -59,55 +61,34 @@ function doCalc(form) {
 }
 </script>
   <?php
- 
-	  
-	  $bb =$con->query("SELECT * FROM users WHERE id=".$_SESSION['id']) or die(mysqli_error($con));
 
- while($userRow=$bb->fetch_array()){
- 
-$active=$userRow['full_name'];
- $level=$userRow['banned'];
- 
- }
- 
  
 
 
-	   $a=$dbcon->query("SELECT * from fee_paymts  WHERE student_id='$id'   ") or die(mysqli_error($dbcon));
+	   $a=$dbcon->query("SELECT * from fee_paymts  WHERE id='$id'   ") or die(mysqli_error($dbcon));
 	 while($ad=$a->fetch_assoc()){
 		 $matrics=$ad['matric'];
+		 $y_id=$ad['yearid'];
 		
 		  $abb=$dbcon->query("SELECT * from special,levels, students WHERE students.matricule='$matrics' AND students.level_id=levels.id AND students.dept_id=special.id   ") or die(mysqli_error($dbcon));
 	 while($add=$abb->fetch_assoc()){
-		$level_id=$add['level_id'];
+		 $level_id=$add['level_id'];
 		$prog_id=$add['dept_id'];
 		$level_name=$add['levels'];
 		$prog_name=$add['prog_name'];
 	 }
 		 
 		 
-		 		 //////////Fees, bank ,regsitrating from settings tbl in school_db//////////////
-$d=$con->query("SELECT * FROM settings where prog_id='".$prog_id."' and level_id='".$level_id."' ") or die(mysqli_error($con));
-while($bu=$d->fetch_assoc()){
-	 $fees=$bu['fees'];
-	 //$regs=$bu[''];
 	
-	  $bank=$bu['bank'];
-	 $regs=$bu['reg'];
-	 $fee_amt=$bu['fees'];
-	
-	
-}
-
 		 	 //////////select academic year//////////////
-$d=$conn->query("SELECT * FROM levels,special,years,students where students.id='".$ad['student_id']."' AND
- levels.id=students.level_id AND special.id=students.dept_id AND years.id=students.year_id ") or die(mysqli_error($conn));
+$d=$conn->query("SELECT * FROM levels,special,years,students where students.matricule='".$matrics."' AND
+ levels.id=students.level_id AND special.id=students.dept_id AND years.id=students.year_id  GROUP BY students.matricule") or die(mysqli_error($conn));
 while($bus=$d->fetch_assoc()){
 	
   
   ?>
   <div class="alert alert-info">
-  <strong>Recording New Fees Installment for <?php echo $bus['fname']; ?> this <?php echo $bus['year_name']; ?></strong> 
+  <strong>Recording Debts Repayments for <?php echo $bus['fname']; ?> this <?php echo $bus['year_name']; ?></strong> 
 </div>
 
 
@@ -123,23 +104,23 @@ while($bus=$d->fetch_assoc()){
       </div>
     </div>
     
-     <div class="form-group">
-      <label class="control-label col-sm-2" for="email">Bank/Method:</label>
+      <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Debt Year:</label>
       <div class="col-sm-10">
-       <select  class="form-control" required id="sel1" name="method" >
-
-        <?php
+          <select class="form-control" id="sel1" name="debt_year">
+               <?php
 							
-								$result = $con->query("SELECT * FROM our_accounts") or die(mysqli_error($con));
-				while($bu=$result->fetch_assoc()){
+								$resultx = $con->query("SELECT * FROM years where id='".$y_id."' ") or die(mysqli_error($con));
+				while($bux=$resultx->fetch_assoc()){
 								?>
                               
-        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
+        <option value="<?php echo $bux['id']; ?>"  ><?php echo $bux['year_name']; ?> </option>
     <?php } ?> 
-        
-      </select>
+              </select>
       </div>
     </div>
+    <input type="hidden" name="active" value="<?php echo $active; ?>"
+     />
    <div class="form-group">
       <label class="control-label col-sm-2" for="email">Level:</label>
       <div class="col-sm-10">
@@ -175,13 +156,9 @@ while($bus=$d->fetch_assoc()){
      <div class="form-group">
       <label class="control-label col-sm-2" for="pwd">Fees Amount Owed:</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" name="feeamt" value="<?php   $bal=($fee_amt-$ad['fee_amt'])-$ad['scholar'];
-		if($bal<1){
-			echo 0;
-		}
-		else {
-			echo $bal;
-		}?>" onBlur="doCalc(this.form)"  readonly >
+        <input type="text" class="form-control" name="feeamt" value="<?php   echo $ad['balance'];
+		
+		?>" onBlur="doCalc(this.form)"  readonly >
       </div>
     </div>
     
@@ -195,11 +172,31 @@ while($bus=$d->fetch_assoc()){
     </div>
     
    
+   
     
     <div class="form-group">
       <label class="control-label col-sm-2" for="pwd">Balance Due:</label>
       <div class="col-sm-10">
         <input type="number" class="form-control" id="pwd" name="balance" readonly="readonly" required="required" style="background:#FFC; color:#000; font-family:'Arial Black', Gadget, sans-serif">
+      </div>
+    </div>
+    
+     <div class="form-group">
+      <label class="control-label col-sm-2" for="pwd">Balance Due:</label>
+      <div class="col-sm-10">
+  
+   <select  class="form-control" required id="sel1" name="method" >
+
+        <?php
+							
+								$result = $con->query("SELECT * FROM our_accounts") or die(mysqli_error($con));
+				while($bu=$result->fetch_assoc()){
+								?>
+                              
+        <option value="<?php echo $bu['id']; ?>"  ><?php echo $bu['name']; ?> </option>
+    <?php } ?> 
+        
+      </select>
       </div>
     </div>
     
@@ -248,6 +245,7 @@ while($bus=$d->fetch_assoc()){
 					}
 					?>
   </select></td></tr>
+ 
   
   
      <input type="hidden"  name="fees"  value="<?php echo $fee_amt; ?>" >
@@ -325,7 +323,7 @@ $cc=$_POST['department'];
 $month=date('m');
 $year=date('Y');
 $balance=$_POST['balance'];
-$fees=$_POST['fees'];
+$debt_year=$_POST['debt_year'];
 	
 /************************ SERVER SIDE VALIDATION **************************************/
 /********** This validation is useful if javascript is disabled in the browswer ***/
@@ -366,27 +364,14 @@ $active=$_POST['active'];
 $time=date('d-m-Y G:i:s');
 $method=$_POST['method'];;
 
-	echo $dates;
-$query55556=$con->query("UPDATE daily  set  
-company='$bank' where cust_id='".$matric."'  and year='$ayear'" ) or die(mysqli_error($con));
 
-
-
-$coo=$dbcon->query("SELECT * FROM daily where date='$dates' and cust_id='".$matric."'") or die(mysqli_error($dbcon));
-  echo $count=$coo->mum_rows;
-	if($count>0){
-		
-echo "<script>alert('Error Recording have be done for that receipt on $dates!'); </script>";
-echo '<meta http-equiv="Refresh" content="0; url=first.php?pay_again">';	
-
-	}
-	else {
-
- $daily=$con->query("INSERT INTO daily set cust_id='$matric',paidto='$active',day='$day',staffname='$fname',discount='$reg',rec='$part',levels='$level',date='$dates',month='$month',year='$ayear',reason='fees',qty='1',area='1',price='$part',total='$part',owed='$balance',
+$query55=$conn->query("INSERT INTO  debts_recovered  set  
+matric='$matric',cur_year='$ayear',debt_year='$debt_year',amt_paid='$part',amt_owed='$balance' ,paidto='$active' " ) or die(mysqli_error($conn));
+ $daily=$con->query("INSERT INTO daily set cust_id='$matric',paidto='$active',day='$day',staffname='$fname',discount='$reg',rec='$part',levels='$level',date='$dates',month='$month',year='$ayear',reason='Debts Repayments',qty='1',area='1',price='$part',total='$part',owed='$balance',
 			purpose='$mmm',company='$bank',time='$time',fyear='$year' ,level_id='$levels',prog_id='$dept_id',method='$method'") or die(mysqli_error($con));
 
 $query55=$conn->query("UPDATE fee_paymts  set  
-balance='$balance',fee_amt='$totapiad',program_id='$dept_id',level_id='$levels',expected_amount='$fees'  where matric='$matric'  " ) or die(mysqli_error($conn));
+balance='$balance',fee_amt='$totapiad'   where id='".$_GET['cust']."'  " ) or die(mysqli_error($conn));
 
 
 echo "<script>alert('Record Created Successfully!'); </script>";
@@ -395,7 +380,7 @@ echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';
  	
  exit;
 	
-}
+
 }
 
 

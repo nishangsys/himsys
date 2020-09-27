@@ -40,14 +40,7 @@ input,select{
 	  AND special.id=students.dept_id AND levels.id=students.level_id ") or die(mysqli_error($conn));
 	while ($rows=$select->fetch_assoc()){
 	$levl_id=$rows['level_id'];
-	if($levl_id>1){
-		echo '<div class="alert alert-danger">
-		  <strong>ERROR. Change of Program is Not Possible at the Level</strong> 
-		</div>';
-
-
-	}
-	else {
+	
 		?>
        <br />
    <div class="row">
@@ -70,7 +63,7 @@ input,select{
 	
 	
       <div class="form-group">
-      <label class="control-label col-sm-2" for="DOB">Current Level:</label>
+      <label class="control-label col-sm-2" for="DOB">Current Levels:</label>
       <div class="col-sm-10">
        <select class="form-control" id="sel1" name="clevel" required>
 	     <?php
@@ -104,139 +97,25 @@ input,select{
       </div>
     </div>  	
 	
+    <input type="hidden" name="matric"  value="<?php echo $rows['matricule']; ?>"  />
 	
 	
       <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-default" name="ok">Submit</button>
+        <button type="submit" class="btn btn-default" name="ok">Save Level Updates</button>
       </div>
     </div>
     </form>
-    </div>
-    </div>
-    </div>
-  
-  
-  
-   <?php
-   if(isset($_POST['ok'])){
-  $zone=mysqli_real_escape_string($con,$_POST['dept']);
- $who=$_GET['cust'];
- $level=$_POST['level'];
- $id=mysqli_real_escape_string($con,$_POST['id']);
- 
- 			 ?>
-
-
- <form method="post" enctype="multipart/form-data" class="form-horizontal" action="" role="form" >
     
-     <table class="table table-bordered">
-	 <?php
-	 
-		
-	 
-	 ?>
-
-              <tr><td>Student's Names</td><td><input type="text" name="name" required="required" value="<?php echo $rows['fname'];; ?>" /></td></tr>
-               
-              <tr><td>Current Level</td><td>
-			  
-			     <select class="form-control" id="sel1" name="dept" required>
-             
-				<option value="<?php echo $rows['level_id']; ?>"><?php echo $rows['levels']; ?></option>
-				
-	
-	</td></tr>
-               </td></tr>
-                 
-              
-               
-                
-                 <tr><td>Program</td><td>
-				 <select class="form-control" id="sel1" name="ndept" required>
-             
-				   <?php
-				   $d=$con->query("SELECT * FROM special where id='".$zone."'  ") or die(mysqli_error($con));
-				   while($df=$d->fetch_assoc()){
-				   ?>
-				<option value="<?php echo $df['id']; ?>"><?php echo $df['prog_name']; ?></option>
-				<?php } ?>
-				 
-				 
-				 </td></tr>
-				 
-				 
-                 <tr><td>New Level</td><td>
-				 <select class="form-control" id="sel1" name="nlevel" required>
-             
-				   <?php
-				   $d=$con->query("SELECT * FROM levels where id='$level'  ") or die(mysqli_error($con));
-				   while($df=$d->fetch_assoc()){
-				   ?>
-				<option value="<?php echo $df['id']; ?>"><?php echo $df['levels']; ?></option>
-				<?php } ?>
-				 
-				 
-				 </td></tr>
-               
-                
-               
-               
-  
-  
-  
-               
-                <tr><td>Fees</td><td><input type="text" name="fees" value="<?php 
-
-					$d=$con->query("SELECT * FROM settings where prog_id='".$zone."' and level_id='$level' ") or die(mysqli_error($con));
-				   while($df=$d->fetch_assoc()){
-					  echo $df['fees'];
-				   }
-
-				?>" readonly="readonly" />
-				
-				
-               
-                <tr><td>Debts</td><td><input type="text" name="debt" value="<?php 
-
-					$d=$con->query("SELECT * FROM fee_paymts where matric='".$rows['matricule']."' and yearid!='$ayear' and balance>0") or die(mysqli_error($con));
-				   while($df=$d->fetch_assoc()){
-					  $bal=$df['balance'];
-				   }
-				   if(empty($bal)){
-					   echo 0;
-				   }
-				   else {
-					   echo $bal;
-				   }
-
-				?>" readonly="readonly" />
-  
-  
-               
-                <tr><td>Former Matricule</td><td><input type="text" name="matric" value="<?php echo $rows['matricule']; ?>" readonly="readonly" />
-                
-             
-             
-           
-<input type="hidden" name="levelid"  value="<?php echo $rows['level_id']; ?>"  />
-           
-<input type="hidden" name="year_id"  value="<?php echo $rows['year_id']; ?>"  />
-
-<input type="hidden" name="last" required="required" value="<?php echo $L; ?>"  />
-<input type="hidden" name="sector" required="required" value="<?php echo $id; ?>"  />
-                        
-                  <tr><td></td><td><button type="submit" name="add" class="btn btn-danger"   >UPDATE</button></td></tr>
-                  <input type="hidden" name="id"  value="<?php echo $l+1; ?>"  />
-            </table>
-    
-    </form><br /><br />
+    </div>
+    </div>
+    </div>
     <?PHP } ?>
    
         </a>
         </div>
           <?php 
-if(isset($_POST['add'])){
+if(isset($_POST['ok'])){
 	
 
 
@@ -248,9 +127,8 @@ $class=$_POST['class'];
 $fees=$_POST['fees'];
 $oldd=$_POST['dept'];
 $matric=$_POST['matric'];
-$newd=$_POST['ndept'];
-$newmat=$_POST['newmat'];
-$level_id=$_POST['levelid'];
+$level=$_POST['level'];
+$clevel=$_POST['clevel'];
 $year_id=$_POST['year_id'];
 $lasts=$_POST['last'];
 $sector=$_POST['sector'];
@@ -258,7 +136,7 @@ $month=date('m');
 $year=date('Y');
 
 $ats=$conn->query("SELECT * FROM students where
-matricule='$newmat'  ") or die(mysqli_error($conn)) ;
+matricule='$matric'  and level_id='$level' ") or die(mysqli_error($conn)) ;
 $count=$ats->num_rows;
 	if($count>0){
 		echo "<script>alert('ERROR. $newmat already exists. Change it'); </script>";
@@ -266,21 +144,16 @@ $count=$ats->num_rows;
 	}
 	else {
 
-	$ats=$conn->query("INSERT INTO  students_changedept  set new_dept='$newd', year_id='$year_id',
-matric='$newmat',old_dept='$oldd',old_mat='$matric' ") or die(mysqli_error($conn)) ;
+	$ats=$conn->query("INSERT INTO  students_changelevel  set new_level='$level', year_id='$year_id',
+matric='$matric',old_level='$clevel',old_mat='$matric' ") or die(mysqli_error($conn)) ;
 	
-	 $ats=$conn->query("update  fee_paymts  set program_id='$newd',level_id='$level_id', yearid='$year_id',
+	 /*$ats=$conn->query("update  fee_paymts  set program_id='$newd',level_id='$level_id', yearid='$year_id',
 matric='$newmat',expected_amount='$fees'  WHERE student_id='".$_GET['cust']."'") or die(mysqli_error($conn)) ;
-
-	 $atsmm=$conn->query("update  students  set dept_id='$newd', 
-matricule='$newmat'  WHERE id='".$_GET['cust']."'") or die(mysqli_error($conn)) ;
+*/
+	 $atsmm=$conn->query("update  students  set level_id='$level'   WHERE id='".$_GET['cust']."'") or die(mysqli_error($conn)) ;
 
 	
 
- $ats=$con->query("update  daily  set cust_id='$newmat'  WHERE cust_id='".$matric."'") or die(mysqli_error($con)) ;
- 
-
- $query55=$dbcon->query("UPDATE main_sects set last='$lasts', year_id='$ayear'  where id='".$sector."'" ) or die(mysqli_error($dbcon)) ;
 
 
 
@@ -293,10 +166,5 @@ echo '<meta http-equiv="Refresh" content="0; url=../Admission/thank.php">';
 }
 	
 	
-	
-}
 }
 ?>
-
-
-<?php } ?>

@@ -229,6 +229,7 @@ form,table{
         
         <li><a href="?stats">Fee Statistics</a></li>
         <li><a href="?genc_lists&link=Import Names">General Lists</a></li>
+        <li><a href="?finance_summary&link=Finance Summary">Finance Summary</a></li>
           
 
       </ul>
@@ -317,8 +318,8 @@ form,table{
       <ul>
         <li><a href="?debtors">Add Debtors</a></li>
         <li><a href="?all_debtors">All Debtors</a></li>
-     <li><a href="?transfer">Reconcile Debts</a></li>
-          <li><a href="?recovered">Reconciled Debts Reports</a></li>
+     
+          <li><a href="?recovered">Recovered Debts Reports</a></li>
 
 
       </ul>

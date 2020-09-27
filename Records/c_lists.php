@@ -43,11 +43,10 @@
       <?php
 	 
 	  if(!isset($_POST['ok'])){
-		  $prog_id=$_POST['dept'];
-		  $year_id=$_POST['ayear'];
+		  
 		  
 	  
-	   $d=$conn->query("SELECT * from levels,special,years,students  where  students.year_id='$year_id' AND  AND students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id GROUP BY dept_id,level_id order by special.prog_name ") or die(mysqli_error($conn));
+	   $d=$conn->query("SELECT * from levels,special,years,students  where  students.year_id='$ayear' AND  students.level_id=levels.id and students.dept_id=special.id  AND students.year_id=years.id GROUP BY dept_id,level_id order by special.prog_name ") or die(mysqli_error($conn));
 $i=1;
 	  }
 	  else {

@@ -123,6 +123,19 @@
 	include '../Records/monthly_att.php';
 	}
 	
+	
+	if(isset($_GET['promote'])){
+	include '../Records/chose_level.php';
+	}
+	if(isset($_GET['promoting'])){
+	include '../Records/promoting.php';
+	}
+	
+	if(isset($_GET['promote_now'])){
+	include '../Records/promote_now.php';
+	}
+	
+	
 					?>
                     
                     

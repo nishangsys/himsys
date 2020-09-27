@@ -402,7 +402,14 @@ if($level=='11' or $level=='12' or $level=='20' or $level=='8'){
 	}
 	
 	if(isset($_GET['move'])){
-	include '../Fees/sers.php';
+	include '../Records/chose_level.php';
+	}
+	if(isset($_GET['promoting'])){
+	include '../Records/promoting.php';
+	}
+	
+	if(isset($_GET['promote_now'])){
+	include '../Records/promote_now.php';
 	}
 	
 	if(isset($_GET['import_names'])){
@@ -426,6 +433,12 @@ if($level=='11' or $level=='12' or $level=='20' or $level=='8'){
 	if(isset($_GET['genc_lists'])){
 	include '../Records/genc_lists.php';
 	}
+	
+	if(isset($_GET['finance_summary'])){
+	include '../Fees/finance_summary.php';
+	}
+	
+	
     ?>
     
     <?php } ?>

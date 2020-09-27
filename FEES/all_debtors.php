@@ -9,14 +9,14 @@
 <body>
 <?php
 $ayear;
-$d=$conn->query("SELECT * FROM historic where ayear>5 and ayear!='$ayear'  GROUP BY ayear order by ayear") or die(mysqli_error($conn));
+$d=$conn->query("SELECT * FROM years,fee_paymts where  fee_paymts.yearid!='$ayear' AND fee_paymts.balance>0 AND fee_paymts.yearid=years.id   GROUP BY fee_paymts.yearid order by fee_paymts.yearid ") or die(mysqli_error($conn));
 while($bn=$d->fetch_assoc()){
 ?>
 
-<a href="?all_debtors&year=<?php echo $bn['ayear']; ?>">
+<a href="?all_debtors&year=<?php echo $bn['yearid']; ?>&yname=<?php echo $bn['year_name']; ?>&gdgdgdh">
 <div class="col-sm-3" style="border:2px solid#f00; color:#F03">
          
-            <h4>  <?php echo $bn['ayear']; ?> Debtors</h4>
+            <h4>  <?php echo $bn['year_name']; ?> Debtors</h4>
             
          
         </div>
@@ -36,7 +36,7 @@ if(isset($_GET['year'])){
               <div class="row">
                        
          <div class="col-sm-12" style="background:#000; color:#FFF; text-align:center; padding:10PX 0PX">
-    <span style="color:#ff0; font-weight:bold">  <?php echo $ac; ?></span> ACADEMIC YEAR DEBTORS REPORTS 
+    <span style="color:#ff0; font-weight:bold">  <?php echo $ayears=$_GET['yname']; ?></span> ACADEMIC YEAR DEBTORS REPORTS 
   
        | <a href="do_debtors.php?dept=<?php echo $dept; ?>&level=<?php echo $level; ?>&year_id=<?PHP echo $ac; ?>" target="_new"> <button type="submit" class="btn btn-warning" name="doLogin" class="btn btn-danger">Download a Copy</button></a>
       </span>
@@ -83,7 +83,8 @@ if(isset($_GET['year'])){
                             <tbody>
 								<?php
 							
-								$result= $conn->query("select  * from historic WHERE balance!='0'  and year_id='$ac'  order by roll DESC" ) or die (mysqli_error($conn));
+								$result= $conn->query("select  * from students,levels,special,fee_paymts WHERE fee_paymts.balance>0 AND fee_paymts.matric=students.matricule AND fee_paymts.level_id=levels.id AND fee_paymts.program_id=special.id   and fee_paymts.yearid='$ac'  GROUP BY students.matricule order by students.fname " ) or die (mysqli_error($conn));
+							 $result->num_rows;
 								$num=1;
 				while ($row= $result->fetch_assoc() ){
 								$id=$row['id'];
@@ -92,24 +93,22 @@ if(isset($_GET['year'])){
                             <td style="text-align:center; word-break:break-all; width:20px;"> <?php echo $num++; ?></td>
 
 						
-								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $name=$row ['student_name']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:300px;"> <?php echo $name=$row ['fname']; ?></td>
 																<td style="text-align:center; word-break:break-all; width:150px;"> <?php echo $name=$row ['matricule']; ?></td>
 
-								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['amountpaid']; ?></td>
-                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['class']; ?></td>
-                                    <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['ayear']; ?></td>
+								<td style="text-align:center; word-break:break-all; width:250px;"> <?php echo $row ['prog_name']; ?></td>
+                                	<td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $row ['levels']; ?></td>
+                                    <td style="text-align:center; word-break:break-all; width:80px;"> <?php echo $ayears; ?></td>
                                     
                       		
                                              <td style="text-align:center; word-break:break-all; width:80px; color:#f00; font-weight:b"> <?php echo $row ['balance']; ?></td>
 			
           		
             <td style="text-align:center; word-break:break-all; width:220px;">					
-                   
-       <a href="?update_debt=<?php echo $name; ?>&id=<?php echo  $row ['id']; ; ?>&year_id=<?php echo $ayear; ?>">      <button type="button" class="btn btn-primary btn-sm">UPDATE</button> </a> <!--| <a href="?all_debtors&delete=<?php echo $row ['id'];; ?>&id=<?php echo  $row ['id']; ; ?>&year_id=<?php echo $ayear; ?>">      <button type="button" class="btn btn-danger btn-sm">DELETE</button> </a> </td>  --->   
-								
-								
-                             
-					</tr>		
+              
+              
+              <a href=javascript:popcontact('../Fees/receive_debts.php?cust=<?php echo $row['id']; ?>') style="color:#fff; text-decoration:blink text-align:center; font-weight:bold;"><button type="button" class="btn btn-primary btn-xs" >Receive Debts </button>
+              	
 								
                              
 					</tr>		
@@ -127,9 +126,9 @@ if(isset($_GET['year'])){
         
                             <tbody>
 								<?php
-								
+								echo $ac;
 							
-						$result= $conn->query("select  SUM(balance) from historic WHERE balance>0 and year_id='".$_GET['year']."' and stat='100' " ) or die (mysqli_error($conn));
+						$result= $conn->query("select  SUM(balance) from fee_paymts WHERE balance>0 and yearid='".$ac."'  " ) or die (mysqli_error($conn));
 								$num=1;
 				while ($row= $result->fetch_assoc() ){
 								$id=$row['id'];
@@ -138,7 +137,7 @@ if(isset($_GET['year'])){
                             <td style="text-align:center; word-break:break-all; width:20px;"> <?php echo $num++; ?></td>
 
 						
-								<td style="text-align:center; word-break:break-all; width:300px;"> TOTAL</td>
+								<td style="text-align:center; word-break:break-all; width:300px;"> TOTAL DEBTS IN <?php echo $ayears; ?></td>
 								<td style="text-align:center; word-break:break-all; width:250px;"> </td>
                                 	<td style="text-align:center; word-break:break-all; width:80px;"> </td>
                                       	<td style="text-align:center; word-break:break-all; width:80px;"> .</td>
