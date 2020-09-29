@@ -1,6 +1,0 @@
-[17-Aug-2017 15:20:27 America/Chicago] PHP Warning:  include(../includes/admin_sidenav.php): failed to open stream: No such file or directory in /home/biakahc/public_html/application/Admin/index.php on line 51
-[17-Aug-2017 15:20:27 America/Chicago] PHP Warning:  include(../includes/admin_sidenav.php): failed to open stream: No such file or directory in /home/biakahc/public_html/application/Admin/index.php on line 51
-[17-Aug-2017 15:20:27 America/Chicago] PHP Warning:  include(): Failed opening '../includes/admin_sidenav.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/biakahc/public_html/application/Admin/index.php on line 51
-[17-Aug-2017 15:20:27 America/Chicago] PHP Warning:  include(../includes/Admin_content.php): failed to open stream: No such file or directory in /home/biakahc/public_html/application/Admin/index.php on line 57
-[17-Aug-2017 15:20:27 America/Chicago] PHP Warning:  include(../includes/Admin_content.php): failed to open stream: No such file or directory in /home/biakahc/public_html/application/Admin/index.php on line 57
-[17-Aug-2017 15:20:27 America/Chicago] PHP Warning:  include(): Failed opening '../includes/Admin_content.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/biakahc/public_html/application/Admin/index.php on line 57

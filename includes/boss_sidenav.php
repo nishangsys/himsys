@@ -76,23 +76,12 @@
      
                 
                         
-                        
-                        
-                        
-                           <li class="panel ">
-                    <a href="?my_license&link=My License " data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-           <i class="icon-key "></i> My License 
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li>       
-                                     
+                       
                                      
                                       
         
                            <li class="panel ">
-                    <a href="?my_license&link=My License " data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
+                    <a href="?set_ayear&link=Set Aacdemic Year" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
            <i class="icon-cog "></i> Set Aacdemic Year 
 	   
                         <span class="pull-right">

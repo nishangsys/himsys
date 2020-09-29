@@ -49,8 +49,8 @@
 	if(isset($_GET['create_newuser'])){
 	include '../superadmin/create_newuser.php';
 		}
-		if(isset($_GET['all_hod'])){
-	include '../superadmin/all_hod.php';
+		if(isset($_GET['set_ayear'])){
+	include '../Cash/academic_year.php';
 		}	
 					?>
                     

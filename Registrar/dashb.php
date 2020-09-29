@@ -1,25 +1,4 @@
 
-  <?php 
-  $today=$_GET['date'];;
-  $branch=$_GET['branch'];
-	$year=date('Y'); 
-	$m=date('m'); 
-	
-	
-	  ?>
-      
-      
-      
-     
-    
-    
-    
-    
-    
-   
-    
-    
-    
     
     
     
@@ -35,7 +14,7 @@
     
       <div class="col-sm-12"> 
       <div class="panel panel-primary">
-        <div class="panel-heading"><?php echo $ayear; ?> Most Enrolled Programs</div>
+        <div class="panel-heading"><?php echo $ayear_name; ?> Most Enrolled Programs</div>
        
             <div class="well well-small" style="height:600px; overflow:scroll">
             
@@ -43,8 +22,8 @@
               <table class="table table-bordered">
               
               <?php 
-			$year=date('Y');
-			  $d=$conn->query("SELECT COUNT(matricule) as tot,departmet FROM students where year_id='$ayear' GROUP BY departmet order by  COUNT(matricule) DESC") or die(mysqli_error($conn));
+			
+			  $d=$conn->query("SELECT COUNT(students.matricule) as tot,special.prog_name FROM students,special where students.year_id='$ayear' and students.dept_id=special.id GROUP BY students.dept_id order by  COUNT(students.matricule) DESC") or die(mysqli_error($conn));
 $i=1;
 ?>
  <thead>
@@ -61,7 +40,7 @@ $i=1;
       <tr>
        
            <td><?php  echo $i++; ?></td>
-                                            <td><?php  echo $bu['departmet']; ?></td>
+                                            <td><?php  echo $bu['prog_name']; ?></td>
                                         
                                             <td><?php  echo $bu['tot']; ?></td>
                                       

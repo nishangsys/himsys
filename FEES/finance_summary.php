@@ -80,12 +80,12 @@ function checkAvailability() {
       </tr>
       <?php } ?>
       
-      <tr>
+      <tr style="color:#f00">
       <td></td>
-      <td>Schoalrship</td><td><?php
+      <td>Total Amount given as Scholarship </td><td><?php
           $dms=$dbcon->query("SELECT SUM(scholar) as totals FROM daily where year='$ayear'    ") or die(mysqli_error($dbcon));
 		  while($dfs=$dms->fetch_assoc()){
-		  echo $dfs['totals'];
+		  echo number_format($dfs['totals']);
 		  }
 		  ?></td></tr>
       

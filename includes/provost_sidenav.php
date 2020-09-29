@@ -59,27 +59,7 @@
                 </li>
                 
                   
-                        <li class="panel">
-                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#pagesr-nav">
-                        <i class="icon-table"></i> Fee Bank Statement
-	   
-                        <span class="pull-right">
-                            <i class="icon-angle-left"></i>
-                        </span>
-                          &nbsp; <span class="label label-info">6</span>&nbsp;
-                    </a>
-                    <ul class="collapse" id="pagesr-nav">
-                           <?php
-					$d=$con->query("SELECT * FROM daily where reason='Fees' and company!='' and year='$ayear' GROUP BY company") or die(mysqli_error($con));
-while($bu=$d->fetch_assoc()){
-
-
-
-?>
-                        <li class=""><a href="?state&link=<?php echo $bu['company']; ?> Reports&reason=<?php echo $bu['company']; ?>"><i class="icon-angle-right"></i> <?php echo $bu['company']; ?> </a></li>
-                     <?php } ?>
-                    </ul>
-                </li>
+                        
 
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#pagesr-nav">
@@ -127,9 +107,8 @@ while($bu=$d->fetch_assoc()){
                          
                        
                         <li><a href="?indiv&link= Student Fee Payment History"><i class="icon-angle-right"></i> Student Fee Pmt Hist </a></li>
-                        <li><a href="?cashs&link=Cash Received Reports "><i class="icon-angle-right"></i> Cash Received Reports </a></li>
+                        <li><a href="?finance_sum&link=Finance Summary Reports  "><i class="icon-angle-right"></i> Finance Summary Reports </a></li>
                         
-                         <li><a href="?regis&link= Registration Fee Report"><i class="icon-angle-right"></i> Registration Fee</a></li>
                          
                            <li><a href="?complete&link=Cash Completed Fees Reports "><i class="icon-angle-right"></i> Completed Fees</a></li>
                         
@@ -190,14 +169,7 @@ while($bu=$d->fetch_assoc()){
                         </a>
                         </li>       
                         
-                           <li class="panel ">
-                    <a href="?attendance&link=Staff Attendance" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-                       <i class="icon-user   "> </i> Staff Attendance
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li>       
+                         
                         
                         
                    <li class="panel ">
@@ -209,7 +181,7 @@ while($bu=$d->fetch_assoc()){
                         </a>
                         </li>         
                         
-                        
+       <!--                 
                       
                 
                   <li class="panel">

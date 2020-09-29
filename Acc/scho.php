@@ -13,11 +13,12 @@ $active=$userRow['full_name'];
 if(isset($_GET['cust'])){
 	
 	$who=$_GET['cust'];
-$d=$conn->query("SELECT * FROM rush where roll='1'") or die(mysqli_error($conn));
+	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
 while($bu=$d->fetch_assoc()){
-	 $year_id=$bu['year'];
-	 $year=$bu['extra'];
-	$year2=$bu['extra2'];
+	 $ayear_name=$bu['year_name'];
+	 $ayear=$bu['id'];
+	
 }
 
 $d=$con->query("SELECT * FROM scholars where id='".$_GET['sp']."'") or die(mysqli_error($con));

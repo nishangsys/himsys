@@ -82,14 +82,7 @@
                        
                     </a>                   
                 </li>
-                <li class="panel active" >
-                    <a href="?academic_year" style="background:#F00" >
-                        <i class="icon-table"></i> Set School Year
-	   
-                       
-                    </a>                   
-                </li>
-                
+             
                 
                 
                 
@@ -251,8 +244,7 @@
  <li><a href="?add_edit"><i class="icon-angle-right"></i> Add Course/ Edit Marks  </a></li>
                          
   <li><a href="?edit_course"><i class="icon-angle-right"></i> Edit Course </a></li>  
-    <li><a href="?add_course"><i class="icon-angle-right"></i> Add Course </a></li>                  
-                        <li><a href="?edit_nonpubhmks"><i class="icon-angle-right"></i> Edit Non Pub Health Mks </a></li>
+    <li><a href="?add_course"><i class="icon-angle-right"></i> Add Course </a></li>       
                     </ul>
                 </li>         
                
@@ -285,22 +277,7 @@
                         
                         
                                        
-                        
-                        
-       
-                        
-                        
-                        
-                           <li class="panel ">
-    
-      <a href="../Admin/index.php" target="new" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav" style="background:#060; color:#fff">
-                       <i class="icon-cog"></i> Access Application
-	   
-                        <span class="pull-right">
-                        </span>
-                        </a>
-                        </li> 
-                        
+                    
                         
                                    
                         

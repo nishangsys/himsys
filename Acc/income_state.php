@@ -45,7 +45,7 @@
  
  */
  
-   $dm=$con->query("SELECT SUM(rec),SUM(bank),SUM(exp),date FROM daily  where month='$date' and year='$year' GROUP BY date") or die(mysqli_error($con));
+   $dm=$con->query("SELECT SUM(rec),SUM(exp),date FROM daily  where month='$date' and year='$ayear' GROUP BY date") or die(mysqli_error($con));
    $i=1;
 while($bum=$dm->fetch_assoc()){
 	
@@ -66,7 +66,7 @@ while($bum=$dm->fetch_assoc()){
                                   <?php
  $date=date('m');
  $year=$year_id;
-   $dm=$con->query("SELECT SUM(rec),SUM(bank),SUM(exp) FROM daily where month='$date'  and year='$year' GROUP BY month") or die(mysqli_error($con));
+   $dm=$con->query("SELECT SUM(rec),SUM(exp) FROM daily where month='$date'  and year='$ayear' GROUP BY month") or die(mysqli_error($con));
    $i=1;
 while($bum=$dm->fetch_assoc()){
 	

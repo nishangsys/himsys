@@ -12,11 +12,12 @@ $localIP = getHostByName(php_uname('n'));
 if(isset($_GET['cust'])){
 	
 	$who=$_GET['cust'];
-$d=$con->query("SELECT * FROM rush where roll='1'") or die(mysqli_error($con));
+	 //////////select academic year//////////////
+$d=$con->query("SELECT * FROM years where status='1'") or die(mysqli_error($con));
 while($bu=$d->fetch_assoc()){
-	 $year_id=$bu['year'];
-	 $year=$bu['extra'];
-	$year2=$bu['extra2'];
+	 $ayear_name=$bu['year_name'];
+	 $ayear=$bu['id'];
+	
 }
 
   $query =$con->query("SELECT * FROM users WHERE id=".$_SESSION['id']) or die(mysqli_error($con));
@@ -32,7 +33,7 @@ while($bu=$d->fetch_assoc()){
 	while ($bss=$asss->fetch_assoc()){
 		$name=$bss['staffname'];
 	}
-	 $ass=$con->query("SELECT * from daily where staffname='".$name."' and reason='fees'  ") or die(mysqli_error($con));
+	 $ass=$con->query("SELECT * from daily where staffname='".$name."' and reason='fees' and year='$ayear'  ") or die(mysqli_error($con));
 	
 
 	
@@ -76,7 +77,6 @@ input,select{
         <th>Amount Paid</th>
         <th>Registration</th>
 
-        <th>Bank</th>
                 <th>Date Paid</th>
 
         <th>Receipt Presented On</th>
@@ -101,9 +101,9 @@ input,select{
       <td><?php echo $i++; ?></td>
        <td><?php echo $bu['staffname']; ?></td>
         <td><?php echo $bu['cust_id']; ?></td>
-        <td><?php echo $bu['amt']; ?></td>
-        <td><?php echo $bu['discount']; ?></td>
-        <td><?php echo $bu['company']; ?></td>
+        <td><?php echo $bu['rec']; ?></td>
+        <td><?php echo $bu['scholar']; ?></td>
+      
         <td><?php echo $bu['date']; ?></td>
         <td><?php echo $bu['paidtou']; ?></td>
        

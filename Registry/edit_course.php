@@ -180,7 +180,7 @@
 echo $name=mysqli_real_escape_string($dbcon,$_POST['querystr']);
 $sectors=mysqli_real_escape_string($dbcon,$_POST['names']);
 
-   $d=$conn->query("SELECT * FROM  subject WHERE subject='$name' order by roll  ") or die(mysqli_error($conn));
+   $d=$conn->query("SELECT * FROM  special,levels,subjects WHERE special.id=subjects.prog_id AND levels.id=subjects.level_id AND  subjects.code='$name' order by subjects.id  ") or die(mysqli_error($conn));
     
 	     
 	$i=1;	
@@ -198,10 +198,9 @@ $sectors=mysqli_real_escape_string($dbcon,$_POST['names']);
 														<th>Full Name</th>
 														
 	<th>Matricule</th>
+    <th>Program</th>
     <th>Level </th>
-
-    <th>School Year</th>
-    <th>Program</th>													
+    													
 	<th>Action</th>
 														
 													</tr>
@@ -222,19 +221,17 @@ $sectors=mysqli_real_escape_string($dbcon,$_POST['names']);
 
 								
 														</td>
-				<td><?php  echo $bu['subject']; ?></td>
+				<td><?php  echo $bu['code']; ?></td>
                                     
              <td><?php  echo $bu['title']; ?></td>
-              <td><?php  echo $bu['department']; ?></td>
-             <td><?php  echo $bu['credit']; ?></td>
+              <td><?php  echo $bu['prog_name']; ?></td>
+             <td><?php  echo $bu['levels']; ?></td>
                                     
-             <td><?php  echo $bu['status']; ?></td>
-
-
+            
 <td>
 	
         
-         <a href="?editing_subj&id=<?php  echo $bu['roll']; ?>">
+         <a href="?editing_subj&id=<?php  echo $bu['id']; ?>&gshhsh">
     
     <button class="btn btn-xs btn-primary" >
 																<i class="ace-icon fa fa-check bigger-120"></i> EDIT 

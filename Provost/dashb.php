@@ -22,43 +22,43 @@
     
         <div class="col-sm-4"> 
       <div class="panel panel-primary">
-        <div class="panel-heading">FINANCIAL ANALYSIS FOR <?PHP echo $ayear ?></div>
+        <div class="panel-heading">FINANCIAL ANALYSIS FOR <?PHP echo $ayear_name; ?></div>
        
             <div class="well well-small" style="height:220px; overflow:scroll">
             
     <?php    
 	    /////////////for updates
-  $doU=$conn->query("SELECT SUM(amount_paid),SUM(balance),SUM(olddebt),(SUM(amount_paid)+SUM(balance)) as tot FROM historic WHERE year_id='".$ayear."' ") or die(mysqli_error($conn));
+  $doU=$conn->query("SELECT SUM(fee_amt),SUM(balance),SUM(expected_amount) as fees ,SUM(scholar) as tot_scholar FROM fee_paymts WHERE yearid='".$ayear."' ") or die(mysqli_error($conn));
   while($nam=$doU->fetch_assoc()){
-	 $income=$nam['SUM(amount_paid)'];
+	 $income=$nam['SUM(fee_amt)'];
 	 $exp=$nam['SUM(balance)'];
-	$debt=$nam['SUM(olddebt)'];
-	$total=$nam['tot'];
+	$debt=$nam['tot_scholar'];
+	$total=$income+$exp+$debt;
 	$perin=number_format((($income/$total)*100),2);
 $perxp=number_format((($exp/$total)*100),2);
 $perdebt=number_format((($debt/$total)*100),2);
   }
   ?>
-                <span>% Amt Paid</span><span class="pull-right"><small><?php echo $perin ?>%</small></span>
+                <span>% Amt Paid <?php echo number_format($income);  ?></span><span class="pull-right"><small><?php echo $perin ?>%</small></span>
 
 
   <div class="progress progress-striped active">
 		<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $perin ?>%;">
                 </div>
                 </div>
-                <span>% Amt Owed</span><span class="pull-right"><small><?php echo $perxp ?>%</small></span>
+                <span>% Amt Owed <?php echo number_format($exp); ?></span><span class="pull-right"><small><?php echo $perxp ?>%</small></span>
 
                 <div class="progress progress-striped active">
 		<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $perxp ?>%"></div>
                 </div>
-                <span>% Amt of Registration Fee</span><span class="pull-right"><small><?php echo $perdebt ?>%</small></span>
+                <span>% Amt of Scholarship <?php echo number_format($debt); ?> </span><span class="pull-right"><small><?php echo $perdebt ?>%</small></span>
 
                <div class="progress progress-striped active">
 		<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $perdebt ?>%"></div>
                 </div>        
 
         </div>
-        <div class="panel-footer"> All rights Reserved by Programmer</div>
+        <div class="panel-footer"> All rights Reserved by Nishang Systems</div>
       </div>
     </div>
 </a>    
@@ -91,7 +91,7 @@ $perdebt=number_format((($debt/$total)*100),2);
     
       <div class="col-sm-7"> 
       <div class="panel panel-primary">
-        <div class="panel-heading"><?php echo $ayear; ?> Most Enrolled Programs</div>
+        <div class="panel-heading"><?php echo $ayear_name; ?> Most Enrolled Programs</div>
        
             <div class="well well-small" style="height:220px; overflow:scroll">
             
@@ -100,7 +100,7 @@ $perdebt=number_format((($debt/$total)*100),2);
               
               <?php 
 			$year=date('Y');
-			  $d=$conn->query("SELECT COUNT(matricule) as tot,departmet FROM students where year_id='$ayear' GROUP BY departmet order by  COUNT(matricule) DESC") or die(mysqli_error($conn));
+			  $d=$conn->query("SELECT COUNT(students.matricule) as tot,special.prog_name FROM students,special where students.year_id='$ayear' and students.dept_id=special.id GROUP BY students.dept_id order by  COUNT(students.matricule) DESC") or die(mysqli_error($conn));
 $i=1;
 ?>
  <thead>
@@ -117,7 +117,7 @@ $i=1;
       <tr>
        
            <td><?php  echo $i++; ?></td>
-                                            <td><?php  echo $bu['departmet']; ?></td>
+                                            <td><?php  echo $bu['prog_name']; ?></td>
                                         
                                             <td><?php  echo $bu['tot']; ?></td>
                                       
@@ -133,7 +133,7 @@ $i=1;
             
     
         </div>
-        <div class="panel-footer"> All rights Reserved by Programmer</div>
+        <div class="panel-footer"> All rights Reserved by Nishang Systems PLC</div>
       </div>
     </div>
     
@@ -153,7 +153,7 @@ $i=1;
     
       <div class="col-sm-7"> 
       <div class="panel panel-primary">
-        <div class="panel-heading"><?php echo $ayear; ?> Most Programs with Most Fees Paid</div>
+        <div class="panel-heading"><?php echo $ayear_name; ?> Most Programs with Most Fees Paid</div>
        
             <div class="well well-small" style="height:500px; overflow:scroll">
             
@@ -162,7 +162,7 @@ $i=1;
               
               <?php 
 			$year=date('Y');
-			  $d=$conn->query("SELECT class,SUM(amount_paid) as paid,SUM(balance) as owed FROM historic where year_id='$ayear' GROUP BY class order by  SUM(amount_paid) DESC") or die(mysqli_error($conn));
+			  $d=$conn->query("SELECT special.prog_name as class,SUM(fee_paymts.fee_amt) as paid,SUM(fee_paymts.balance) as owed FROM fee_paymts,special where fee_paymts.yearid='$ayear' AND fee_paymts.program_id=special.id GROUP BY fee_paymts.program_id order by  SUM(fee_amt) DESC") or die(mysqli_error($conn));
 $i=1;
 ?>
  <thead>

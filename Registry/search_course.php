@@ -4,7 +4,7 @@
 
 	if(isset($_POST['querystr'])){
 
-		$conn = new mysqli('localhost', 'nishang', 'google1234', '2019_university');
+		include '../includes/dbc.php';
 
 
 
@@ -22,7 +22,7 @@
 
 		}else{
 
-			$sql = "SELECT * FROM subject WHERE title  LIKE '%$querystr%'  or subject LIKE '%$querystr%'  GROUP BY subject";
+			$sql = "SELECT * FROM subjects WHERE title  LIKE '%$querystr%'  or code LIKE '%$querystr%'  GROUP BY code";
 
 			$sqlquery = $conn->query($sql);
 
@@ -34,7 +34,7 @@
 
 					$results['data'] .= "
 
-						<li class='list-gpfrm-list' data-fullname='".$ldata['subject']." '>".$ldata['title']."   (".$ldata['subject'].")</li>
+						<li class='list-gpfrm-list' data-fullname='".$ldata['code']." '>".$ldata['title']."   (".$ldata['code'].")</li>
 
 					";
 

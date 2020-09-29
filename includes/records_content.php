@@ -19,15 +19,7 @@
             <strong>School Year: <span style="color:#f00"><?php echo $ayear_name; ?></span></strong>
             
             
-            | &nbsp;&nbsp;&nbsp;&nbsp; 
             
-            
-             <strong>Semester: <span style="color:#f00"><?php if($semester==1){
-				 echo "First Semester";
-			 }
-			 else {
-				 echo "SECOND SEMESTER";
-			 }; ?></span></strong>
             </h4>
             </p>
           </div>
@@ -123,6 +115,9 @@
 	include '../Records/monthly_att.php';
 	}
 	
+	if(isset($_GET['semester_att'])){
+	include '../Records/semester_att.php';
+	}
 	
 	if(isset($_GET['promote'])){
 	include '../Records/chose_level.php';

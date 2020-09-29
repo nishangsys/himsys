@@ -9,25 +9,17 @@
                       <div class="row">
         <div class="col-sm-4">
           <div class="well">
-         <h4 style="font-family:Georgia, 'Times New Roman', Times, serif; color:#060">  <a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"> </a> <?php echo $secto; ?> LOGIN</h4>
+         <h4 style="font-family:Georgia, 'Times New Roman', Times, serif; color:#060">  <a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"> </a> <?php echo $secto; ?> LOGGED IN</h4>
           </div>
         </div>
         <div class="col-sm-8">
           <div class="well">
             <p>
             <h4 >
-            <strong>School Year: <span style="color:#f00"><?php echo $ayear; ?></span></strong>
+            <strong>School Year: <span style="color:#f00"><?php echo $ayear_name; ?></span></strong>
             
             
-            | &nbsp;&nbsp;&nbsp;&nbsp; 
-            
-            
-             <strong>Semester: <span style="color:#f00"><?php if($semester==1){
-				 echo "First Semester";
-			 }
-			 else {
-				 echo "SECOND SEMESTER";
-			 }; ?></span></strong>
+           
             </h4>
             </p>
           </div>
@@ -107,6 +99,10 @@
 	}	
 	if(isset($_GET['income_statement'])){
 	include '../Acc/income_state.php';
+	}
+	
+	if(isset($_GET['finance_sum'])){
+	include '../Fees/finance_summary.php';
 	}		?>
                     
                     

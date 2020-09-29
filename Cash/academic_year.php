@@ -1,78 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
 
-</head>
-
-<body>
 <?php
 	$_POST = array_map("ucwords", $_POST);
 	
 	////////////////insert item
 
-if(isset($_POST['OK'])){
-$shape=$_POST['name'];
-$disc=$_POST['disc'];
-$cost=$_POST['cost'];
-$qty=$_POST['qty'];
+if(isset($_GET['id'])){
+
 
   
-	  $dfGu=$con->query("UPDATE rush SET year='$shape'  where roll='1'") or die(mysqli_error($con));
-	   $message= "<div class='alert alert-success'>Item Successfully Updated. Thank You</div>";
+	  $dfGu=$con->query("UPDATE years SET status='0' WHERE id!='".$_GET['id']."' ") or die(mysqli_error($con));
+	  
+	  
+	  $dfGu=$con->query("UPDATE years SET status='1' WHERE id='".$_GET['id']."' ") or die(mysqli_error($con));
+	  
+	   echo "<script>alert('SUCCESSFULLY set ".$_GET['yname']." AS CURRENT ACADEMIC YEAR ')</script>";
+
+echo '<meta http-equiv="Refresh" content="0; url=?set_ayear&link=Set%20Aacdemic%20Year">';
 
   }
 
-
-//$df=$con->query("DELETE FROM rush where name='$shape' and disc='$disc' and branch='$branch'") or die(mysqli_error($con));
-
-  /////////////for updates
-  $doU=$con->query("SELECT * FROM rush WHERE roll='1' ") or die(mysqli_error($con));
-  while($nam=$doU->fetch_assoc()){
-	 $sha=$nam['year'];
-	  
-
- 
-	
   
 ?>
 
  
-              <div class="row">
-               <div class="col-sm-10"> 
-             <h2 style="text-align:center">Setting Up Current Academic Year <span style="color:#090"></h2>          
-                        <?PHP
-						 echo $message;
-						?>
-                       <form class="form-inline" action="" method="post">
-                      
-  
-  
-  
-                        
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="pwd"></label>
-    <div class="col-sm-10"> 
-      <input type="text" required="required" class="form-control" id="pwd" value="<?php echo $sha; ?>" name="name" placeholder="Acdemic Year:" >
-    </div>
-  </div>
-  
-  
-  
-   
-  
-  
-   <button type="submit" name="OK" class="btn btn-primary">Set as Academic Year</button>
-  <?php
-  if($_GET['update']!=''){
-	  echo '<button type="submit" name="Update" class="btn btn-primary">UPDATE</button>';
-  }
-  ?>
-</form>
           
       <?php
-	  $do12=$con->query("SELECT * from rush where  roll='1'") or die(mysqli_error($con));
+	  $do12=$con->query("SELECT * from years order by id DESC") or die(mysqli_error($con));
 	  $i=1;
       
       
@@ -104,16 +57,20 @@ $qty=$_POST['qty'];
 		
 		?>
         <td><?php  echo $i++; ?></td>
-        <td><?php echo $name=$df['year']; ?></td>
+        <td><?php echo $name=$df['year_name']; ?></td>
       
 
 
          <td>
-            <a href="?academic_year&dept=<?php echo $_GET['dept']; ?>&update=<?php echo $df['id']; ?>">
-        <button type="button" class="btn btn-info">UPDATE</button>    
-      
+         <?php
+		 if($df['status']==1){
+			 echo "<span class='btn btn-success btn-xs'>Is the current Academic Year</span>";
+		 ?>
+         <?php } else { ?>
+            <a href="?set_ayear&id=<?php echo $df['id']; ?>&update=<?php echo $df['id']; ?>&yname=<?php echo $name=$df['year_name']; ?>&FSFSG" onClick="return confirm('Do you wish to set <?php echo $name=$df['year_name']; ?>  as current academic Year')" class="btn btn-primary btn-xs">
+       Set as Current Academic Year     
 
-</a></td>
+</a>  <?php } ?></td>
 
        
       </tr>
@@ -123,10 +80,4 @@ $qty=$_POST['qty'];
     
   </table>  
   
-  <?php
-    }
-  
-  ?>
-       
-</div>
-</div>
+ 

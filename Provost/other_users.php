@@ -1,6 +1,6 @@
 <?php
  $id;
-   $dm=$con->query("SELECT * FROM sector where sarea='7' ") or die(mysqli_error($con));
+   $dm=$con->query("SELECT * FROM sector  ") or die(mysqli_error($con));
 while($bum=$dm->fetch_assoc()){
 	 $deptss=$bum['name'];
 	  $link=$bum['link'];

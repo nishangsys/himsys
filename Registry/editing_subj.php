@@ -4,7 +4,8 @@
 if(isset($_GET['editing_subj'])){
 
 	
-	 $ass=$conn->query("SELECT * from subject where roll='".$_GET['id']."'  ") or die(mysqli_error($conn));
+	 $ass=$conn->query("
+	 SELECT * FROM  special,levels,subjects WHERE  subjects.id='".$_GET['id']."' AND special.id=subjects.prog_id AND levels.id=subjects.level_id   order by subjects.id ") or die(mysqli_error($conn));
 	while ($rows=$ass->fetch_assoc()){
 	
 	?>
@@ -36,10 +37,10 @@ input,select{
 
               <tr><td>Courses Title</td><td><input type="text" name="title" required="required" autocomplete="off" value="<?php echo $rows['title'];; ?>" /></td></tr>
                
-              <tr><td>Course Code</td><td><input type="text" name="code" required="required" autocomplete="off" value="<?php echo $rows['subject'];; ?>" readonly="readonly"   /></td></tr>
+              <tr><td>Course Code</td><td><input type="text" name="code" required="required" autocomplete="off" value="<?php echo $rows['code'];; ?>"    /></td></tr>
                
                
-                <tr><td>Credit Value</td><td><input type="text" name="credit" autocomplete="off" value="<?php echo $rows['credit']; ?>" required/></td></tr>
+                <tr><td>Credit Value</td><td><input type="text" name="credit" autocomplete="off" value="<?php echo $rows['cv']; ?>" required/></td></tr>
                 
                 
                 <tr><td>Status</td><td><input type="text" name="status" autocomplete="off" value="<?php echo $rows['status']; ?>" required/></td></tr>
@@ -50,33 +51,12 @@ input,select{
                 
             
              <tr><td>Levels</td><td> <select required class="form-control" id="sel1" name="level" >
-              <option value="<?php echo $rows['level']; ?>"  ><?php echo $rows['level']; ?> </option>
-        <?php
-							
-								$result = $conn->query("SELECT * FROM levels order by levels") or die(mysqli_error($conn));
-				while($bu=$result->fetch_assoc()){
-								?>
-                       
-           
-        <option value="<?php echo $bu['levels']; ?>"  ><?php echo $bu['levels']; ?> </option>
-    <?php } ?> 
+              <option value="<?php echo $rows['level_id']; ?>"  ><?php echo $rows['levels']; ?> </option>
+       
         
       </select></td></tr>
   
   
-  <tr><td>Department ID</td><td> <select required class="form-control" id="sel1" name="dept" >
-              <option value="<?php echo $rows['department']; ?>"  ><?php echo $rows['department']; ?> </option>
-        <?php
-							
-								$result = $con->query("SELECT * FROM special group by certi ") or die(mysqli_error($con));
-				while($bu=$result->fetch_assoc()){
-								?>
-                       
-           
-        <option value="<?php echo $bu['certi']; ?>"  ><?php echo $bu['certi']; ?> </option>
-    <?php } ?> 
-        
-      </select></td></tr>
   
   
              
@@ -111,7 +91,7 @@ $status=$_POST['status'];
 $sem=$_POST['sem'];
 
 $level=$_POST['level'];
-$dept=$_POST['dept'];
+$code=$_POST['code'];
 
 
 
@@ -119,8 +99,8 @@ $dept=$_POST['dept'];
 title='$title',credit='$cv',status='$status'sem='$sem'mlevel='$level,department='$dept' where roll='".$_GET['id']."'") or die(mysqli_error($conn)) ;
 */
 
- $ats=$conn->query("UPDATE subject  set  
-title='$title',credit='$cv',status='$status',sem='$sem',level='$level',department='$dept' where roll='".$_GET['id']."'") or die(mysqli_error($conn)) ;
+ $ats=$conn->query("UPDATE subjects  set  
+title='$title',cv='$cv',status='$status',code='$code'  where id='".$_GET['id']."'") or die(mysqli_error($conn)) ;
 
 echo "<script>alert('Record Created Successfully!'); </script>";
 

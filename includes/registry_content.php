@@ -20,20 +20,7 @@
         
         <div class="col-sm-8">
           <div class="well">
-            <p>
-           
-            
-            | &nbsp;&nbsp;&nbsp;&nbsp; 
-            
-            
-             <strong>Semester: <span style="color:#f00"><?php if($semester==1){
-				 echo "First Semester";
-			 }
-			 else {
-				 echo "SECOND SEMESTER";
-			 }; ?></span></strong>
-            </h4>
-            </p>
+          
           </div>
         </div>
       </div>
@@ -153,9 +140,6 @@
 	include '../Provost/tstats.php';
 	}
 	
-	if(isset($_GET['academic_year'])){
-	include '../Cash/academic_year.php';
-	}
 	
 		if(isset($_GET['upload'])){
 	include '../Exams/upload.php';
@@ -270,9 +254,7 @@
 	if(isset($_GET['contacts'])){
 	include '../Registry/contacts.php';
 	}
-	if(isset($_GET['edit_course'])){
-	include '../Registry/edit_course.php';
-	}
+	
 	if(isset($_GET['editing_subj'])){
 	include '../Registry/editing_subj.php';
 	}

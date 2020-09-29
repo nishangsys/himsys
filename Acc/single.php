@@ -48,9 +48,10 @@ include '../includes/dbc.php';
         </h3>
         <?php
 		$reason=$_GET['reason'];
-				$year_id=$_GET['year_id'];
+				echo $year_id=$_GET['year_id'];
 
-		 $d=$con->query("SELECT SUM(amt),staffname,company,date,paidto,cust_id,id,paidtou FROM daily where  year='$year_id' and reason='fees' and company!='' GROUP BY staffname order by staffname") or die(mysqli_error($con));
+		 $d=$dbcon->query("SELECT SUM(rec) as paid,staffname,company,date,paidto,cust_id,id  FROM daily where  year='$year_id' and reason='fees'   GROUP BY cust_id order by staffname") or die(mysqli_error($dbcon));
+		echo $hm=$d->num_rows;
 $i=1;
 ?>
  <thead>
@@ -73,7 +74,7 @@ $i=1;
            <td><?php  echo $i++; ?></td>
              <td><?php  echo $bu['staffname']; ?></td>
              <td><?php  echo $bu['cust_id']; ?></td>
-             <td><?php  echo number_format($bu['SUM(amt)']); ?></td>
+             <td><?php  echo number_format($bu['paid']); ?></td>
              <td><?php  echo $bu['paidto']; ?></td>
             
              <td><?php  echo $bu['paidtou']; ?></td>

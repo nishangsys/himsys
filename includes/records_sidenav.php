@@ -171,10 +171,10 @@
                     </a>
                     <ul class="collapse" id="error-nav">
                         <li><a href="?daily_att&link=Daily Attendance Reports"><i class="icon-angle-right"></i> Daily Reports </a></li>
-                        <li><a href="?monthly_att&link=Daily Attendance Reports"><i class="icon-angle-right"></i> Month Reports  </a></li>
+                        <li><a href="?monthly_att&link=Daily Attendance Reports"><i class="icon-angle-right"></i> Monthly Reports  </a></li>
                       
                       
-                          <li><a href="?review_exp&link=Records Expenditure"><i class="icon-angle-right"></i> View Expenditure  </a></li>
+                          <li><a href="?semester_att&link=Records Expenditure"><i class="icon-angle-right"></i> Semester Reports  </a></li>
                       
                     </ul>
                 </li>  
